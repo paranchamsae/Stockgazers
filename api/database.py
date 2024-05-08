@@ -5,10 +5,12 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-# SQLALCHEMY_DATABASE_URL = "mysql+pymysql://daniel:4144@125.133.232.114:4144/stockgazers"
+import pymysql
+
+SQLALCHEMY_DATABASE_URL = "mysql+mysqldb://daniel:1q2w3e4r!@125.133.232.114:4144/stockgazers"
 
 engine = create_engine(
-    # SQLALCHEMY_DATABASE_URL
+    SQLALCHEMY_DATABASE_URL
 )
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
