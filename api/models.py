@@ -16,7 +16,7 @@ class User(Base):
     updateDatetime = Column(DateTime, nullable=True)
 
 class Stocks(Base):
-    __taablename__ = "SGStocks"
+    __tablename__ = "SGStocks"
 
 class Preference(Base):
     __tablename__ = "SGUserSettings"

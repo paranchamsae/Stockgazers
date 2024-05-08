@@ -7,11 +7,15 @@ from sqlalchemy.orm import sessionmaker
 
 import pymysql
 
-SQLALCHEMY_DATABASE_URL = "mysql+mysqldb://daniel:1q2w3e4r!@125.133.232.114:4144/stockgazers"
+SQLALCHEMY_DATABASE_URL = "mysql+pymysql://daniel:1q2w3e4r!@125.133.232.114:4144/stockgazers"
 
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL
 )
+
+# PYMYSQL_CONNECTION_STRING = "host='125.133.232.114', port='4144', user='daniel', passwd='1q2w3e4r!', db='stockgazers', charset='utf8'"
+# engine = pymysql.connect(PYMYSQL_CONNECTION_STRING)
+# cursor = engine.cursor()
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
