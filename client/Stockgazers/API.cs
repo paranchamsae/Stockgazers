@@ -11,20 +11,39 @@ namespace Stockgazers.APIs
     public class API
     {
         static readonly string StockXAccount = "https://accounts.stockx.com/authorize";
-        static readonly string DanielSrv = "https://stockgazers.kr";
+        //static readonly string DanielSrv = "https://stockgazers.kr";
+        static readonly string DanielSrv = "http://127.0.0.1:8000";
 
-        static readonly string APIKey = "";
-        static readonly string ClientID = "";
-        static readonly string ClientSecret = "";
+        static string? strAPIKey = null;
+        static string? strClientID = null;
+        static string? strClientSecret = null;
+
+        public static string? APIKey
+        {
+            get {  return strAPIKey; }
+            set { strAPIKey = value; }
+        }
+
+        public static string? ClientID
+        {
+            get { return strClientID; }
+            set { strClientID = value; }
+        }
+
+        public static string? ClientSecret
+        {
+            get { return strClientSecret; }
+            set { strClientSecret = value; }
+        }
 
         public static string GetAuth()
         {
             return StockXAccount;
         }
 
-        public static string GetID()
+        public static string GetServer()
         {
-            return ClientID;
+            return DanielSrv;
         }
 
         public static string GetCallback()

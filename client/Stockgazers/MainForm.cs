@@ -47,7 +47,7 @@ namespace Stockgazers
         private async void Form1_Load(object sender, EventArgs e)
         {
             #region 1. 딱스 로그인 하고 인증 코드를 획득함
-            string param = $@"response_type=code&client_id={API.GetID()}&redirect_uri={API.GetCallback()}&scope=offline_access%20openid&audience=gateway.stockx.com&state=abcXYZ0987";
+            string param = $@"response_type=code&client_id={API.ClientID}&redirect_uri={API.GetCallback()}&scope=offline_access%20openid&audience=gateway.stockx.com&state=abcXYZ0987";
             StockXLoginForm stockXLoginForm = new(this, param);
             stockXLoginForm.ShowDialog();
 
