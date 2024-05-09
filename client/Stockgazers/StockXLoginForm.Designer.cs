@@ -41,7 +41,7 @@
             webView.Location = new Point(0, 0);
             webView.Margin = new Padding(3, 4, 3, 4);
             webView.Name = "webView";
-            webView.Size = new Size(619, 450);
+            webView.Size = new Size(359, 648);
             webView.TabIndex = 2;
             webView.ZoomFactor = 1D;
             // 
@@ -49,7 +49,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(619, 450);
+            ClientSize = new Size(359, 648);
             Controls.Add(webView);
             Name = "StockXLoginForm";
             Text = "StockXLoginForm";

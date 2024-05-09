@@ -28,6 +28,7 @@ namespace Stockgazers
 
         private void WebView_SourceChanged(object? sender, Microsoft.Web.WebView2.Core.CoreWebView2SourceChangedEventArgs e)
         {
+            Trace.WriteLine(webView.Source.ToString());
             // 딱스 로그인이 살아있거나 새로 로그인이 성공하여 콜백을 받음
             if (webView.Source.ToString().StartsWith("https://stockgazers.kr/api/callback"))
                 BackToMainform();

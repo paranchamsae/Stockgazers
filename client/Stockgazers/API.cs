@@ -13,9 +13,9 @@ namespace Stockgazers.APIs
         static readonly string StockXAccount = "https://accounts.stockx.com/authorize";
         static readonly string DanielSrv = "https://stockgazers.kr";
 
-        static readonly string APIKey = "qEEyuy3uQvFsS1zcxTIB2V8z7PaGcd9nE3MjYW30";
-        static readonly string ClientID = "xXybtOs6BRBiJS5aFylrjfHATztZyV64";
-        static readonly string ClientSecret = "HL6hPdDNqn5Ectb3iiDDfkcjzH9XmAoDiTPkAd451zjNuUDpFMGaI5MMb3SU5gIT";
+        static readonly string APIKey = "";
+        static readonly string ClientID = "";
+        static readonly string ClientSecret = "";
 
         public static string GetAuth()
         {
@@ -29,7 +29,7 @@ namespace Stockgazers.APIs
 
         public static string GetCallback()
         {
-            return DanielSrv;
+            return DanielSrv+"/api/callback";
         }
 
         public async Task<HttpResponseMessage> Call(HttpClient client, HttpMethod method, string url, string? param=null)

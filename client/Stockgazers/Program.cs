@@ -11,7 +11,14 @@ namespace Stockgazers
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
-            Application.Run(new MainForm());
+
+            Common common = new();
+            Application.Run(new LoginForm(common));
+
+            if (common.IsAppLogin)
+            {
+                Application.Run(new MainForm(common));
+            }
         }
     }
 }
