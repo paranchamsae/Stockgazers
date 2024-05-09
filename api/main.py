@@ -17,14 +17,9 @@ app = FastAPI()
 #     allow_headers=["*"],
 # )
 
-
-@app.get("/")
-def hello():
-    return "hello fastapi"
-
-# @app.get("/hello2")
-# def hello2():
-#     return "hello python fastapi!!"
+# @app.get("/")
+# def hello():
+#     return "hello fastapi"
 
 app.include_router(user_router.router)
 app.include_router(stocks_router.router)
