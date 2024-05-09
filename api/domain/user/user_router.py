@@ -24,10 +24,11 @@ async def login(request: user_schema.RequestLogin):
     statusCode = 0
     message = ""
     data = None
+    core = None
 
     db = SessionLocal()
 
-    statement = text("select * from SGUser where UserID='"+request.id+"'")      # 아이디로 디비에서 레코드 조회
+    statement = text("select * from SGUser where UserID='"+request.ID+"'")      # 아이디로 디비에서 레코드 조회
     result = db.execute(statement)
 
     row = result.mappings().all()
@@ -40,18 +41,23 @@ async def login(request: user_schema.RequestLogin):
             statusCode = 404
             message = "deleted account"
         else:
-            statement = text("select sha2('"+request.pw+"', 256)")      # 해당 계정의 패스워드 일치 여부 확인
+            statement = text("select sha2('"+request.PW+"', 256) as v")      # 해당 계정의 패스워드 일치 여부 확인
             pw_result = db.execute(statement)
             pwrow = pw_result.mappings().all()
 
-            if pwrow[0] != row[0]["UserPassword"]:  # 패스워드 불일치
+            if pwrow[0]["v"] != row[0]["UserPassword"]:  # 패스워드 불일치
+                print(pwrow[0]["v"])
+                print(row[0]["UserPassword"])
                 statusCode = 404
                 message = "invalid data"
             else:   # 패스워드도 일치함!
                 statusCode = 200
                 data = row[0]
+                statement = text("select * from SGKey order by id desc limit 1")
+                keyresult = db.execute(statement)
+                core = keyresult.mappings().all()[0]
 
-    return { "statusCode": statusCode, "message": str(message), "data": data }
+    return { "statusCode": statusCode, "message": str(message), "data": data, "core": core }
 
 @router.put("/token", summary="Stockgazers 클라이언트 토큰 갱신")
 async def updateToken():

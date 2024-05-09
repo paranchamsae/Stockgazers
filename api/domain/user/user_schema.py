@@ -7,8 +7,8 @@ class RequestCreateUser(BaseModel):
     pw: str
 
 class RequestLogin(BaseModel):
-    id: str
-    pw: str
+    ID: str
+    PW: str
 
 class Preference(BaseModel):
     userid: int
