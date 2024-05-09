@@ -50,7 +50,6 @@
             Name = "MainForm";
             Text = "Form1";
             Load += Form1_Load;
-            Shown += MainForm_Shown;
             ResumeLayout(false);
         }
 

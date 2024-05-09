@@ -1,21 +1,12 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Stockgazers.APIs;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Net.Http.Json;
 using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+using ReaLTaiizor.Forms;
 
 namespace Stockgazers
 {
-    public partial class LoginForm : Form
+    public partial class LoginForm : MaterialForm
     {
         Common common;
 

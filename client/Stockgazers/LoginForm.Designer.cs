@@ -40,14 +40,14 @@
             // 
             // textBox_id
             // 
-            textBox_id.Location = new Point(89, 176);
+            textBox_id.Location = new Point(83, 231);
             textBox_id.Name = "textBox_id";
             textBox_id.Size = new Size(187, 25);
             textBox_id.TabIndex = 0;
             // 
             // textBox_passwd
             // 
-            textBox_passwd.Location = new Point(89, 218);
+            textBox_passwd.Location = new Point(83, 273);
             textBox_passwd.Name = "textBox_passwd";
             textBox_passwd.PasswordChar = '●';
             textBox_passwd.Size = new Size(187, 25);
@@ -56,7 +56,7 @@
             // button1
             // 
             button1.Font = new Font("맑은 고딕", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            button1.Location = new Point(96, 277);
+            button1.Location = new Point(90, 332);
             button1.Name = "button1";
             button1.Size = new Size(75, 26);
             button1.TabIndex = 2;
@@ -67,7 +67,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(32, 179);
+            label1.Location = new Point(26, 234);
             label1.Name = "label1";
             label1.Size = new Size(51, 19);
             label1.TabIndex = 3;
@@ -76,7 +76,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(18, 221);
+            label2.Location = new Point(12, 276);
             label2.Name = "label2";
             label2.Size = new Size(65, 19);
             label2.TabIndex = 4;
@@ -86,7 +86,7 @@
             // 
             panel1.BackgroundImage = (Image)resources.GetObject("panel1.BackgroundImage");
             panel1.BackgroundImageLayout = ImageLayout.Stretch;
-            panel1.Location = new Point(12, 12);
+            panel1.Location = new Point(6, 67);
             panel1.Name = "panel1";
             panel1.Size = new Size(264, 126);
             panel1.TabIndex = 5;
@@ -94,7 +94,7 @@
             // button2
             // 
             button2.Font = new Font("맑은 고딕", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            button2.Location = new Point(96, 309);
+            button2.Location = new Point(90, 364);
             button2.Name = "button2";
             button2.Size = new Size(75, 26);
             button2.TabIndex = 6;
@@ -105,7 +105,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(288, 355);
+            ClientSize = new Size(276, 410);
             Controls.Add(button2);
             Controls.Add(panel1);
             Controls.Add(label2);
