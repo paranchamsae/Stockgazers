@@ -5,6 +5,8 @@ using ReaLTaiizor.Controls;
 using ReaLTaiizor.Manager;
 using ReaLTaiizor.Colors;
 using ReaLTaiizor.Util;
+using Newtonsoft.Json;
+using System.Text;
 
 namespace Stockgazers
 {
@@ -26,19 +28,16 @@ namespace Stockgazers
             set { state = value; }
         }
 
-        //API server;
-        //HttpClient session;
-        Common common;
-
-        public MainForm()
+        class Token
         {
-            //server = new();
-            //session = new HttpClient();
-
-            InitializeComponent();
-
-            common = new();
+            public required string grant_type { get; set; }
+            public required string client_id { get; set; }
+            public required string client_secret { get; set; }
+            public required string code { get; set; }
+            public required string redirect_uri { get; set; }
         }
+
+        Common common;
 
         public MainForm(Common c)
         {
@@ -63,11 +62,6 @@ namespace Stockgazers
 
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show($"authcode: {AuthCode}, state: {state}");
-        }
-
         private async void Form1_Load(object sender, EventArgs e)
         {
             #region 1. 딱스 로그인 하고 인증 코드를 획득함
@@ -81,6 +75,22 @@ namespace Stockgazers
                 MessageBox.Show("인증 코드 획득 실패, 딱스 재로그인 필요", "Stockgazers", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+            #endregion
+
+            #region 2. 획득한 인증코드로 딱스 액세스/리프레시 토큰을 얻음
+            string url = $"https://accounts.stockx.com/oauth/token";
+            Token data = new()
+            {
+                grant_type = "authorization_code",
+                client_id = "",
+                client_secret = "",
+                code = AuthCode,
+                redirect_uri = "https://stockgazers.kr/api/callback"
+            };
+            var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8,
+                "application/json");
+            var response = await common.session.PostAsync(url, content);
+            string result22 = response.Content.ReadAsStringAsync().Result;
             #endregion
 
             #region 2. 내 재고 목록을 서버에서 가지고 와서 클라이언트에 뿌려줌
