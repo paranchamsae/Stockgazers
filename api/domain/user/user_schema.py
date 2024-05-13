@@ -3,8 +3,8 @@ from pydantic import BaseModel
 
 #request
 class RequestCreateUser(BaseModel):
-    userid: str
-    pw: str
+    LoginID: str
+    Password: str
 
 class RequestLogin(BaseModel):
     ID: str
@@ -12,9 +12,15 @@ class RequestLogin(BaseModel):
 
 class Preference(BaseModel):
     userid: int
-    pw: str
+    # pw: str
     exchangeRate: int
     isAutoDiscount: bool
     autoDiscountPrice: int
 
 #response
+class ResponseUserInfo(BaseModel):
+    UserID: int
+    LoginID: str
+    ExchangeRate: int | None = None
+    IsAutoDiscount: bool | None = None
+    DiscountPrice: int | None = None
