@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using Stockgazers.APIs;
 using System.Text;
 using ReaLTaiizor.Forms;
+using ReaLTaiizor.Controls;
 
 namespace Stockgazers
 {
@@ -22,12 +23,12 @@ namespace Stockgazers
             common = c;
         }
 
-        private async void button1_Click(object sender, EventArgs e)
+        private async void materialButton1_Click(object sender, EventArgs e)
         {
             Login data = new()
             {
-                ID = textBox_id.Text,
-                PW = textBox_passwd.Text
+                ID = materialTextBoxEdit1.Text,
+                PW = materialTextBoxEdit2.Text
             };
 
             string url = $"{API.GetServer()}/api/user/login";
@@ -41,12 +42,14 @@ namespace Stockgazers
                 var resultjson = JsonConvert.DeserializeObject<JObject>(result);
                 if (resultjson == null)
                 {
-                    MessageBox.Show("서버와의 통신에 실패하였습니다.\r\n잠시 후 다시 시도 해 주세요.", "Stockgazers", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MaterialSnackBar snackBar = new("서버와의 통신에 실패하였습니다.\r\n잠시 후 다시 시도 해 주세요.", "OK", true);
+                    snackBar.Show(this);
                     return;
                 }
                 else if (resultjson != null && resultjson.Value<string>("statusCode") != "200")
                 {
-                    MessageBox.Show("삭제되었거나 아이디/패스워드 정보가 다른 계정입니다.", "Stockgazers", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MaterialSnackBar snackBar = new("삭제되었거나 아이디/패스워드 정보가 다른 계정입니다.", "OK", true);
+                    snackBar.Show(this);
                     return;
                 }
                 else if (resultjson != null && resultjson.Value<string>("statusCode") == "200")
@@ -59,7 +62,8 @@ namespace Stockgazers
 
                     if (API.APIKey == null || API.ClientID == null || API.ClientSecret == null)
                     {
-                        MessageBox.Show("서버와의 통신에 실패하였습니다.\r\n잠시 후 다시 시도 해 주세요.", "Stockgazers", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MaterialSnackBar snackBar = new("서버와의 통신에 실패하였습니다.\r\n잠시 후 다시 시도 해 주세요.", "OK", true);
+                        snackBar.Show(this);
                         API.APIKey = null;
                         API.ClientID = null;
                         API.ClientSecret = null;
@@ -70,9 +74,28 @@ namespace Stockgazers
             }
             catch (HttpRequestException ex)
             {
-                MessageBox.Show(ex.Message.Split(new char[] { '(' }).First().Trim() + "\r\n잠시 후 다시 시도 해 주세요.", "Stockgazers", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MaterialSnackBar snackBar = new(ex.Message.Split(new char[] { '(' }).First().Trim() + "\r\n잠시 후 다시 시도 해 주세요.", "OK", true);
+                snackBar.Show(this);
             }
             this.Close();
+        }
+
+        private void materialButton2_Click(object sender, EventArgs e)
+        {
+            MaterialSnackBar snackBar = new("현재 준비 중인 기능입니다 :)", "OK", true);
+            snackBar.Show(this);
+        }
+
+        private void materialTextBoxEdit1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+                materialButton1_Click(this, e);
+        }
+
+        private void materialTextBoxEdit2_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+                materialButton1_Click(this, e);
         }
     }
 }
