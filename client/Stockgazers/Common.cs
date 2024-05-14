@@ -17,5 +17,7 @@ namespace Stockgazers
         public string AccessToken = string.Empty;
         public string RefreshToken = string.Empty;
         public string IDToken = string.Empty;
+
+        public int StockgazersUserID = -1;
     }
 }

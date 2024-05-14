@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            ListViewItem listViewItem4 = new ListViewItem("item1");
-            ListViewItem listViewItem5 = new ListViewItem("item2");
-            ListViewItem listViewItem6 = new ListViewItem(new string[] { "", "1", "2", "3", "4", "5" }, -1);
+            ListViewItem listViewItem1 = new ListViewItem("item1");
+            ListViewItem listViewItem2 = new ListViewItem("item2");
+            ListViewItem listViewItem3 = new ListViewItem(new string[] { "", "1", "2", "3", "4", "5" }, -1);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             materialTabControl1 = new ReaLTaiizor.Controls.MaterialTabControl();
             tabPage1 = new TabPage();
@@ -167,7 +167,7 @@
             materialListView2.BorderStyle = BorderStyle.None;
             materialListView2.Depth = 0;
             materialListView2.FullRowSelect = true;
-            materialListView2.Items.AddRange(new ListViewItem[] { listViewItem4, listViewItem5 });
+            materialListView2.Items.AddRange(new ListViewItem[] { listViewItem1, listViewItem2 });
             materialListView2.Location = new Point(920, 142);
             materialListView2.MinimumSize = new Size(200, 100);
             materialListView2.MouseLocation = new Point(-1, -1);
@@ -280,8 +280,8 @@
             materialListView1.Dock = DockStyle.Fill;
             materialListView1.FullRowSelect = true;
             materialListView1.HeaderStyle = ColumnHeaderStyle.Nonclickable;
-            listViewItem6.StateImageIndex = 0;
-            materialListView1.Items.AddRange(new ListViewItem[] { listViewItem6 });
+            listViewItem3.StateImageIndex = 0;
+            materialListView1.Items.AddRange(new ListViewItem[] { listViewItem3 });
             materialListView1.Location = new Point(3, 3);
             materialListView1.MinimumSize = new Size(200, 100);
             materialListView1.MouseLocation = new Point(-1, -1);

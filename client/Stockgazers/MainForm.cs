@@ -8,6 +8,7 @@ using ReaLTaiizor.Util;
 using Newtonsoft.Json;
 using System.Text;
 using Newtonsoft.Json.Linq;
+using System.Diagnostics;
 
 namespace Stockgazers
 {
@@ -94,7 +95,7 @@ namespace Stockgazers
             var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8,
                 "application/json");
             var response = await common.session.PostAsync(url, content);
-            
+
             string tokenRaw = response.Content.ReadAsStringAsync().Result;
             var tokenJson = JsonConvert.DeserializeObject<JObject>(tokenRaw);
             if (tokenJson != null)
@@ -105,6 +106,9 @@ namespace Stockgazers
                 common.RefreshToken = Refresh?.ToString() ?? string.Empty;
                 JToken ID = tokenJson.Value<string>("id_token");
                 common.IDToken = ID?.ToString() ?? string.Empty;
+
+                Trace.WriteLine(API.APIKey);
+                Trace.WriteLine(common.AccessToken);
             }
             #endregion
 
@@ -114,11 +118,50 @@ namespace Stockgazers
             // 서버에서는 이 요청을 받으면...
             // 전체 데이터를 딱스에서 받아오고 디비랑 비교 > 다른부분 있으면 업데이트 하고 리턴
             // 진행전/중/완료 건수가 엄청 많다면??   ... 로직 고민을 해야할 것 같다
-            HttpResponseMessage result = await common.server.Call(common.session, HttpMethod.Get, "https://stockgazers.kr/");
-            if (result.StatusCode != HttpStatusCode.OK)
-                MessageBox.Show("error");
 
-            // 목록 가지고오면 클라이언트 뷰에 데이터 바인딩
+            #region 2-1. 딱스에 등록된 내 전체 판매현황
+            url = $"https://api.stockx.com/v2/selling/listings";
+            common.session.DefaultRequestHeaders.Add("Authorization", $"Bearer {common.AccessToken}");
+            common.session.DefaultRequestHeaders.Add("x-api-key", $"{API.APIKey}");
+
+            response = await common.session.GetAsync(url);
+            List<JToken> StockxListingsList = new List<JToken>();
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                var StockxRaw = response.Content.ReadAsStringAsync().Result;
+                JToken? tempStockx = JsonConvert.DeserializeObject<JToken>(StockxRaw);
+                if (tempStockx != null)
+                    StockxListingsList = JsonConvert.DeserializeObject<JToken>(tempStockx["listings"]!.ToString())!.ToList();
+            }
+            if (StockxListingsList.Count == 0)
+            {
+                MaterialSnackBar snackBar = new("StockX에서 나의 판매 현황을 불러오는데 실패했습니다.", "OK", true);
+                snackBar.Show(this);
+                return;
+            }
+
+            #endregion
+
+            #region 2-2. Stockgazers DB 서버에 관리 중인 내 전체 판매 현황
+            url = $"http://127.0.0.1:8000/api/stocks/{common.StockgazersUserID}";
+            response = await common.session.GetAsync(url);
+            JToken? StockgazersReference = null;
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                var StockgazersRaw = response.Content.ReadAsStringAsync().Result;
+                StockgazersReference = JsonConvert.DeserializeObject<JToken>(StockgazersRaw);
+            }
+            if (StockgazersReference == null)
+            {
+                MaterialSnackBar snackBar = new("Stockgazers 서버에서 나의 판매 현황을 불러오는데 실패했습니다.", "OK", true);
+                snackBar.Show(this);
+            }
+            #endregion
+
+            #region 2-3. 딱스 목록이랑 Stockgazers 판매현황 Distinct로 거르고 남아있는 데이터는 디비에 추가
+
+            #endregion
+
             #endregion
         }
     }

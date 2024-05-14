@@ -39,7 +39,7 @@ namespace Stockgazers
             {
                 var response = await common.session.PostAsync(url, content);
                 string result = response.Content.ReadAsStringAsync().Result;
-                var resultjson = JsonConvert.DeserializeObject<JObject>(result);
+                JObject? resultjson = JsonConvert.DeserializeObject<JObject>(result);
                 if (resultjson == null)
                 {
                     MaterialSnackBar snackBar = new("서버와의 통신에 실패하였습니다.\r\n잠시 후 다시 시도 해 주세요.", "OK", true);
@@ -54,6 +54,10 @@ namespace Stockgazers
                 }
                 else if (resultjson != null && resultjson.Value<string>("statusCode") == "200")
                 {
+                    JToken? userData = resultjson["data"];
+                    if(userData != null)
+                        common.StockgazersUserID = userData.Value<int>("ID");
+
                     JToken? core = resultjson["core"];
 
                     API.APIKey = core?.Value<string>("Key1");
