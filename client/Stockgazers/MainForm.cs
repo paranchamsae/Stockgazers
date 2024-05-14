@@ -7,6 +7,7 @@ using ReaLTaiizor.Colors;
 using ReaLTaiizor.Util;
 using Newtonsoft.Json;
 using System.Text;
+using Newtonsoft.Json.Linq;
 
 namespace Stockgazers
 {
@@ -78,19 +79,33 @@ namespace Stockgazers
             #endregion
 
             #region 2. 획득한 인증코드로 딱스 액세스/리프레시 토큰을 얻음
+            if (API.ClientID == null || API.ClientSecret == null)
+                return;
+
             string url = $"https://accounts.stockx.com/oauth/token";
             Token data = new()
             {
                 grant_type = "authorization_code",
-                client_id = "",
-                client_secret = "",
+                client_id = API.ClientID,
+                client_secret = API.ClientSecret,
                 code = AuthCode,
                 redirect_uri = "https://stockgazers.kr/api/callback"
             };
             var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8,
                 "application/json");
             var response = await common.session.PostAsync(url, content);
-            string result22 = response.Content.ReadAsStringAsync().Result;
+            
+            string tokenRaw = response.Content.ReadAsStringAsync().Result;
+            var tokenJson = JsonConvert.DeserializeObject<JObject>(tokenRaw);
+            if (tokenJson != null)
+            {
+                JToken Access = tokenJson.Value<string>("access_token");
+                common.AccessToken = Access?.ToString() ?? string.Empty;
+                JToken Refresh = tokenJson.Value<string>("refresh_token");
+                common.RefreshToken = Refresh?.ToString() ?? string.Empty;
+                JToken ID = tokenJson.Value<string>("id_token");
+                common.IDToken = ID?.ToString() ?? string.Empty;
+            }
             #endregion
 
             #region 2. 내 재고 목록을 서버에서 가지고 와서 클라이언트에 뿌려줌

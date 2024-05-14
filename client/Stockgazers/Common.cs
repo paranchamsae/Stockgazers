@@ -13,5 +13,9 @@ namespace Stockgazers
         public HttpClient session = new();
 
         public bool IsAppLogin = false;
+
+        public string AccessToken = string.Empty;
+        public string RefreshToken = string.Empty;
+        public string IDToken = string.Empty;
     }
 }
