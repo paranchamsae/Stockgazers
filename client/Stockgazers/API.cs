@@ -11,8 +11,13 @@ namespace Stockgazers.APIs
     public class API
     {
         static readonly string StockXAccount = "https://accounts.stockx.com/authorize";
-        //static readonly string DanielSrv = "https://stockgazers.kr";
+        static readonly string CallbackUri = "https://stockgazers.kr/api/callback";
+#if DEBUG
         static readonly string DanielSrv = "http://127.0.0.1:8000";
+#else
+        static readonly string DanielSrv = "https://stockgazers.kr";
+#endif
+
 
         static string? strAPIKey = null;
         static string? strClientID = null;
@@ -48,7 +53,7 @@ namespace Stockgazers.APIs
 
         public static string GetCallback()
         {
-            return DanielSrv+"/api/callback";
+            return CallbackUri;
         }
 
         public async Task<HttpResponseMessage> Call(HttpClient client, HttpMethod method, string url, string? param=null)
