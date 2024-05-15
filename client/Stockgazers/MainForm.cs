@@ -9,12 +9,14 @@ using Newtonsoft.Json;
 using System.Text;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
+using Stockgazers.Models;
 
 namespace Stockgazers
 {
     public partial class MainForm : MaterialForm
     {
         private readonly MaterialSkinManager materialSkinManager;
+        Common common;
 
         private string authcode = string.Empty;
         private string state = string.Empty;
@@ -29,40 +31,6 @@ namespace Stockgazers
             get { return state; }
             set { state = value; }
         }
-
-        class Token
-        {
-            public required string grant_type { get; set; }
-            public required string client_id { get; set; }
-            public required string client_secret { get; set; }
-            public required string code { get; set; }
-            public required string redirect_uri { get; set; }
-        }
-
-        class Stock
-        {
-            public int UserID { get; set; }
-            public string IsDelete { get; set; } = string.Empty;
-            public string ListingID { get; set; } = string.Empty;
-            public string StyleID { get; set; } = string.Empty;
-            public string ProductID { get; set; } = string.Empty;
-            public string Title { get; set; } = string.Empty;
-            public string VariantID { get; set; } = string.Empty;
-            public string VariantValue { get; set; } = string.Empty;
-            public int BuyPrice { get; set; }
-            public float BuyPriceUSD { get; set; }
-            public int Price { get; set; }
-            public int Limit { get; set; }
-            public string OrderNo { get; set; } = string.Empty;
-            public DateTime? SellDatetime { get; set; } = null;
-            public DateTime? SendDatetime { get; set; } = null;
-            public float AdjustPrice { get; set; }
-            public float Profit { get; set; }
-            //public DateTime CreateDatetime { get; set; }
-            //public DateTime? UpdateDatetime { get; set; } = null;
-        }
-
-        Common common;
 
         public MainForm(Common c)
         {
@@ -89,9 +57,8 @@ namespace Stockgazers
 
         private async void Form1_Load(object sender, EventArgs e)
         {
-            #region 1. 딱스 로그인 하고 인증 코드를 획득함
-            //string param = $@"response_type=code&client_id={API.ClientID}&redirect_uri={API.GetCallback()}&scope=offline_access%20openid&audience=gateway.stockx.com&state=abcXYZ0987";
-            string param = $@"response_type=code&client_id={API.ClientID}&redirect_uri=https://stockgazers.kr/api/callback&scope=offline_access%20openid&audience=gateway.stockx.com&state=abcXYZ0987";
+            #region 1-1. 딱스 로그인 하고 인증 코드를 획득함
+            string param = $@"response_type=code&client_id={API.ClientID}&redirect_uri={API.GetCallback()}&scope=offline_access%20openid&audience=gateway.stockx.com&state=abcXYZ0987";
             StockXLoginForm stockXLoginForm = new(this, param);
             stockXLoginForm.ShowDialog();
 
@@ -102,7 +69,7 @@ namespace Stockgazers
             }
             #endregion
 
-            #region 2. 획득한 인증코드로 딱스 액세스/리프레시 토큰을 얻음
+            #region 1-2. 획득한 인증코드로 딱스 액세스/리프레시 토큰을 얻음
             if (API.ClientID == null || API.ClientSecret == null)
                 return;
 
@@ -113,7 +80,7 @@ namespace Stockgazers
                 client_id = API.ClientID,
                 client_secret = API.ClientSecret,
                 code = AuthCode,
-                redirect_uri = "https://stockgazers.kr/api/callback"
+                redirect_uri = API.GetCallback()
             };
             var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8,
                 "application/json");
@@ -136,11 +103,6 @@ namespace Stockgazers
             #endregion
 
             #region 2. 내 재고 목록을 서버에서 가지고 와서 클라이언트에 뿌려줌
-            // 나의 재고 목록을 서버에서 가지고 옴
-
-            // 서버에서는 이 요청을 받으면...
-            // 전체 데이터를 딱스에서 받아오고 디비랑 비교 > 다른부분 있으면 업데이트 하고 리턴
-            // 진행전/중/완료 건수가 엄청 많다면??   ... 로직 고민을 해야할 것 같다
 
             #region 2-1. 딱스에 등록된 내 전체 판매현황
             url = $"https://api.stockx.com/v2/selling/listings";
@@ -162,11 +124,10 @@ namespace Stockgazers
                 snackBar.Show(this);
                 return;
             }
-
             #endregion
 
             #region 2-2. Stockgazers DB 서버에 관리 중인 내 전체 판매 현황
-            url = $"http://127.0.0.1:8000/api/stocks/{common.StockgazersUserID}";
+            url = $"{API.GetServer()}/api/stocks/{common.StockgazersUserID}";
             response = await common.session.GetAsync(url);
             JToken? StockgazersReference = null;
             if (response.StatusCode == HttpStatusCode.OK)
@@ -213,12 +174,15 @@ namespace Stockgazers
 
             if (stocks.Count > 0)
             {
-                url = $"http://127.0.0.1:8000/api/stocks";
+                url = $"{API.GetServer()}/api/stocks";
                 var sendData = new StringContent(JsonConvert.SerializeObject(stocks), Encoding.UTF8, "application/json");
                 response = await common.session.PostAsync(url, sendData);
             }
+            #endregion
 
             #endregion
+
+            #region 3. 홈 화면 데이터 업데이트
 
             #endregion
         }

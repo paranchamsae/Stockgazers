@@ -29,21 +29,44 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            ListViewItem listViewItem1 = new ListViewItem("item1");
-            ListViewItem listViewItem2 = new ListViewItem("item2");
-            ListViewItem listViewItem3 = new ListViewItem(new string[] { "", "1", "2", "3", "4", "5" }, -1);
+            ListViewItem listViewItem1 = new ListViewItem(new string[] { "", "1", "2", "3", "4", "5" }, -1);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             materialTabControl1 = new ReaLTaiizor.Controls.MaterialTabControl();
             tabPage1 = new TabPage();
-            materialLabel4 = new ReaLTaiizor.Controls.MaterialLabel();
+            materialCard10 = new ReaLTaiizor.Controls.MaterialCard();
+            materialLabel27 = new ReaLTaiizor.Controls.MaterialLabel();
+            materialLabel28 = new ReaLTaiizor.Controls.MaterialLabel();
+            materialLabel29 = new ReaLTaiizor.Controls.MaterialLabel();
+            materialCard9 = new ReaLTaiizor.Controls.MaterialCard();
+            materialLabel24 = new ReaLTaiizor.Controls.MaterialLabel();
+            materialLabel25 = new ReaLTaiizor.Controls.MaterialLabel();
+            materialLabel26 = new ReaLTaiizor.Controls.MaterialLabel();
+            materialCard8 = new ReaLTaiizor.Controls.MaterialCard();
+            materialLabel17 = new ReaLTaiizor.Controls.MaterialLabel();
+            materialLabel18 = new ReaLTaiizor.Controls.MaterialLabel();
+            materialLabel19 = new ReaLTaiizor.Controls.MaterialLabel();
+            materialCard7 = new ReaLTaiizor.Controls.MaterialCard();
+            materialLabel14 = new ReaLTaiizor.Controls.MaterialLabel();
+            materialLabel15 = new ReaLTaiizor.Controls.MaterialLabel();
+            materialLabel16 = new ReaLTaiizor.Controls.MaterialLabel();
             materialCard5 = new ReaLTaiizor.Controls.MaterialCard();
-            materialLabel6 = new ReaLTaiizor.Controls.MaterialLabel();
-            label3 = new Label();
-            materialListView2 = new ReaLTaiizor.Controls.MaterialListView();
+            materialLabel20 = new ReaLTaiizor.Controls.MaterialLabel();
             materialCard4 = new ReaLTaiizor.Controls.MaterialCard();
+            materialLabel4 = new ReaLTaiizor.Controls.MaterialLabel();
+            materialLabel22 = new ReaLTaiizor.Controls.MaterialLabel();
+            materialLabel11 = new ReaLTaiizor.Controls.MaterialLabel();
             materialCard3 = new ReaLTaiizor.Controls.MaterialCard();
+            materialLabel23 = new ReaLTaiizor.Controls.MaterialLabel();
+            materialLabel21 = new ReaLTaiizor.Controls.MaterialLabel();
+            materialLabel10 = new ReaLTaiizor.Controls.MaterialLabel();
             materialCard2 = new ReaLTaiizor.Controls.MaterialCard();
+            materialLabel12 = new ReaLTaiizor.Controls.MaterialLabel();
+            materialLabel9 = new ReaLTaiizor.Controls.MaterialLabel();
+            materialLabel6 = new ReaLTaiizor.Controls.MaterialLabel();
             materialCard1 = new ReaLTaiizor.Controls.MaterialCard();
+            materialLabel13 = new ReaLTaiizor.Controls.MaterialLabel();
+            materialLabel8 = new ReaLTaiizor.Controls.MaterialLabel();
+            materialLabel7 = new ReaLTaiizor.Controls.MaterialLabel();
             tabPage2 = new TabPage();
             materialCard6 = new ReaLTaiizor.Controls.MaterialCard();
             materialLabel5 = new ReaLTaiizor.Controls.MaterialLabel();
@@ -65,7 +88,15 @@
             imageList1 = new ImageList(components);
             materialTabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
+            materialCard10.SuspendLayout();
+            materialCard9.SuspendLayout();
+            materialCard8.SuspendLayout();
+            materialCard7.SuspendLayout();
             materialCard5.SuspendLayout();
+            materialCard4.SuspendLayout();
+            materialCard3.SuspendLayout();
+            materialCard2.SuspendLayout();
+            materialCard1.SuspendLayout();
             tabPage2.SuspendLayout();
             materialCard6.SuspendLayout();
             tabPage3.SuspendLayout();
@@ -84,44 +115,258 @@
             materialTabControl1.Multiline = true;
             materialTabControl1.Name = "materialTabControl1";
             materialTabControl1.SelectedIndex = 0;
-            materialTabControl1.Size = new Size(1378, 571);
+            materialTabControl1.Size = new Size(1288, 688);
             materialTabControl1.TabIndex = 0;
             // 
             // tabPage1
             // 
-            tabPage1.Controls.Add(materialLabel4);
+            tabPage1.Controls.Add(materialCard10);
+            tabPage1.Controls.Add(materialCard9);
+            tabPage1.Controls.Add(materialCard8);
+            tabPage1.Controls.Add(materialCard7);
             tabPage1.Controls.Add(materialCard5);
-            tabPage1.Controls.Add(materialListView2);
             tabPage1.Controls.Add(materialCard4);
             tabPage1.Controls.Add(materialCard3);
             tabPage1.Controls.Add(materialCard2);
             tabPage1.Controls.Add(materialCard1);
+            tabPage1.Font = new Font("Roboto", 12F, FontStyle.Bold, GraphicsUnit.Point);
             tabPage1.ImageKey = "icons8-집-16.png";
             tabPage1.Location = new Point(4, 24);
             tabPage1.Name = "tabPage1";
             tabPage1.Padding = new Padding(3);
-            tabPage1.Size = new Size(1370, 543);
+            tabPage1.Size = new Size(1280, 660);
             tabPage1.TabIndex = 0;
-            tabPage1.Text = "Home";
+            tabPage1.Text = "메인";
             tabPage1.UseVisualStyleBackColor = true;
             // 
-            // materialLabel4
+            // materialCard10
             // 
-            materialLabel4.AutoSize = true;
-            materialLabel4.Depth = 0;
-            materialLabel4.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
-            materialLabel4.Location = new Point(909, 76);
-            materialLabel4.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
-            materialLabel4.Name = "materialLabel4";
-            materialLabel4.Size = new Size(111, 19);
-            materialLabel4.TabIndex = 8;
-            materialLabel4.Text = "abcdefghijklmn";
+            materialCard10.BackColor = Color.FromArgb(255, 255, 255);
+            materialCard10.Controls.Add(materialLabel27);
+            materialCard10.Controls.Add(materialLabel28);
+            materialCard10.Controls.Add(materialLabel29);
+            materialCard10.Depth = 0;
+            materialCard10.ForeColor = Color.FromArgb(222, 0, 0, 0);
+            materialCard10.Location = new Point(841, 285);
+            materialCard10.Margin = new Padding(14);
+            materialCard10.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
+            materialCard10.Name = "materialCard10";
+            materialCard10.Padding = new Padding(14);
+            materialCard10.Size = new Size(381, 180);
+            materialCard10.TabIndex = 12;
+            // 
+            // materialLabel27
+            // 
+            materialLabel27.AutoSize = true;
+            materialLabel27.Depth = 0;
+            materialLabel27.Font = new Font("Roboto Medium", 20F, FontStyle.Bold, GraphicsUnit.Pixel);
+            materialLabel27.FontType = ReaLTaiizor.Manager.MaterialSkinManager.FontType.H6;
+            materialLabel27.HighEmphasis = true;
+            materialLabel27.Location = new Point(71, 123);
+            materialLabel27.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
+            materialLabel27.Name = "materialLabel27";
+            materialLabel27.Size = new Size(30, 24);
+            materialLabel27.TabIndex = 12;
+            materialLabel27.Text = "▼ 1";
+            // 
+            // materialLabel28
+            // 
+            materialLabel28.AutoSize = true;
+            materialLabel28.Depth = 0;
+            materialLabel28.Font = new Font("Roboto", 48F, FontStyle.Bold, GraphicsUnit.Pixel);
+            materialLabel28.FontType = ReaLTaiizor.Manager.MaterialSkinManager.FontType.H3;
+            materialLabel28.Location = new Point(17, 65);
+            materialLabel28.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
+            materialLabel28.Name = "materialLabel28";
+            materialLabel28.Size = new Size(157, 58);
+            materialLabel28.TabIndex = 11;
+            materialLabel28.Text = "12.34%";
+            // 
+            // materialLabel29
+            // 
+            materialLabel29.AutoSize = true;
+            materialLabel29.Depth = 0;
+            materialLabel29.Font = new Font("Roboto Medium", 20F, FontStyle.Bold, GraphicsUnit.Pixel);
+            materialLabel29.FontType = ReaLTaiizor.Manager.MaterialSkinManager.FontType.H6;
+            materialLabel29.Location = new Point(17, 14);
+            materialLabel29.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
+            materialLabel29.Name = "materialLabel29";
+            materialLabel29.Size = new Size(181, 24);
+            materialLabel29.TabIndex = 10;
+            materialLabel29.Text = "역대 최고 수익률 거래품목";
+            // 
+            // materialCard9
+            // 
+            materialCard9.BackColor = Color.FromArgb(255, 255, 255);
+            materialCard9.Controls.Add(materialLabel24);
+            materialCard9.Controls.Add(materialLabel25);
+            materialCard9.Controls.Add(materialLabel26);
+            materialCard9.Depth = 0;
+            materialCard9.ForeColor = Color.FromArgb(222, 0, 0, 0);
+            materialCard9.Location = new Point(841, 77);
+            materialCard9.Margin = new Padding(14);
+            materialCard9.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
+            materialCard9.Name = "materialCard9";
+            materialCard9.Padding = new Padding(14);
+            materialCard9.Size = new Size(381, 180);
+            materialCard9.TabIndex = 11;
+            // 
+            // materialLabel24
+            // 
+            materialLabel24.AutoSize = true;
+            materialLabel24.Depth = 0;
+            materialLabel24.Font = new Font("Roboto Medium", 20F, FontStyle.Bold, GraphicsUnit.Pixel);
+            materialLabel24.FontType = ReaLTaiizor.Manager.MaterialSkinManager.FontType.H6;
+            materialLabel24.HighEmphasis = true;
+            materialLabel24.Location = new Point(71, 123);
+            materialLabel24.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
+            materialLabel24.Name = "materialLabel24";
+            materialLabel24.Size = new Size(30, 24);
+            materialLabel24.TabIndex = 12;
+            materialLabel24.Text = "▼ 1";
+            // 
+            // materialLabel25
+            // 
+            materialLabel25.AutoSize = true;
+            materialLabel25.Depth = 0;
+            materialLabel25.Font = new Font("Roboto", 48F, FontStyle.Bold, GraphicsUnit.Pixel);
+            materialLabel25.FontType = ReaLTaiizor.Manager.MaterialSkinManager.FontType.H3;
+            materialLabel25.Location = new Point(17, 65);
+            materialLabel25.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
+            materialLabel25.Name = "materialLabel25";
+            materialLabel25.Size = new Size(157, 58);
+            materialLabel25.TabIndex = 11;
+            materialLabel25.Text = "12.34%";
+            // 
+            // materialLabel26
+            // 
+            materialLabel26.AutoSize = true;
+            materialLabel26.Depth = 0;
+            materialLabel26.Font = new Font("Roboto Medium", 20F, FontStyle.Bold, GraphicsUnit.Pixel);
+            materialLabel26.FontType = ReaLTaiizor.Manager.MaterialSkinManager.FontType.H6;
+            materialLabel26.Location = new Point(17, 14);
+            materialLabel26.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
+            materialLabel26.Name = "materialLabel26";
+            materialLabel26.Size = new Size(131, 24);
+            materialLabel26.TabIndex = 10;
+            materialLabel26.Text = "역대 최다 거래품목";
+            // 
+            // materialCard8
+            // 
+            materialCard8.BackColor = Color.FromArgb(255, 255, 255);
+            materialCard8.Controls.Add(materialLabel17);
+            materialCard8.Controls.Add(materialLabel18);
+            materialCard8.Controls.Add(materialLabel19);
+            materialCard8.Depth = 0;
+            materialCard8.ForeColor = Color.FromArgb(222, 0, 0, 0);
+            materialCard8.Location = new Point(425, 285);
+            materialCard8.Margin = new Padding(14);
+            materialCard8.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
+            materialCard8.Name = "materialCard8";
+            materialCard8.Padding = new Padding(14);
+            materialCard8.Size = new Size(388, 180);
+            materialCard8.TabIndex = 10;
+            // 
+            // materialLabel17
+            // 
+            materialLabel17.AutoSize = true;
+            materialLabel17.Depth = 0;
+            materialLabel17.Font = new Font("Roboto Medium", 20F, FontStyle.Bold, GraphicsUnit.Pixel);
+            materialLabel17.FontType = ReaLTaiizor.Manager.MaterialSkinManager.FontType.H6;
+            materialLabel17.HighEmphasis = true;
+            materialLabel17.Location = new Point(71, 123);
+            materialLabel17.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
+            materialLabel17.Name = "materialLabel17";
+            materialLabel17.Size = new Size(30, 24);
+            materialLabel17.TabIndex = 12;
+            materialLabel17.Text = "▼ 1";
+            // 
+            // materialLabel18
+            // 
+            materialLabel18.AutoSize = true;
+            materialLabel18.Depth = 0;
+            materialLabel18.Font = new Font("Roboto", 48F, FontStyle.Bold, GraphicsUnit.Pixel);
+            materialLabel18.FontType = ReaLTaiizor.Manager.MaterialSkinManager.FontType.H3;
+            materialLabel18.Location = new Point(17, 65);
+            materialLabel18.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
+            materialLabel18.Name = "materialLabel18";
+            materialLabel18.Size = new Size(251, 58);
+            materialLabel18.TabIndex = 11;
+            materialLabel18.Text = "123.45 USD";
+            // 
+            // materialLabel19
+            // 
+            materialLabel19.AutoSize = true;
+            materialLabel19.Depth = 0;
+            materialLabel19.Font = new Font("Roboto Medium", 20F, FontStyle.Bold, GraphicsUnit.Pixel);
+            materialLabel19.FontType = ReaLTaiizor.Manager.MaterialSkinManager.FontType.H6;
+            materialLabel19.Location = new Point(17, 14);
+            materialLabel19.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
+            materialLabel19.Name = "materialLabel19";
+            materialLabel19.Size = new Size(96, 24);
+            materialLabel19.TabIndex = 10;
+            materialLabel19.Text = "평균 정산금액";
+            // 
+            // materialCard7
+            // 
+            materialCard7.BackColor = Color.FromArgb(255, 255, 255);
+            materialCard7.Controls.Add(materialLabel14);
+            materialCard7.Controls.Add(materialLabel15);
+            materialCard7.Controls.Add(materialLabel16);
+            materialCard7.Depth = 0;
+            materialCard7.ForeColor = Color.FromArgb(222, 0, 0, 0);
+            materialCard7.Location = new Point(633, 77);
+            materialCard7.Margin = new Padding(14);
+            materialCard7.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
+            materialCard7.Name = "materialCard7";
+            materialCard7.Padding = new Padding(14);
+            materialCard7.Size = new Size(180, 180);
+            materialCard7.TabIndex = 9;
+            // 
+            // materialLabel14
+            // 
+            materialLabel14.AutoSize = true;
+            materialLabel14.Depth = 0;
+            materialLabel14.Font = new Font("Roboto Medium", 20F, FontStyle.Bold, GraphicsUnit.Pixel);
+            materialLabel14.FontType = ReaLTaiizor.Manager.MaterialSkinManager.FontType.H6;
+            materialLabel14.HighEmphasis = true;
+            materialLabel14.Location = new Point(71, 123);
+            materialLabel14.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
+            materialLabel14.Name = "materialLabel14";
+            materialLabel14.Size = new Size(30, 24);
+            materialLabel14.TabIndex = 12;
+            materialLabel14.Text = "▼ 1";
+            // 
+            // materialLabel15
+            // 
+            materialLabel15.AutoSize = true;
+            materialLabel15.Depth = 0;
+            materialLabel15.Font = new Font("Roboto", 48F, FontStyle.Bold, GraphicsUnit.Pixel);
+            materialLabel15.FontType = ReaLTaiizor.Manager.MaterialSkinManager.FontType.H3;
+            materialLabel15.Location = new Point(17, 65);
+            materialLabel15.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
+            materialLabel15.Name = "materialLabel15";
+            materialLabel15.Size = new Size(157, 58);
+            materialLabel15.TabIndex = 11;
+            materialLabel15.Text = "12.34%";
+            // 
+            // materialLabel16
+            // 
+            materialLabel16.AutoSize = true;
+            materialLabel16.Depth = 0;
+            materialLabel16.Font = new Font("Roboto Medium", 20F, FontStyle.Bold, GraphicsUnit.Pixel);
+            materialLabel16.FontType = ReaLTaiizor.Manager.MaterialSkinManager.FontType.H6;
+            materialLabel16.Location = new Point(17, 14);
+            materialLabel16.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
+            materialLabel16.Name = "materialLabel16";
+            materialLabel16.Size = new Size(81, 24);
+            materialLabel16.TabIndex = 10;
+            materialLabel16.Text = "평균 수익률";
             // 
             // materialCard5
             // 
             materialCard5.BackColor = Color.FromArgb(255, 255, 255);
-            materialCard5.Controls.Add(materialLabel6);
-            materialCard5.Controls.Add(label3);
+            materialCard5.Controls.Add(materialLabel20);
             materialCard5.Depth = 0;
             materialCard5.Dock = DockStyle.Top;
             materialCard5.ForeColor = Color.FromArgb(222, 0, 0, 0);
@@ -130,118 +375,258 @@
             materialCard5.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
             materialCard5.Name = "materialCard5";
             materialCard5.Padding = new Padding(14);
-            materialCard5.Size = new Size(1364, 46);
+            materialCard5.Size = new Size(1274, 46);
             materialCard5.TabIndex = 7;
+            // 
+            // materialLabel20
+            // 
+            materialLabel20.AutoSize = true;
+            materialLabel20.Depth = 0;
+            materialLabel20.Font = new Font("Roboto Medium", 20F, FontStyle.Bold, GraphicsUnit.Pixel);
+            materialLabel20.FontType = ReaLTaiizor.Manager.MaterialSkinManager.FontType.H6;
+            materialLabel20.Location = new Point(570, 11);
+            materialLabel20.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
+            materialLabel20.Name = "materialLabel20";
+            materialLabel20.Size = new Size(86, 24);
+            materialLabel20.TabIndex = 13;
+            materialLabel20.Text = "입찰 진행 중";
+            // 
+            // materialCard4
+            // 
+            materialCard4.BackColor = Color.FromArgb(255, 255, 255);
+            materialCard4.Controls.Add(materialLabel4);
+            materialCard4.Controls.Add(materialLabel22);
+            materialCard4.Controls.Add(materialLabel11);
+            materialCard4.Depth = 0;
+            materialCard4.ForeColor = Color.FromArgb(222, 0, 0, 0);
+            materialCard4.Location = new Point(425, 77);
+            materialCard4.Margin = new Padding(14);
+            materialCard4.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
+            materialCard4.Name = "materialCard4";
+            materialCard4.Padding = new Padding(14);
+            materialCard4.Size = new Size(180, 180);
+            materialCard4.TabIndex = 5;
+            // 
+            // materialLabel4
+            // 
+            materialLabel4.AutoSize = true;
+            materialLabel4.Depth = 0;
+            materialLabel4.Font = new Font("Roboto Medium", 20F, FontStyle.Bold, GraphicsUnit.Pixel);
+            materialLabel4.FontType = ReaLTaiizor.Manager.MaterialSkinManager.FontType.H6;
+            materialLabel4.HighEmphasis = true;
+            materialLabel4.Location = new Point(85, 126);
+            materialLabel4.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
+            materialLabel4.Name = "materialLabel4";
+            materialLabel4.Size = new Size(30, 24);
+            materialLabel4.TabIndex = 14;
+            materialLabel4.Text = "▼ 1";
+            // 
+            // materialLabel22
+            // 
+            materialLabel22.AutoSize = true;
+            materialLabel22.Depth = 0;
+            materialLabel22.Font = new Font("Roboto", 48F, FontStyle.Bold, GraphicsUnit.Pixel);
+            materialLabel22.FontType = ReaLTaiizor.Manager.MaterialSkinManager.FontType.H3;
+            materialLabel22.Location = new Point(60, 68);
+            materialLabel22.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
+            materialLabel22.Name = "materialLabel22";
+            materialLabel22.Size = new Size(28, 58);
+            materialLabel22.TabIndex = 13;
+            materialLabel22.Text = "8";
+            // 
+            // materialLabel11
+            // 
+            materialLabel11.AutoSize = true;
+            materialLabel11.Depth = 0;
+            materialLabel11.Font = new Font("Roboto Medium", 20F, FontStyle.Bold, GraphicsUnit.Pixel);
+            materialLabel11.FontType = ReaLTaiizor.Manager.MaterialSkinManager.FontType.H6;
+            materialLabel11.Location = new Point(17, 14);
+            materialLabel11.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
+            materialLabel11.Name = "materialLabel11";
+            materialLabel11.Size = new Size(86, 24);
+            materialLabel11.TabIndex = 12;
+            materialLabel11.Text = "입찰 진행 중";
+            // 
+            // materialCard3
+            // 
+            materialCard3.BackColor = Color.FromArgb(255, 255, 255);
+            materialCard3.Controls.Add(materialLabel23);
+            materialCard3.Controls.Add(materialLabel21);
+            materialCard3.Controls.Add(materialLabel10);
+            materialCard3.Depth = 0;
+            materialCard3.ForeColor = Color.FromArgb(222, 0, 0, 0);
+            materialCard3.Location = new Point(15, 285);
+            materialCard3.Margin = new Padding(14);
+            materialCard3.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
+            materialCard3.Name = "materialCard3";
+            materialCard3.Padding = new Padding(14);
+            materialCard3.Size = new Size(382, 180);
+            materialCard3.TabIndex = 4;
+            // 
+            // materialLabel23
+            // 
+            materialLabel23.AutoSize = true;
+            materialLabel23.Depth = 0;
+            materialLabel23.Font = new Font("Roboto Medium", 20F, FontStyle.Bold, GraphicsUnit.Pixel);
+            materialLabel23.FontType = ReaLTaiizor.Manager.MaterialSkinManager.FontType.H6;
+            materialLabel23.HighEmphasis = true;
+            materialLabel23.Location = new Point(167, 119);
+            materialLabel23.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
+            materialLabel23.Name = "materialLabel23";
+            materialLabel23.Size = new Size(30, 24);
+            materialLabel23.TabIndex = 13;
+            materialLabel23.Text = "▼ 1";
+            // 
+            // materialLabel21
+            // 
+            materialLabel21.AutoSize = true;
+            materialLabel21.Depth = 0;
+            materialLabel21.Font = new Font("Roboto", 48F, FontStyle.Bold, GraphicsUnit.Pixel);
+            materialLabel21.FontType = ReaLTaiizor.Manager.MaterialSkinManager.FontType.H3;
+            materialLabel21.Location = new Point(12, 61);
+            materialLabel21.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
+            materialLabel21.Name = "materialLabel21";
+            materialLabel21.Size = new Size(354, 58);
+            materialLabel21.TabIndex = 12;
+            materialLabel21.Text = "123,456.78 KRW";
+            // 
+            // materialLabel10
+            // 
+            materialLabel10.AutoSize = true;
+            materialLabel10.Depth = 0;
+            materialLabel10.Font = new Font("Roboto Medium", 20F, FontStyle.Bold, GraphicsUnit.Pixel);
+            materialLabel10.FontType = ReaLTaiizor.Manager.MaterialSkinManager.FontType.H6;
+            materialLabel10.Location = new Point(17, 14);
+            materialLabel10.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
+            materialLabel10.Name = "materialLabel10";
+            materialLabel10.Size = new Size(101, 24);
+            materialLabel10.TabIndex = 11;
+            materialLabel10.Text = "평균 매입 단가";
+            // 
+            // materialCard2
+            // 
+            materialCard2.BackColor = Color.FromArgb(255, 255, 255);
+            materialCard2.Controls.Add(materialLabel12);
+            materialCard2.Controls.Add(materialLabel9);
+            materialCard2.Controls.Add(materialLabel6);
+            materialCard2.Depth = 0;
+            materialCard2.ForeColor = Color.FromArgb(222, 0, 0, 0);
+            materialCard2.Location = new Point(217, 77);
+            materialCard2.Margin = new Padding(14);
+            materialCard2.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
+            materialCard2.Name = "materialCard2";
+            materialCard2.Padding = new Padding(14);
+            materialCard2.Size = new Size(180, 180);
+            materialCard2.TabIndex = 3;
+            // 
+            // materialLabel12
+            // 
+            materialLabel12.AutoSize = true;
+            materialLabel12.Depth = 0;
+            materialLabel12.Font = new Font("Roboto Medium", 20F, FontStyle.Bold, GraphicsUnit.Pixel);
+            materialLabel12.FontType = ReaLTaiizor.Manager.MaterialSkinManager.FontType.H6;
+            materialLabel12.HighEmphasis = true;
+            materialLabel12.Location = new Point(71, 123);
+            materialLabel12.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
+            materialLabel12.Name = "materialLabel12";
+            materialLabel12.Size = new Size(30, 24);
+            materialLabel12.TabIndex = 12;
+            materialLabel12.Text = "▼ 1";
+            // 
+            // materialLabel9
+            // 
+            materialLabel9.AutoSize = true;
+            materialLabel9.Depth = 0;
+            materialLabel9.Font = new Font("Roboto", 48F, FontStyle.Bold, GraphicsUnit.Pixel);
+            materialLabel9.FontType = ReaLTaiizor.Manager.MaterialSkinManager.FontType.H3;
+            materialLabel9.Location = new Point(46, 65);
+            materialLabel9.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
+            materialLabel9.Name = "materialLabel9";
+            materialLabel9.Size = new Size(28, 58);
+            materialLabel9.TabIndex = 11;
+            materialLabel9.Text = "1";
             // 
             // materialLabel6
             // 
             materialLabel6.AutoSize = true;
             materialLabel6.Depth = 0;
-            materialLabel6.Font = new Font("Roboto", 24F, FontStyle.Bold, GraphicsUnit.Pixel);
-            materialLabel6.FontType = ReaLTaiizor.Manager.MaterialSkinManager.FontType.H5;
-            materialLabel6.ForeColor = Color.RoyalBlue;
-            materialLabel6.HighEmphasis = true;
-            materialLabel6.Location = new Point(17, 12);
+            materialLabel6.Font = new Font("Roboto Medium", 20F, FontStyle.Bold, GraphicsUnit.Pixel);
+            materialLabel6.FontType = ReaLTaiizor.Manager.MaterialSkinManager.FontType.H6;
+            materialLabel6.Location = new Point(17, 14);
             materialLabel6.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
             materialLabel6.Name = "materialLabel6";
-            materialLabel6.Size = new Size(340, 29);
+            materialLabel6.Size = new Size(136, 24);
             materialLabel6.TabIndex = 10;
-            materialLabel6.Text = "text input test 12341234 ㅁㄴㅇㄹ";
-            materialLabel6.UseAccent = true;
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Font = new Font("Roboto", 18F, FontStyle.Bold, GraphicsUnit.Point);
-            label3.ForeColor = Color.SteelBlue;
-            label3.Location = new Point(241, 12);
-            label3.Name = "label3";
-            label3.Size = new Size(537, 29);
-            label3.TabIndex = 4;
-            label3.Text = "전체 수익률 0012122`%, 전월 대비 00% 상승 했네요! 🎉";
-            // 
-            // materialListView2
-            // 
-            materialListView2.AutoSizeTable = false;
-            materialListView2.BackColor = Color.FromArgb(255, 255, 255);
-            materialListView2.BorderStyle = BorderStyle.None;
-            materialListView2.Depth = 0;
-            materialListView2.FullRowSelect = true;
-            materialListView2.Items.AddRange(new ListViewItem[] { listViewItem1, listViewItem2 });
-            materialListView2.Location = new Point(920, 142);
-            materialListView2.MinimumSize = new Size(200, 100);
-            materialListView2.MouseLocation = new Point(-1, -1);
-            materialListView2.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.OUT;
-            materialListView2.Name = "materialListView2";
-            materialListView2.OwnerDraw = true;
-            materialListView2.Size = new Size(298, 347);
-            materialListView2.TabIndex = 6;
-            materialListView2.UseCompatibleStateImageBehavior = false;
-            materialListView2.View = View.Details;
-            // 
-            // materialCard4
-            // 
-            materialCard4.BackColor = Color.FromArgb(255, 255, 255);
-            materialCard4.Depth = 0;
-            materialCard4.ForeColor = Color.FromArgb(222, 0, 0, 0);
-            materialCard4.Location = new Point(451, 330);
-            materialCard4.Margin = new Padding(14);
-            materialCard4.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
-            materialCard4.Name = "materialCard4";
-            materialCard4.Padding = new Padding(14);
-            materialCard4.Size = new Size(406, 187);
-            materialCard4.TabIndex = 5;
-            // 
-            // materialCard3
-            // 
-            materialCard3.BackColor = Color.FromArgb(255, 255, 255);
-            materialCard3.Depth = 0;
-            materialCard3.ForeColor = Color.FromArgb(222, 0, 0, 0);
-            materialCard3.Location = new Point(17, 330);
-            materialCard3.Margin = new Padding(14);
-            materialCard3.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
-            materialCard3.Name = "materialCard3";
-            materialCard3.Padding = new Padding(14);
-            materialCard3.Size = new Size(406, 187);
-            materialCard3.TabIndex = 4;
-            // 
-            // materialCard2
-            // 
-            materialCard2.BackColor = Color.FromArgb(255, 255, 255);
-            materialCard2.Depth = 0;
-            materialCard2.ForeColor = Color.FromArgb(222, 0, 0, 0);
-            materialCard2.Location = new Point(451, 77);
-            materialCard2.Margin = new Padding(14);
-            materialCard2.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
-            materialCard2.Name = "materialCard2";
-            materialCard2.Padding = new Padding(14);
-            materialCard2.Size = new Size(406, 187);
-            materialCard2.TabIndex = 3;
+            materialLabel6.Text = "진행 중인 판매 건수";
             // 
             // materialCard1
             // 
             materialCard1.BackColor = Color.FromArgb(255, 255, 255);
+            materialCard1.Controls.Add(materialLabel13);
+            materialCard1.Controls.Add(materialLabel8);
+            materialCard1.Controls.Add(materialLabel7);
             materialCard1.Depth = 0;
             materialCard1.ForeColor = Color.FromArgb(222, 0, 0, 0);
-            materialCard1.Location = new Point(17, 77);
+            materialCard1.Location = new Point(15, 77);
             materialCard1.Margin = new Padding(14);
             materialCard1.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
             materialCard1.Name = "materialCard1";
             materialCard1.Padding = new Padding(14);
-            materialCard1.Size = new Size(406, 187);
+            materialCard1.Size = new Size(180, 180);
             materialCard1.TabIndex = 2;
+            // 
+            // materialLabel13
+            // 
+            materialLabel13.AutoSize = true;
+            materialLabel13.Depth = 0;
+            materialLabel13.Font = new Font("Roboto Medium", 20F, FontStyle.Bold, GraphicsUnit.Pixel);
+            materialLabel13.FontType = ReaLTaiizor.Manager.MaterialSkinManager.FontType.H6;
+            materialLabel13.HighEmphasis = true;
+            materialLabel13.Location = new Point(60, 123);
+            materialLabel13.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
+            materialLabel13.Name = "materialLabel13";
+            materialLabel13.Size = new Size(30, 24);
+            materialLabel13.TabIndex = 13;
+            materialLabel13.Text = "▼ 1";
+            // 
+            // materialLabel8
+            // 
+            materialLabel8.AutoSize = true;
+            materialLabel8.Depth = 0;
+            materialLabel8.Font = new Font("Roboto", 48F, FontStyle.Bold, GraphicsUnit.Pixel);
+            materialLabel8.FontType = ReaLTaiizor.Manager.MaterialSkinManager.FontType.H3;
+            materialLabel8.Location = new Point(49, 65);
+            materialLabel8.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
+            materialLabel8.Name = "materialLabel8";
+            materialLabel8.Size = new Size(55, 58);
+            materialLabel8.TabIndex = 10;
+            materialLabel8.Text = "89";
+            // 
+            // materialLabel7
+            // 
+            materialLabel7.AutoSize = true;
+            materialLabel7.Depth = 0;
+            materialLabel7.Font = new Font("Roboto Medium", 20F, FontStyle.Bold, GraphicsUnit.Pixel);
+            materialLabel7.FontType = ReaLTaiizor.Manager.MaterialSkinManager.FontType.H6;
+            materialLabel7.Location = new Point(17, 14);
+            materialLabel7.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
+            materialLabel7.Name = "materialLabel7";
+            materialLabel7.Size = new Size(86, 24);
+            materialLabel7.TabIndex = 9;
+            materialLabel7.Text = "등록 물품 수";
             // 
             // tabPage2
             // 
             tabPage2.Controls.Add(materialCard6);
             tabPage2.Controls.Add(materialListView1);
+            tabPage2.Font = new Font("Roboto", 12F, FontStyle.Bold, GraphicsUnit.Point);
             tabPage2.ImageKey = "icons8-돈-가방-16.png";
             tabPage2.Location = new Point(4, 24);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(3);
-            tabPage2.Size = new Size(1370, 543);
+            tabPage2.Size = new Size(1280, 660);
             tabPage2.TabIndex = 1;
-            tabPage2.Text = "SellStatus";
+            tabPage2.Text = "판매현황";
             tabPage2.UseVisualStyleBackColor = true;
             // 
             // materialCard6
@@ -280,8 +665,8 @@
             materialListView1.Dock = DockStyle.Fill;
             materialListView1.FullRowSelect = true;
             materialListView1.HeaderStyle = ColumnHeaderStyle.Nonclickable;
-            listViewItem3.StateImageIndex = 0;
-            materialListView1.Items.AddRange(new ListViewItem[] { listViewItem3 });
+            listViewItem1.StateImageIndex = 0;
+            materialListView1.Items.AddRange(new ListViewItem[] { listViewItem1 });
             materialListView1.Location = new Point(3, 3);
             materialListView1.MinimumSize = new Size(200, 100);
             materialListView1.MouseLocation = new Point(-1, -1);
@@ -304,12 +689,13 @@
             tabPage3.Controls.Add(materialLabel3);
             tabPage3.Controls.Add(materialLabel2);
             tabPage3.Controls.Add(materialLabel1);
+            tabPage3.Font = new Font("Roboto", 12F, FontStyle.Bold, GraphicsUnit.Point);
             tabPage3.ImageKey = "icons8-설정-3-16.png";
             tabPage3.Location = new Point(4, 24);
             tabPage3.Name = "tabPage3";
-            tabPage3.Size = new Size(1370, 543);
+            tabPage3.Size = new Size(1280, 660);
             tabPage3.TabIndex = 2;
-            tabPage3.Text = "Settings";
+            tabPage3.Text = "설정";
             tabPage3.UseVisualStyleBackColor = true;
             // 
             // materialButton2
@@ -468,19 +854,36 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1384, 638);
+            ClientSize = new Size(1294, 755);
             Controls.Add(materialTabControl1);
             DrawerShowIconsWhenHidden = true;
             DrawerTabControl = materialTabControl1;
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            MaximizeBox = false;
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Stockgazers";
             Load += Form1_Load;
             materialTabControl1.ResumeLayout(false);
             tabPage1.ResumeLayout(false);
-            tabPage1.PerformLayout();
+            materialCard10.ResumeLayout(false);
+            materialCard10.PerformLayout();
+            materialCard9.ResumeLayout(false);
+            materialCard9.PerformLayout();
+            materialCard8.ResumeLayout(false);
+            materialCard8.PerformLayout();
+            materialCard7.ResumeLayout(false);
+            materialCard7.PerformLayout();
             materialCard5.ResumeLayout(false);
             materialCard5.PerformLayout();
+            materialCard4.ResumeLayout(false);
+            materialCard4.PerformLayout();
+            materialCard3.ResumeLayout(false);
+            materialCard3.PerformLayout();
+            materialCard2.ResumeLayout(false);
+            materialCard2.PerformLayout();
+            materialCard1.ResumeLayout(false);
+            materialCard1.PerformLayout();
             tabPage2.ResumeLayout(false);
             materialCard6.ResumeLayout(false);
             materialCard6.PerformLayout();
@@ -512,14 +915,39 @@
         private ReaLTaiizor.Controls.MaterialRadioButton materialRadioButton1;
         private ReaLTaiizor.Controls.MaterialCard materialCard1;
         private ReaLTaiizor.Controls.MaterialCard materialCard2;
-        private ReaLTaiizor.Controls.MaterialListView materialListView2;
         private ReaLTaiizor.Controls.MaterialCard materialCard4;
         private ReaLTaiizor.Controls.MaterialCard materialCard3;
         private ReaLTaiizor.Controls.MaterialCard materialCard5;
-        private Label label3;
         private ReaLTaiizor.Controls.MaterialCard materialCard6;
         private ReaLTaiizor.Controls.MaterialLabel materialLabel5;
-        private ReaLTaiizor.Controls.MaterialLabel materialLabel4;
+        private ReaLTaiizor.Controls.MaterialLabel materialLabel8;
+        private ReaLTaiizor.Controls.MaterialLabel materialLabel7;
+        private ReaLTaiizor.Controls.MaterialLabel materialLabel11;
+        private ReaLTaiizor.Controls.MaterialLabel materialLabel10;
+        private ReaLTaiizor.Controls.MaterialLabel materialLabel9;
         private ReaLTaiizor.Controls.MaterialLabel materialLabel6;
+        private ReaLTaiizor.Controls.MaterialCard materialCard8;
+        private ReaLTaiizor.Controls.MaterialLabel materialLabel17;
+        private ReaLTaiizor.Controls.MaterialLabel materialLabel18;
+        private ReaLTaiizor.Controls.MaterialLabel materialLabel19;
+        private ReaLTaiizor.Controls.MaterialCard materialCard7;
+        private ReaLTaiizor.Controls.MaterialLabel materialLabel14;
+        private ReaLTaiizor.Controls.MaterialLabel materialLabel15;
+        private ReaLTaiizor.Controls.MaterialLabel materialLabel16;
+        private ReaLTaiizor.Controls.MaterialLabel materialLabel12;
+        private ReaLTaiizor.Controls.MaterialLabel materialLabel13;
+        private ReaLTaiizor.Controls.MaterialLabel materialLabel4;
+        private ReaLTaiizor.Controls.MaterialLabel materialLabel22;
+        private ReaLTaiizor.Controls.MaterialLabel materialLabel20;
+        private ReaLTaiizor.Controls.MaterialCard materialCard10;
+        private ReaLTaiizor.Controls.MaterialLabel materialLabel27;
+        private ReaLTaiizor.Controls.MaterialLabel materialLabel28;
+        private ReaLTaiizor.Controls.MaterialLabel materialLabel29;
+        private ReaLTaiizor.Controls.MaterialCard materialCard9;
+        private ReaLTaiizor.Controls.MaterialLabel materialLabel24;
+        private ReaLTaiizor.Controls.MaterialLabel materialLabel25;
+        private ReaLTaiizor.Controls.MaterialLabel materialLabel26;
+        private ReaLTaiizor.Controls.MaterialLabel materialLabel23;
+        private ReaLTaiizor.Controls.MaterialLabel materialLabel21;
     }
 }
