@@ -78,8 +78,7 @@ namespace Stockgazers
             }
             catch (HttpRequestException ex)
             {
-                MaterialSnackBar snackBar = new(ex.Message.Split(new char[] { '(' }).First().Trim() + "\r\n잠시 후 다시 시도 해 주세요.", "OK", true);
-                snackBar.Show(this);
+                MessageBox.Show(ex.Message.Split(new char[] { '(' }).First().Trim() + "\r\n잠시 후 다시 시도 해 주세요.", "Stockgazers", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             this.Close();
         }

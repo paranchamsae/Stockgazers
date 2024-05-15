@@ -39,6 +39,28 @@ namespace Stockgazers
             public required string redirect_uri { get; set; }
         }
 
+        class Stock
+        {
+            public int UserID { get; set; }
+            public string IsDelete { get; set; } = string.Empty;
+            public string ListingID { get; set; } = string.Empty;
+            public string StyleID { get; set; } = string.Empty;
+            public string ProductID { get; set; } = string.Empty;
+            public string Title { get; set; } = string.Empty;
+            public string VariantID { get; set; } = string.Empty;
+            public string VariantValue { get; set; } = string.Empty;
+            public int BuyPrice { get; set; }
+            public float BuyPriceUSD { get; set; }
+            public int Limit { get; set; }
+            public string OrderNo { get; set; } = string.Empty;
+            public DateTime? SellDatetime { get; set; } = null;
+            public DateTime? SendDatetime { get; set; } = null;
+            public float AdjustPrice { get; set; }
+            public float Profit { get; set; }
+            public DateTime CreateDatetime { get; set; }
+            public DateTime? UpdateDatetime { get; set; } = null;
+        }
+
         Common common;
 
         public MainForm(Common c)
@@ -158,7 +180,32 @@ namespace Stockgazers
             }
             #endregion
 
-            #region 2-3. 딱스 목록이랑 Stockgazers 판매현황 Distinct로 거르고 남아있는 데이터는 디비에 추가
+            #region 2-3. 딱스 목록이랑 Stockgazers 판매현황 중복 거르고 남아있는 데이터는 디비에 추가
+            StockxListingsList = StockxListingsList.Where(x => StockgazersReference.Count(y => y["ListingID"].ToString() == x["listingId"].ToString()) == 0).ToList();
+            List<Stock> stocks = new();
+            foreach (JToken list in StockxListingsList.Take(3))
+            {
+                Stock s = new()
+                {
+                    UserID = common.StockgazersUserID,
+                    IsDelete = "F",
+                    ListingID = list["listingId"]!.ToString(),
+                    StyleID = list["product"]["styleId"].ToString(),
+                    ProductID = list["product"]["productId"].ToString(),
+                    Title = list["product"]["productName"].ToString(),
+                    VariantID = list["variant"]["variantId"].ToString(),
+                    VariantValue = list["variant"]["variantValue"].ToString(),
+                    BuyPrice = 0,
+                    BuyPriceUSD = 0.0f,
+                    Limit = 0,
+
+                };
+                stocks.Add(s);
+            }
+            
+            url = $"http://127.0.0.1:8000/api/stocks";
+            var sendData = new StringContent(JsonConvert.SerializeObject(stocks), Encoding.UTF8, "application/json");
+            response = await common.session.PutAsync(url, sendData);
 
             #endregion
 
