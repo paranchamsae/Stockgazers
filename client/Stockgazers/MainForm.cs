@@ -13,6 +13,8 @@ using Stockgazers.Models;
 
 namespace Stockgazers
 {
+#pragma warning disable CS8602
+#pragma warning disable CS8604
     public partial class MainForm : MaterialForm
     {
         private readonly MaterialSkinManager materialSkinManager;
@@ -110,15 +112,15 @@ namespace Stockgazers
             common.session.DefaultRequestHeaders.Add("x-api-key", $"{API.APIKey}");
 
             response = await common.session.GetAsync(url);
-            List<JToken> StockxListingsList = new List<JToken>();
+            List<JToken> StockxListingsListOrigin = new List<JToken>();
             if (response.StatusCode == HttpStatusCode.OK)
             {
                 var StockxRaw = response.Content.ReadAsStringAsync().Result;
                 JToken? tempStockx = JsonConvert.DeserializeObject<JToken>(StockxRaw);
                 if (tempStockx != null)
-                    StockxListingsList = JsonConvert.DeserializeObject<JToken>(tempStockx["listings"]!.ToString())!.ToList();
+                    StockxListingsListOrigin = JsonConvert.DeserializeObject<JToken>(tempStockx["listings"]!.ToString())!.ToList();
             }
-            if (StockxListingsList.Count == 0)
+            if (StockxListingsListOrigin.Count == 0)
             {
                 MaterialSnackBar snackBar = new("StockX에서 나의 판매 현황을 불러오는데 실패했습니다.", "OK", true);
                 snackBar.Show(this);
@@ -143,7 +145,7 @@ namespace Stockgazers
             #endregion
 
             #region 2-3. 딱스 목록이랑 Stockgazers 판매현황 중복 거르고 남아있는 데이터는 디비에 추가
-            StockxListingsList = StockxListingsList.Where(x => x["listingId"] != null && x["product"].Count() > 0 && x["variant"].Count() > 0).ToList();
+            List<JToken> StockxListingsList = StockxListingsListOrigin.Where(x => x["listingId"] != null && x["product"].Any() && x["variant"].Any()).ToList();
             StockxListingsList = StockxListingsList.Where(x => StockgazersReference.Count(y => y["ListingID"].ToString() == x["listingId"].ToString()) == 0).ToList();
             List<Stock> stocks = new();
             foreach (JToken list in StockxListingsList)
@@ -182,8 +184,33 @@ namespace Stockgazers
 
             #endregion
 
-            #region 3. 홈 화면 데이터 업데이트
+            #region 3. 홈 화면 데이터 업데이트 - 판매 완료이력 조회(판매금액, 정산금액 획득 후 서버에서 profit 계산)
+            List<JToken> ordersRaw = StockxListingsListOrigin.Where(x => x["order"] != null && x["order"]!.Any()).ToList();
+            List<Order> order = new List<Order>();
+            foreach (var row in ordersRaw)
+            {
+                url = $"https://api.stockx.com/v2/selling/orders/{row["order"]["orderNumber"].ToString()}";
+                response = await common.session.GetAsync(url);
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    JToken? tempOrder = JsonConvert.DeserializeObject<JToken>(response.Content.ReadAsStringAsync().Result);
+                    Order o = new()
+                    {
+                        OrderNo = tempOrder["orderNumber"].ToString(),
+                        ListingID = tempOrder["listingId"].ToString(),
+                        SalePrice = Convert.ToInt32(tempOrder["payout"]["salePrice"]),
+                        AdjustPrice = Convert.ToDouble(tempOrder["payout"]["totalPayout"])
+                    };
+                    order.Add(o);
+                }
+            }
 
+            if (order.Count > 0)
+            {
+                url = $"{API.GetServer()}/api/stocks/order";
+                var sendData = new StringContent(JsonConvert.SerializeObject(order), Encoding.UTF8, "application/json");
+                response = await common.session.PostAsync(url, sendData);
+            }
             #endregion
         }
     }

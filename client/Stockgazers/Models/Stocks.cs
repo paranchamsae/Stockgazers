@@ -26,4 +26,12 @@ namespace Stockgazers.Models
         public float AdjustPrice { get; set; }
         public float Profit { get; set; }
     }
+
+    public class Order
+    {
+        public string OrderNo { get; set; } = string.Empty;
+        public string ListingID { get; set; } = string.Empty;
+        public int SalePrice { get; set; }
+        public double AdjustPrice { get; set; }
+    }
 }
