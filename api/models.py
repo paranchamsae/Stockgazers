@@ -32,6 +32,7 @@ class Stocks(Base):
     VariantValue = Column(String, nullable=False)
     BuyPrice = Column(Integer, nullable=False)
     BuyPriceUSD = Column(Float, nullable=False, default=0)
+    Price = Column(Integer, nullable=False, default=0)
     Limit = Column(Integer, nullable=False, default=0)
     OrderNo = Column(String, nullable=True)
     SellDatetime = Column(DateTime, nullable=True)

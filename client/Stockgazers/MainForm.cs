@@ -51,14 +51,15 @@ namespace Stockgazers
             public string VariantValue { get; set; } = string.Empty;
             public int BuyPrice { get; set; }
             public float BuyPriceUSD { get; set; }
+            public int Price { get; set; }
             public int Limit { get; set; }
             public string OrderNo { get; set; } = string.Empty;
             public DateTime? SellDatetime { get; set; } = null;
             public DateTime? SendDatetime { get; set; } = null;
             public float AdjustPrice { get; set; }
             public float Profit { get; set; }
-            public DateTime CreateDatetime { get; set; }
-            public DateTime? UpdateDatetime { get; set; } = null;
+            //public DateTime CreateDatetime { get; set; }
+            //public DateTime? UpdateDatetime { get; set; } = null;
         }
 
         Common common;
@@ -181,9 +182,10 @@ namespace Stockgazers
             #endregion
 
             #region 2-3. 딱스 목록이랑 Stockgazers 판매현황 중복 거르고 남아있는 데이터는 디비에 추가
+            StockxListingsList = StockxListingsList.Where(x => x["listingId"] != null && x["product"].Count() > 0 && x["variant"].Count() > 0).ToList();
             StockxListingsList = StockxListingsList.Where(x => StockgazersReference.Count(y => y["ListingID"].ToString() == x["listingId"].ToString()) == 0).ToList();
             List<Stock> stocks = new();
-            foreach (JToken list in StockxListingsList.Take(3))
+            foreach (JToken list in StockxListingsList)
             {
                 Stock s = new()
                 {
@@ -197,15 +199,24 @@ namespace Stockgazers
                     VariantValue = list["variant"]["variantValue"].ToString(),
                     BuyPrice = 0,
                     BuyPriceUSD = 0.0f,
+                    Price = Convert.ToInt32(list["amount"].ToString()),
                     Limit = 0,
-
                 };
+
+                if (list["order"].Count() > 0)
+                {
+                    s.OrderNo = list["order"]["orderNumber"].ToString();
+                    //s.SellDatetime = list["order"]["orderCreatedAt"]
+                }
                 stocks.Add(s);
             }
-            
-            url = $"http://127.0.0.1:8000/api/stocks";
-            var sendData = new StringContent(JsonConvert.SerializeObject(stocks), Encoding.UTF8, "application/json");
-            response = await common.session.PutAsync(url, sendData);
+
+            if (stocks.Count > 0)
+            {
+                url = $"http://127.0.0.1:8000/api/stocks";
+                var sendData = new StringContent(JsonConvert.SerializeObject(stocks), Encoding.UTF8, "application/json");
+                response = await common.session.PostAsync(url, sendData);
+            }
 
             #endregion
 
