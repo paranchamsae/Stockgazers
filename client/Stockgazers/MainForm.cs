@@ -206,7 +206,7 @@ namespace Stockgazers
                 if (list["order"].Count() > 0)
                 {
                     s.OrderNo = list["order"]["orderNumber"].ToString();
-                    //s.SellDatetime = list["order"]["orderCreatedAt"]
+                    s.SellDatetime = Convert.ToDateTime(list["order"]["orderCreatedAt"]);
                 }
                 stocks.Add(s);
             }
