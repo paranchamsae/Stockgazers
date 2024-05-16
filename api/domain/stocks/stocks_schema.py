@@ -22,6 +22,12 @@ class RequestAddStocks(BaseModel):
     # CreateDatetime: AwareDatetime
     # UpdateDatetime: AwareDatetime | None = None
 
+# class StocksExcelExport(BaseModel):
+#     StyleID: str
+#     Title: str
+#     VariantValue: str
+#     ListingID: str
+
 # class RequestAddStocksBulk(BaseModel):
 #     Data: list[RequestAddStocks]
 
