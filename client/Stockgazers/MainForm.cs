@@ -10,6 +10,7 @@ using System.Text;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
 using Stockgazers.Models;
+using System.Security.Policy;
 
 namespace Stockgazers
 {
@@ -187,21 +188,24 @@ namespace Stockgazers
             #region 3. 홈 화면 데이터 업데이트 - 판매 완료이력 조회(판매금액, 정산금액 획득 후 서버에서 profit 계산)
             List<JToken> ordersRaw = StockxListingsListOrigin.Where(x => x["order"] != null && x["order"]!.Any()).ToList();
             List<Order> order = new List<Order>();
-            foreach (var row in ordersRaw)
+            if (StockgazersReference.Where(x => Convert.ToInt32(x["Price"]) == 0).Any())
             {
-                url = $"https://api.stockx.com/v2/selling/orders/{row["order"]["orderNumber"].ToString()}";
-                response = await common.session.GetAsync(url);
-                if (response.StatusCode == HttpStatusCode.OK)
+                foreach (var row in ordersRaw)
                 {
-                    JToken? tempOrder = JsonConvert.DeserializeObject<JToken>(response.Content.ReadAsStringAsync().Result);
-                    Order o = new()
+                    url = $"https://api.stockx.com/v2/selling/orders/{row["order"]["orderNumber"]}";
+                    response = await common.session.GetAsync(url);
+                    if (response.StatusCode == HttpStatusCode.OK)
                     {
-                        OrderNo = tempOrder["orderNumber"].ToString(),
-                        ListingID = tempOrder["listingId"].ToString(),
-                        SalePrice = Convert.ToInt32(tempOrder["payout"]["salePrice"]),
-                        AdjustPrice = Convert.ToDouble(tempOrder["payout"]["totalPayout"])
-                    };
-                    order.Add(o);
+                        JToken? tempOrder = JsonConvert.DeserializeObject<JToken>(response.Content.ReadAsStringAsync().Result);
+                        Order o = new()
+                        {
+                            OrderNo = tempOrder["orderNumber"].ToString(),
+                            ListingID = tempOrder["listingId"].ToString(),
+                            SalePrice = Convert.ToInt32(tempOrder["payout"]["salePrice"]),
+                            AdjustPrice = Convert.ToDouble(tempOrder["payout"]["totalPayout"])
+                        };
+                        order.Add(o);
+                    }
                 }
             }
 
@@ -212,6 +216,50 @@ namespace Stockgazers
                 response = await common.session.PostAsync(url, sendData);
             }
             #endregion
+
+            #region 4. 판매현황 탭 리스트뷰 데이터 집어넣기
+            foreach (var row in StockgazersReference)
+            {
+                string[] element = new[] {
+                    "",
+                    row["StyleId"].ToString(),
+                    row["Title"].ToString(),
+                    row["BuyPrice"].ToString(),
+                    row["Price"].ToString(),
+                    row["OrderNo"].ToString().Length > 0 ? "판매완료" : "입찰 중",
+                    row["AdjustPrice"].ToString(),
+                    row["Profit"].ToString(),
+                };
+                materialListView1.Items.Add(new ListViewItem(element));
+            }
+
+            #endregion
+        }
+
+        private void materialRadioButton4_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private async void materialButton4_Click(object sender, EventArgs e)
+        {
+            string url = $"{API.GetServer()}/api/stocks/export/{common.StockgazersUserID}";
+            var response = await common.session.GetAsync(url);
+            string? path = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                using (Stream stream = await response.Content.ReadAsStreamAsync())
+                {
+                    using (FileStream fs = new(Path.Combine(path, "data.csv"), FileMode.OpenOrCreate, FileAccess.ReadWrite))
+                    {
+                        await stream.CopyToAsync(fs);
+                    }
+                }
+                
+                MaterialSnackBar snackBar = new("프로그램 경로에 다운로드 되었어요", "OK", true);
+                snackBar.Show(this);
+            }
         }
     }
 }

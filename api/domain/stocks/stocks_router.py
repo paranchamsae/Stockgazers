@@ -1,11 +1,12 @@
+#-*- coding:utf-8 -*-
 from fastapi import APIRouter, HTTPException, status, File, UploadFile
-from fastapi.responses import JSONResponse, StreamingResponse
+from fastapi.responses import JSONResponse, FileResponse
 import math
 from database import get_db
 from datetime import datetime
 
 from pandas import pandas       # excel export library
-from io import BytesIO
+from io import BytesIO, StringIO
 
 from sqlalchemy import select, update
 from models import Stocks
@@ -26,31 +27,30 @@ async def get_stocks(UserID: str):
 
 @router.get("/export/{UserID}", summary="내 재고 현황 엑셀로 내려받기(구매원가 업로드용)")
 async def get_stocks_excel(UserID: str):
-    StyleIDs = []
-    Titles = []
-    VariantValues = []
-    ListingIDs = []
-
+    elements = []
     with get_db() as db:
         result = db.query(Stocks).filter(Stocks.UserID == int(UserID)).all()
         for row in result:
-            StyleIDs.append(row.StyleId)
-            Titles.append(row.Title)
-            VariantValues.append(row.VariantValue)
-            ListingIDs.append(row.ListingID)
+            testrow = []
+            testrow.append(row.StyleId)
+            testrow.append(row.Title)
+            testrow.append(row.VariantValue)
+            testrow.append(row.ListingID)
+            testrow.append("")
+            elements.append(testrow)
 
-    frame = pandas.DataFrame({
-        '모델코드': StyleIDs, 
-        '모델명': Titles,
-        '사이즈': VariantValues,
-        '고유아이디': ListingIDs,
-        '구매원가' : ""
-    })
-   
-    return StreamingResponse(
-        iter([frame.to_csv(index=False)]),
-        media_type="text/csv",
-        headers={"Content-Disposition": "attachment;filename=data.csv"}
+    frame = pandas.DataFrame(
+        elements,
+        columns = ["모델명", "이름", "사이즈", "고유아이디", "구매원가"]
+    )
+
+    filename = "data-"+UserID+"-"+datetime.now().strftime('%Y%m%d')+".csv"
+    frame.to_csv(filename, index=False, encoding="utf-8-sig")
+
+    return FileResponse(
+        filename,
+        filename=filename,
+        media_type="text/csv"
     )
 
 @router.post("/import", summary="내 재고 현황 엑셀 업로드(구매원가 업로드용)")

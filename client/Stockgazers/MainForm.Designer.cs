@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            ListViewItem listViewItem1 = new ListViewItem(new string[] { "", "1", "2", "3", "4", "5" }, -1);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             materialTabControl1 = new ReaLTaiizor.Controls.MaterialTabControl();
             tabPage1 = new TabPage();
@@ -68,14 +67,20 @@
             materialLabel8 = new ReaLTaiizor.Controls.MaterialLabel();
             materialLabel7 = new ReaLTaiizor.Controls.MaterialLabel();
             tabPage2 = new TabPage();
-            materialCard6 = new ReaLTaiizor.Controls.MaterialCard();
-            materialLabel5 = new ReaLTaiizor.Controls.MaterialLabel();
+            materialRadioButton5 = new ReaLTaiizor.Controls.MaterialRadioButton();
+            materialRadioButton4 = new ReaLTaiizor.Controls.MaterialRadioButton();
+            materialRadioButton3 = new ReaLTaiizor.Controls.MaterialRadioButton();
+            materialTextBoxEdit2 = new ReaLTaiizor.Controls.MaterialTextBoxEdit();
+            materialButton3 = new ReaLTaiizor.Controls.MaterialButton();
             materialListView1 = new ReaLTaiizor.Controls.MaterialListView();
+            columnHeader8 = new ColumnHeader();
             columnHeader1 = new ColumnHeader();
             columnHeader2 = new ColumnHeader();
             columnHeader3 = new ColumnHeader();
             columnHeader4 = new ColumnHeader();
             columnHeader5 = new ColumnHeader();
+            columnHeader6 = new ColumnHeader();
+            columnHeader7 = new ColumnHeader();
             tabPage3 = new TabPage();
             materialButton2 = new ReaLTaiizor.Controls.MaterialButton();
             materialButton1 = new ReaLTaiizor.Controls.MaterialButton();
@@ -86,6 +91,8 @@
             materialLabel2 = new ReaLTaiizor.Controls.MaterialLabel();
             materialLabel1 = new ReaLTaiizor.Controls.MaterialLabel();
             imageList1 = new ImageList(components);
+            materialButton4 = new ReaLTaiizor.Controls.MaterialButton();
+            materialButton5 = new ReaLTaiizor.Controls.MaterialButton();
             materialTabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             materialCard10.SuspendLayout();
@@ -98,7 +105,6 @@
             materialCard2.SuspendLayout();
             materialCard1.SuspendLayout();
             tabPage2.SuspendLayout();
-            materialCard6.SuspendLayout();
             tabPage3.SuspendLayout();
             SuspendLayout();
             // 
@@ -115,7 +121,7 @@
             materialTabControl1.Multiline = true;
             materialTabControl1.Name = "materialTabControl1";
             materialTabControl1.SelectedIndex = 0;
-            materialTabControl1.Size = new Size(1288, 688);
+            materialTabControl1.Size = new Size(1400, 961);
             materialTabControl1.TabIndex = 0;
             // 
             // tabPage1
@@ -134,7 +140,7 @@
             tabPage1.Location = new Point(4, 24);
             tabPage1.Name = "tabPage1";
             tabPage1.Padding = new Padding(3);
-            tabPage1.Size = new Size(1280, 660);
+            tabPage1.Size = new Size(1392, 933);
             tabPage1.TabIndex = 0;
             tabPage1.Text = "메인";
             tabPage1.UseVisualStyleBackColor = true;
@@ -375,7 +381,7 @@
             materialCard5.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
             materialCard5.Name = "materialCard5";
             materialCard5.Padding = new Padding(14);
-            materialCard5.Size = new Size(1274, 46);
+            materialCard5.Size = new Size(1386, 46);
             materialCard5.TabIndex = 7;
             // 
             // materialLabel20
@@ -617,67 +623,187 @@
             // 
             // tabPage2
             // 
-            tabPage2.Controls.Add(materialCard6);
+            tabPage2.Controls.Add(materialButton5);
+            tabPage2.Controls.Add(materialButton4);
+            tabPage2.Controls.Add(materialRadioButton5);
+            tabPage2.Controls.Add(materialRadioButton4);
+            tabPage2.Controls.Add(materialRadioButton3);
+            tabPage2.Controls.Add(materialTextBoxEdit2);
+            tabPage2.Controls.Add(materialButton3);
             tabPage2.Controls.Add(materialListView1);
             tabPage2.Font = new Font("Roboto", 12F, FontStyle.Bold, GraphicsUnit.Point);
             tabPage2.ImageKey = "icons8-돈-가방-16.png";
             tabPage2.Location = new Point(4, 24);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(3);
-            tabPage2.Size = new Size(1280, 660);
+            tabPage2.Size = new Size(1392, 933);
             tabPage2.TabIndex = 1;
             tabPage2.Text = "판매현황";
             tabPage2.UseVisualStyleBackColor = true;
             // 
-            // materialCard6
+            // materialRadioButton5
             // 
-            materialCard6.BackColor = Color.FromArgb(255, 255, 255);
-            materialCard6.Controls.Add(materialLabel5);
-            materialCard6.Depth = 0;
-            materialCard6.ForeColor = Color.FromArgb(222, 0, 0, 0);
-            materialCard6.Location = new Point(412, 70);
-            materialCard6.Margin = new Padding(14);
-            materialCard6.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
-            materialCard6.Name = "materialCard6";
-            materialCard6.Padding = new Padding(14);
-            materialCard6.Size = new Size(317, 254);
-            materialCard6.TabIndex = 1;
+            materialRadioButton5.AutoSize = true;
+            materialRadioButton5.Depth = 0;
+            materialRadioButton5.Location = new Point(140, 57);
+            materialRadioButton5.Margin = new Padding(0);
+            materialRadioButton5.MouseLocation = new Point(-1, -1);
+            materialRadioButton5.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
+            materialRadioButton5.Name = "materialRadioButton5";
+            materialRadioButton5.Ripple = true;
+            materialRadioButton5.Size = new Size(59, 37);
+            materialRadioButton5.TabIndex = 5;
+            materialRadioButton5.TabStop = true;
+            materialRadioButton5.Text = "완료";
+            materialRadioButton5.UseAccentColor = false;
+            materialRadioButton5.UseVisualStyleBackColor = true;
             // 
-            // materialLabel5
+            // materialRadioButton4
             // 
-            materialLabel5.AutoSize = true;
-            materialLabel5.Depth = 0;
-            materialLabel5.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
-            materialLabel5.Location = new Point(56, 72);
-            materialLabel5.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
-            materialLabel5.Name = "materialLabel5";
-            materialLabel5.Size = new Size(107, 19);
-            materialLabel5.TabIndex = 0;
-            materialLabel5.Text = "materialLabel5";
+            materialRadioButton4.AutoSize = true;
+            materialRadioButton4.Depth = 0;
+            materialRadioButton4.Location = new Point(65, 57);
+            materialRadioButton4.Margin = new Padding(0);
+            materialRadioButton4.MouseLocation = new Point(-1, -1);
+            materialRadioButton4.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
+            materialRadioButton4.Name = "materialRadioButton4";
+            materialRadioButton4.Ripple = true;
+            materialRadioButton4.Size = new Size(75, 37);
+            materialRadioButton4.TabIndex = 4;
+            materialRadioButton4.TabStop = true;
+            materialRadioButton4.Text = "입찰 중";
+            materialRadioButton4.UseAccentColor = true;
+            materialRadioButton4.UseVisualStyleBackColor = true;
+            // 
+            // materialRadioButton3
+            // 
+            materialRadioButton3.AutoSize = true;
+            materialRadioButton3.Checked = true;
+            materialRadioButton3.Depth = 0;
+            materialRadioButton3.Location = new Point(6, 57);
+            materialRadioButton3.Margin = new Padding(0);
+            materialRadioButton3.MouseLocation = new Point(-1, -1);
+            materialRadioButton3.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
+            materialRadioButton3.Name = "materialRadioButton3";
+            materialRadioButton3.Ripple = true;
+            materialRadioButton3.Size = new Size(59, 37);
+            materialRadioButton3.TabIndex = 3;
+            materialRadioButton3.TabStop = true;
+            materialRadioButton3.Text = "전체";
+            materialRadioButton3.UseAccentColor = false;
+            materialRadioButton3.UseVisualStyleBackColor = true;
+            // 
+            // materialTextBoxEdit2
+            // 
+            materialTextBoxEdit2.AnimateReadOnly = false;
+            materialTextBoxEdit2.AutoCompleteMode = AutoCompleteMode.None;
+            materialTextBoxEdit2.AutoCompleteSource = AutoCompleteSource.None;
+            materialTextBoxEdit2.BackgroundImageLayout = ImageLayout.None;
+            materialTextBoxEdit2.CharacterCasing = CharacterCasing.Normal;
+            materialTextBoxEdit2.Depth = 0;
+            materialTextBoxEdit2.Font = new Font("Roboto", 16F, FontStyle.Regular, GraphicsUnit.Pixel);
+            materialTextBoxEdit2.HideSelection = true;
+            materialTextBoxEdit2.Hint = "모델명, 이름으로 검색";
+            materialTextBoxEdit2.LeadingIcon = Properties.Resources.icons8_수색_24;
+            materialTextBoxEdit2.Location = new Point(6, 6);
+            materialTextBoxEdit2.MaxLength = 32767;
+            materialTextBoxEdit2.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.OUT;
+            materialTextBoxEdit2.Name = "materialTextBoxEdit2";
+            materialTextBoxEdit2.PasswordChar = '\0';
+            materialTextBoxEdit2.PrefixSuffixText = null;
+            materialTextBoxEdit2.ReadOnly = false;
+            materialTextBoxEdit2.RightToLeft = RightToLeft.No;
+            materialTextBoxEdit2.SelectedText = "";
+            materialTextBoxEdit2.SelectionLength = 0;
+            materialTextBoxEdit2.SelectionStart = 0;
+            materialTextBoxEdit2.ShortcutsEnabled = true;
+            materialTextBoxEdit2.Size = new Size(250, 48);
+            materialTextBoxEdit2.TabIndex = 2;
+            materialTextBoxEdit2.TabStop = false;
+            materialTextBoxEdit2.TextAlign = HorizontalAlignment.Left;
+            materialTextBoxEdit2.TrailingIcon = null;
+            materialTextBoxEdit2.UseSystemPasswordChar = false;
+            // 
+            // materialButton3
+            // 
+            materialButton3.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            materialButton3.Density = ReaLTaiizor.Controls.MaterialButton.MaterialButtonDensity.Default;
+            materialButton3.Depth = 0;
+            materialButton3.HighEmphasis = true;
+            materialButton3.Icon = null;
+            materialButton3.IconType = ReaLTaiizor.Controls.MaterialButton.MaterialIconType.Rebase;
+            materialButton3.Location = new Point(263, 18);
+            materialButton3.Margin = new Padding(4, 6, 4, 6);
+            materialButton3.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
+            materialButton3.Name = "materialButton3";
+            materialButton3.NoAccentTextColor = Color.Empty;
+            materialButton3.Size = new Size(78, 36);
+            materialButton3.TabIndex = 1;
+            materialButton3.Text = "Search";
+            materialButton3.Type = ReaLTaiizor.Controls.MaterialButton.MaterialButtonType.Contained;
+            materialButton3.UseAccentColor = false;
+            materialButton3.UseVisualStyleBackColor = true;
             // 
             // materialListView1
             // 
-            materialListView1.AutoSizeTable = true;
+            materialListView1.AutoSizeTable = false;
             materialListView1.BackColor = Color.FromArgb(255, 255, 255);
             materialListView1.BorderStyle = BorderStyle.None;
-            materialListView1.Columns.AddRange(new ColumnHeader[] { columnHeader1, columnHeader2, columnHeader3, columnHeader4, columnHeader5 });
+            materialListView1.CheckBoxes = true;
+            materialListView1.Columns.AddRange(new ColumnHeader[] { columnHeader8, columnHeader1, columnHeader2, columnHeader3, columnHeader4, columnHeader5, columnHeader6, columnHeader7 });
             materialListView1.Depth = 0;
-            materialListView1.Dock = DockStyle.Fill;
             materialListView1.FullRowSelect = true;
             materialListView1.HeaderStyle = ColumnHeaderStyle.Nonclickable;
-            listViewItem1.StateImageIndex = 0;
-            materialListView1.Items.AddRange(new ListViewItem[] { listViewItem1 });
-            materialListView1.Location = new Point(3, 3);
+            materialListView1.Location = new Point(3, 97);
             materialListView1.MinimumSize = new Size(200, 100);
             materialListView1.MouseLocation = new Point(-1, -1);
             materialListView1.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.OUT;
             materialListView1.Name = "materialListView1";
             materialListView1.OwnerDraw = true;
-            materialListView1.Scrollable = false;
-            materialListView1.Size = new Size(300, 100);
+            materialListView1.Size = new Size(1352, 791);
             materialListView1.TabIndex = 0;
             materialListView1.UseCompatibleStateImageBehavior = false;
             materialListView1.View = View.Details;
+            // 
+            // columnHeader8
+            // 
+            columnHeader8.Text = "자동 가격조정 설정";
+            columnHeader8.Width = 120;
+            // 
+            // columnHeader1
+            // 
+            columnHeader1.Text = "모델명";
+            columnHeader1.Width = 130;
+            // 
+            // columnHeader2
+            // 
+            columnHeader2.Text = "이름";
+            columnHeader2.Width = 250;
+            // 
+            // columnHeader3
+            // 
+            columnHeader3.Text = "구매원가";
+            columnHeader3.Width = 100;
+            // 
+            // columnHeader4
+            // 
+            columnHeader4.Text = "입찰금액";
+            columnHeader4.Width = 100;
+            // 
+            // columnHeader5
+            // 
+            columnHeader5.Text = "상태";
+            columnHeader5.Width = 100;
+            // 
+            // columnHeader6
+            // 
+            columnHeader6.Text = "정산금액";
+            columnHeader6.Width = 100;
+            // 
+            // columnHeader7
+            // 
+            columnHeader7.Text = "이익률";
+            columnHeader7.Width = 100;
             // 
             // tabPage3
             // 
@@ -693,7 +819,7 @@
             tabPage3.ImageKey = "icons8-설정-3-16.png";
             tabPage3.Location = new Point(4, 24);
             tabPage3.Name = "tabPage3";
-            tabPage3.Size = new Size(1280, 660);
+            tabPage3.Size = new Size(1392, 933);
             tabPage3.TabIndex = 2;
             tabPage3.Text = "설정";
             tabPage3.UseVisualStyleBackColor = true;
@@ -849,12 +975,54 @@
             imageList1.Images.SetKeyName(2, "icons8-도움-16.png");
             imageList1.Images.SetKeyName(3, "icons8-돈-가방-16.png");
             imageList1.Images.SetKeyName(4, "icons8-설정-3-16.png");
+            imageList1.Images.SetKeyName(5, "icons8-수색-24.png");
+            // 
+            // materialButton4
+            // 
+            materialButton4.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            materialButton4.Density = ReaLTaiizor.Controls.MaterialButton.MaterialButtonDensity.Default;
+            materialButton4.Depth = 0;
+            materialButton4.HighEmphasis = true;
+            materialButton4.Icon = Properties.Resources.icons8_다운로드_업데이트_24;
+            materialButton4.IconType = ReaLTaiizor.Controls.MaterialButton.MaterialIconType.Rebase;
+            materialButton4.Location = new Point(447, 26);
+            materialButton4.Margin = new Padding(4, 6, 4, 6);
+            materialButton4.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
+            materialButton4.Name = "materialButton4";
+            materialButton4.NoAccentTextColor = Color.Empty;
+            materialButton4.Size = new Size(186, 36);
+            materialButton4.TabIndex = 6;
+            materialButton4.Text = "materialButton4";
+            materialButton4.Type = ReaLTaiizor.Controls.MaterialButton.MaterialButtonType.Contained;
+            materialButton4.UseAccentColor = false;
+            materialButton4.UseVisualStyleBackColor = true;
+            materialButton4.Click += materialButton4_Click;
+            // 
+            // materialButton5
+            // 
+            materialButton5.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            materialButton5.Density = ReaLTaiizor.Controls.MaterialButton.MaterialButtonDensity.Default;
+            materialButton5.Depth = 0;
+            materialButton5.HighEmphasis = true;
+            materialButton5.Icon = Properties.Resources.icons8_붙이다_24;
+            materialButton5.IconType = ReaLTaiizor.Controls.MaterialButton.MaterialIconType.Rebase;
+            materialButton5.Location = new Point(663, 26);
+            materialButton5.Margin = new Padding(4, 6, 4, 6);
+            materialButton5.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
+            materialButton5.Name = "materialButton5";
+            materialButton5.NoAccentTextColor = Color.Empty;
+            materialButton5.Size = new Size(186, 36);
+            materialButton5.TabIndex = 7;
+            materialButton5.Text = "materialButton5";
+            materialButton5.Type = ReaLTaiizor.Controls.MaterialButton.MaterialButtonType.Contained;
+            materialButton5.UseAccentColor = false;
+            materialButton5.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1294, 755);
+            ClientSize = new Size(1406, 1028);
             Controls.Add(materialTabControl1);
             DrawerShowIconsWhenHidden = true;
             DrawerTabControl = materialTabControl1;
@@ -885,8 +1053,7 @@
             materialCard1.ResumeLayout(false);
             materialCard1.PerformLayout();
             tabPage2.ResumeLayout(false);
-            materialCard6.ResumeLayout(false);
-            materialCard6.PerformLayout();
+            tabPage2.PerformLayout();
             tabPage3.ResumeLayout(false);
             tabPage3.PerformLayout();
             ResumeLayout(false);
@@ -918,8 +1085,6 @@
         private ReaLTaiizor.Controls.MaterialCard materialCard4;
         private ReaLTaiizor.Controls.MaterialCard materialCard3;
         private ReaLTaiizor.Controls.MaterialCard materialCard5;
-        private ReaLTaiizor.Controls.MaterialCard materialCard6;
-        private ReaLTaiizor.Controls.MaterialLabel materialLabel5;
         private ReaLTaiizor.Controls.MaterialLabel materialLabel8;
         private ReaLTaiizor.Controls.MaterialLabel materialLabel7;
         private ReaLTaiizor.Controls.MaterialLabel materialLabel11;
@@ -949,5 +1114,15 @@
         private ReaLTaiizor.Controls.MaterialLabel materialLabel26;
         private ReaLTaiizor.Controls.MaterialLabel materialLabel23;
         private ReaLTaiizor.Controls.MaterialLabel materialLabel21;
+        private ReaLTaiizor.Controls.MaterialRadioButton materialRadioButton5;
+        private ReaLTaiizor.Controls.MaterialRadioButton materialRadioButton4;
+        private ReaLTaiizor.Controls.MaterialRadioButton materialRadioButton3;
+        private ReaLTaiizor.Controls.MaterialTextBoxEdit materialTextBoxEdit2;
+        private ReaLTaiizor.Controls.MaterialButton materialButton3;
+        private ColumnHeader columnHeader8;
+        private ColumnHeader columnHeader6;
+        private ColumnHeader columnHeader7;
+        private ReaLTaiizor.Controls.MaterialButton materialButton5;
+        private ReaLTaiizor.Controls.MaterialButton materialButton4;
     }
 }

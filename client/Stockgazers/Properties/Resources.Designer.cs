@@ -73,6 +73,36 @@ namespace Stockgazers.Properties {
         /// <summary>
         ///   System.Drawing.Bitmap 형식의 지역화된 리소스를 찾습니다.
         /// </summary>
+        internal static System.Drawing.Bitmap icons8_다운로드_업데이트_24 {
+            get {
+                object obj = ResourceManager.GetObject("icons8-다운로드-업데이트-24", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   System.Drawing.Bitmap 형식의 지역화된 리소스를 찾습니다.
+        /// </summary>
+        internal static System.Drawing.Bitmap icons8_붙이다_24 {
+            get {
+                object obj = ResourceManager.GetObject("icons8-붙이다-24", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   System.Drawing.Bitmap 형식의 지역화된 리소스를 찾습니다.
+        /// </summary>
+        internal static System.Drawing.Bitmap icons8_수색_24 {
+            get {
+                object obj = ResourceManager.GetObject("icons8-수색-24", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   System.Drawing.Bitmap 형식의 지역화된 리소스를 찾습니다.
+        /// </summary>
         internal static System.Drawing.Bitmap icons8_지문_24 {
             get {
                 object obj = ResourceManager.GetObject("icons8-지문-24", resourceCulture);
