@@ -13,6 +13,7 @@ using Stockgazers.Models;
 using System.Security.Policy;
 using System.Net.Http.Headers;
 using System.Windows.Forms;
+using System;
 
 namespace Stockgazers
 {
@@ -300,6 +301,8 @@ namespace Stockgazers
                     response.EnsureSuccessStatusCode();
                     MaterialSnackBar snackBar2 = new("구매원가 데이터가 업로드 되었어요", "OK", true);
                     snackBar2.Show(this);
+
+                    RefreshSellStatus();
                 }
                 catch (Exception ex)
                 {
@@ -310,6 +313,57 @@ namespace Stockgazers
             }
             else
                 return;
+        }
+
+        private async void RefreshSellStatus(bool isClearGrid = true)
+        {
+            if (isClearGrid)
+                materialListView1.Clear();
+
+            string url = $"{API.GetServer()}/api/stocks/{common.StockgazersUserID}";
+            var response = await common.session.GetAsync(url);
+
+            try
+            {
+                response.EnsureSuccessStatusCode();
+                JToken? StockgazersReference = null;
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    var StockgazersRaw = response.Content.ReadAsStringAsync().Result;
+                    StockgazersReference = JsonConvert.DeserializeObject<JToken>(StockgazersRaw);
+                }
+                if (StockgazersReference == null)
+                {
+                    MaterialSnackBar snackBar = new("Stockgazers 서버에서 나의 판매 현황을 불러오는데 실패했습니다.", "OK", true);
+                    snackBar.Show(this);
+                }
+
+                foreach (var row in StockgazersReference)
+                {
+                    string[] element = new[] {
+                        "",
+                        row["StyleId"].ToString(),
+                        row["Title"].ToString(),
+                        row["BuyPrice"].ToString(),
+                        row["Price"].ToString(),
+                        row["OrderNo"].ToString().Length > 0 ? "판매완료" : "입찰 중",
+                        row["AdjustPrice"].ToString(),
+                        row["Profit"].ToString(),
+                    };
+                    materialListView1.Items.Add(new ListViewItem(element));
+                }
+            }
+            catch (Exception ex)
+            {
+                MaterialSnackBar snackBar = new($"RefreshSellStatus: {ex.Message}", "OK", true);
+                snackBar.Show(this);
+            }
+        }
+
+        private void materialFloatingActionButton1_Click(object sender, EventArgs e)
+        {
+            AddStockForm addStockForm = new AddStockForm(common);
+            addStockForm.ShowDialog();
         }
     }
 }

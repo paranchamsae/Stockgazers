@@ -67,6 +67,7 @@
             materialLabel8 = new ReaLTaiizor.Controls.MaterialLabel();
             materialLabel7 = new ReaLTaiizor.Controls.MaterialLabel();
             tabPage2 = new TabPage();
+            materialFloatingActionButton1 = new ReaLTaiizor.Controls.MaterialFloatingActionButton();
             materialButton5 = new ReaLTaiizor.Controls.MaterialButton();
             materialButton4 = new ReaLTaiizor.Controls.MaterialButton();
             materialRadioButton5 = new ReaLTaiizor.Controls.MaterialRadioButton();
@@ -121,7 +122,7 @@
             materialTabControl1.Multiline = true;
             materialTabControl1.Name = "materialTabControl1";
             materialTabControl1.SelectedIndex = 0;
-            materialTabControl1.Size = new Size(1291, 717);
+            materialTabControl1.Size = new Size(1288, 844);
             materialTabControl1.TabIndex = 0;
             // 
             // tabPage1
@@ -140,7 +141,7 @@
             tabPage1.Location = new Point(4, 24);
             tabPage1.Name = "tabPage1";
             tabPage1.Padding = new Padding(3);
-            tabPage1.Size = new Size(1283, 689);
+            tabPage1.Size = new Size(1280, 816);
             tabPage1.TabIndex = 0;
             tabPage1.Text = "메인";
             tabPage1.UseVisualStyleBackColor = true;
@@ -381,7 +382,7 @@
             materialCard5.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
             materialCard5.Name = "materialCard5";
             materialCard5.Padding = new Padding(14);
-            materialCard5.Size = new Size(1277, 46);
+            materialCard5.Size = new Size(1274, 46);
             materialCard5.TabIndex = 7;
             // 
             // materialLabel20
@@ -623,6 +624,7 @@
             // 
             // tabPage2
             // 
+            tabPage2.Controls.Add(materialFloatingActionButton1);
             tabPage2.Controls.Add(materialButton5);
             tabPage2.Controls.Add(materialButton4);
             tabPage2.Controls.Add(materialRadioButton5);
@@ -636,10 +638,24 @@
             tabPage2.Location = new Point(4, 24);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(3);
-            tabPage2.Size = new Size(1267, 650);
+            tabPage2.Size = new Size(1280, 816);
             tabPage2.TabIndex = 1;
             tabPage2.Text = "판매현황";
             tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // materialFloatingActionButton1
+            // 
+            materialFloatingActionButton1.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            materialFloatingActionButton1.Depth = 0;
+            materialFloatingActionButton1.Icon = Properties.Resources.plus;
+            materialFloatingActionButton1.Location = new Point(1218, 754);
+            materialFloatingActionButton1.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
+            materialFloatingActionButton1.Name = "materialFloatingActionButton1";
+            materialFloatingActionButton1.Size = new Size(56, 56);
+            materialFloatingActionButton1.TabIndex = 8;
+            materialFloatingActionButton1.Text = "+";
+            materialFloatingActionButton1.UseVisualStyleBackColor = true;
+            materialFloatingActionButton1.Click += materialFloatingActionButton1_Click;
             // 
             // materialButton5
             // 
@@ -649,14 +665,14 @@
             materialButton5.HighEmphasis = true;
             materialButton5.Icon = Properties.Resources.icons8_붙이다_24;
             materialButton5.IconType = ReaLTaiizor.Controls.MaterialButton.MaterialIconType.Rebase;
-            materialButton5.Location = new Point(663, 26);
+            materialButton5.Location = new Point(349, 52);
             materialButton5.Margin = new Padding(4, 6, 4, 6);
             materialButton5.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
             materialButton5.Name = "materialButton5";
             materialButton5.NoAccentTextColor = Color.Empty;
-            materialButton5.Size = new Size(186, 36);
+            materialButton5.Size = new Size(216, 36);
             materialButton5.TabIndex = 7;
-            materialButton5.Text = "materialButton5";
+            materialButton5.Text = "구매원가 데이터 업로드";
             materialButton5.Type = ReaLTaiizor.Controls.MaterialButton.MaterialButtonType.Contained;
             materialButton5.UseAccentColor = false;
             materialButton5.UseVisualStyleBackColor = true;
@@ -670,14 +686,14 @@
             materialButton4.HighEmphasis = true;
             materialButton4.Icon = Properties.Resources.icons8_다운로드_업데이트_24;
             materialButton4.IconType = ReaLTaiizor.Controls.MaterialButton.MaterialIconType.Rebase;
-            materialButton4.Location = new Point(447, 26);
+            materialButton4.Location = new Point(349, 9);
             materialButton4.Margin = new Padding(4, 6, 4, 6);
             materialButton4.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
             materialButton4.Name = "materialButton4";
             materialButton4.NoAccentTextColor = Color.Empty;
-            materialButton4.Size = new Size(186, 36);
+            materialButton4.Size = new Size(232, 36);
             materialButton4.TabIndex = 6;
-            materialButton4.Text = "materialButton4";
+            materialButton4.Text = "구매원가 데이터 다운로드";
             materialButton4.Type = ReaLTaiizor.Controls.MaterialButton.MaterialButtonType.Contained;
             materialButton4.UseAccentColor = false;
             materialButton4.UseVisualStyleBackColor = true;
@@ -788,6 +804,7 @@
             // 
             // materialListView1
             // 
+            materialListView1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             materialListView1.AutoSizeTable = false;
             materialListView1.BackColor = Color.FromArgb(255, 255, 255);
             materialListView1.BorderStyle = BorderStyle.None;
@@ -802,7 +819,7 @@
             materialListView1.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.OUT;
             materialListView1.Name = "materialListView1";
             materialListView1.OwnerDraw = true;
-            materialListView1.Size = new Size(1258, 791);
+            materialListView1.Size = new Size(1271, 713);
             materialListView1.TabIndex = 0;
             materialListView1.UseCompatibleStateImageBehavior = false;
             materialListView1.View = View.Details;
@@ -861,7 +878,7 @@
             tabPage3.ImageKey = "icons8-설정-3-16.png";
             tabPage3.Location = new Point(4, 24);
             tabPage3.Name = "tabPage3";
-            tabPage3.Size = new Size(1267, 650);
+            tabPage3.Size = new Size(1264, 777);
             tabPage3.TabIndex = 2;
             tabPage3.Text = "설정";
             tabPage3.UseVisualStyleBackColor = true;
@@ -1023,7 +1040,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1297, 784);
+            ClientSize = new Size(1294, 911);
             Controls.Add(materialTabControl1);
             DrawerShowIconsWhenHidden = true;
             DrawerTabControl = materialTabControl1;
@@ -1125,5 +1142,6 @@
         private ColumnHeader columnHeader7;
         private ReaLTaiizor.Controls.MaterialButton materialButton5;
         private ReaLTaiizor.Controls.MaterialButton materialButton4;
+        private ReaLTaiizor.Controls.MaterialFloatingActionButton materialFloatingActionButton1;
     }
 }
