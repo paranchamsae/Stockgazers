@@ -8,7 +8,7 @@ from sqlalchemy.orm import sessionmaker
 
 # import pymysql
 
-SQLALCHEMY_DATABASE_URL = "mysql+pymysql://daniel:1q2w3e4r!@125.133.232.114:4144/stockgazers"
+SQLALCHEMY_DATABASE_URL = "mysql+pymysql://daniel:1q2w3e4r!@121.190.252.23:4144/stockgazers"
 
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL

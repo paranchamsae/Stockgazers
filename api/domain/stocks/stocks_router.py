@@ -8,7 +8,7 @@ from datetime import datetime
 from pandas import pandas       # excel export library
 from io import BytesIO, StringIO
 
-from sqlalchemy import select, update
+from sqlalchemy import select, text, update
 from models import Stocks
 
 from domain.stocks import stocks_schema
@@ -55,27 +55,35 @@ async def get_stocks_excel(UserID: str):
 
 @router.post("/import", summary="내 재고 현황 엑셀 업로드(구매원가 업로드용)")
 async def set_stocks_excel(file: UploadFile = File(...)):
-    print(file.filename)
-    dataframe = pandas.read_csv(file.file)
-    # print(dataframe)
+    dataframe = pandas.read_csv(file.file, encoding_errors='ignore')
     with get_db() as db:
         for row in dataframe.iterrows():
-            # print(row.iloc[3])
-            result = db.query(Stocks).filter(Stocks.ListingID==row[1][3]).all()
-            if math.isnan(float(row[1][4])):
-                continue
+            query = text("select * from SGStocks where ListingID='"+row[1][3]+"' ")
+            result = db.execute(query).mappings().all()
 
-            query = update(Stocks).where(Stocks.ListingID == row[1][4]).values(
-                BuyPrice = int(row[1][4]),
-                BuyPriceUSD = int(row[1][4])*1300
-            )
+            if math.isnan(float(row[1][4])):
+                continue            
+
+            if result[0]["OrderNo"] == "":
+                query = update(Stocks).where(Stocks.ListingID == row[1][3]).values(
+                    BuyPrice = int(row[1][4]),
+                    BuyPriceUSD = int(row[1][4])/1300
+                )
+            else:
+                query = update(Stocks).where(Stocks.ListingID == row[1][3]).values(
+                    BuyPrice = int(row[1][4]),
+                    BuyPriceUSD = int(row[1][4])/1300,
+                )
             
             try:
                 db.execute(query)
+                print(query)
             except Exception as e:
                 db.rollback()
+                print(e)
             finally:
                 db.commit()
+                print("")
 
     return JSONResponse(
         status_code=status.HTTP_200_OK,

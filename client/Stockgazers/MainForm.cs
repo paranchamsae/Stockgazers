@@ -256,10 +256,45 @@ namespace Stockgazers
                         await stream.CopyToAsync(fs);
                     }
                 }
-                
+
                 MaterialSnackBar snackBar = new("프로그램 경로에 다운로드 되었어요", "OK", true);
                 snackBar.Show(this);
             }
+        }
+
+        private async void materialButton5_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog dlg = new()
+            {
+                Title = "Stockgazers",
+                Filter = "csv 파일 (*.csv)|*.csv"
+            };
+
+            DialogResult dlgResult = dlg.ShowDialog();
+            if (dlgResult == DialogResult.OK)
+            {
+                string filepath = dlg.FileName;
+                byte[] bytes = File.ReadAllBytes(filepath);
+                MultipartFormDataContent sendData = new()
+                {
+                    { new ByteArrayContent(bytes, 0, bytes.Length), "csv", dlg.SafeFileName }
+                };
+                var response = await common.session.PostAsync(API.GetServer() + "/api/stocks/import", sendData);
+                try
+                {
+                    response.EnsureSuccessStatusCode();
+                    MaterialSnackBar snackBar2 = new("구매원가 데이터가 업로드 되었어요", "OK", true);
+                    snackBar2.Show(this);
+                }
+                catch (Exception ex)
+                {
+                    MaterialSnackBar snackBar = new(ex.Message, "OK", true);
+                    snackBar.Show(this);
+                    return;
+                }
+            }
+            else
+                return;
         }
     }
 }
