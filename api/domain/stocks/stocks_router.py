@@ -54,8 +54,11 @@ async def get_stocks_excel(UserID: str):
     )
 
 @router.post("/import", summary="내 재고 현황 엑셀 업로드(구매원가 업로드용)")
-async def set_stocks_excel(file: UploadFile = File(...)):
-    dataframe = pandas.read_csv(file.file, encoding_errors='ignore')
+async def set_stocks_excel(csvfile: UploadFile = File(...)):
+    dataframe = pandas.read_csv(csvfile.file, encoding_errors='ignore')
+    csvfile.file.close()
+    # print(dataframe)
+
     with get_db() as db:
         for row in dataframe.iterrows():
             query = text("select * from SGStocks where ListingID='"+row[1][3]+"' ")

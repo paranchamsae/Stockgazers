@@ -11,6 +11,8 @@ using Newtonsoft.Json.Linq;
 using System.Diagnostics;
 using Stockgazers.Models;
 using System.Security.Policy;
+using System.Net.Http.Headers;
+using System.Windows.Forms;
 
 namespace Stockgazers
 {
@@ -273,12 +275,13 @@ namespace Stockgazers
             DialogResult dlgResult = dlg.ShowDialog();
             if (dlgResult == DialogResult.OK)
             {
+                MultipartFormDataContent sendData = new();
+                sendData.Headers.ContentType.MediaType = "multipart/form-data";
+
                 string filepath = dlg.FileName;
                 byte[] bytes = File.ReadAllBytes(filepath);
-                MultipartFormDataContent sendData = new()
-                {
-                    { new ByteArrayContent(bytes, 0, bytes.Length), "csv", dlg.SafeFileName }
-                };
+                sendData.Add(new StreamContent(new MemoryStream(bytes)), "csvfile", "data.csv");
+
                 var response = await common.session.PostAsync(API.GetServer() + "/api/stocks/import", sendData);
                 try
                 {
