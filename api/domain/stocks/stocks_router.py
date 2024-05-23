@@ -67,15 +67,19 @@ async def set_stocks_excel(csvfile: UploadFile = File(...)):
             if math.isnan(float(row[1][4])):
                 continue            
 
-            if result[0]["OrderNo"] == "":
+            if result[0]["AdjustPrice"] > 0:
+                tempProfit = ((int(row[1][4])/1300)-result[0]["AdjustPrice"])/(int(row[1][4])/1300)*100
                 query = update(Stocks).where(Stocks.ListingID == row[1][3]).values(
                     BuyPrice = int(row[1][4]),
-                    BuyPriceUSD = int(row[1][4])/1300
+                    BuyPriceUSD = int(row[1][4])/1300,
+                    Profit = round(tempProfit, 2),
+                    UpdateDatetime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                 )
             else:
                 query = update(Stocks).where(Stocks.ListingID == row[1][3]).values(
                     BuyPrice = int(row[1][4]),
                     BuyPriceUSD = int(row[1][4])/1300,
+                    UpdateDatetime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                 )
             
             try:
@@ -125,6 +129,35 @@ async def addStocks(request: list[stocks_schema.RequestAddStocks]):
 
     return JSONResponse(
         status_code=status.HTTP_201_CREATED,
+        content={
+            "message": "ok"
+        }
+    )
+
+@router.patch("/order", summary="판매 완료 데이터에 판매정보 업데이트")
+async def patchorder(request: list[stocks_schema.RequestPatchOrder]):
+    with get_db() as db:
+        for row in request:
+            # 해당 레코드에 구매원가 데이터가 있다면 profit 데이터도 계산하여 업데이트 같이 쳐줌
+            result = db.query(Stocks).filter(Stocks.ListingID == row.ListingID).all()
+            if result[0]["BuyPrice"] > 0 and result[0]["BuyPriceUSD"] > 0:
+                query = update(Stocks).where(Stocks.ListingID == row.ListingID).values(
+                    OrderNo = row.OrderNo,
+                    AdjustPrice = row.AdjustPrice,
+                    Profit = round((result[0]["BuyPriceUSD"]-row.AdjustPrice)/row.AdjustPrice*100, 2),
+                    UpdateDatetime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                )
+            else:
+                query = update(Stocks).where(Stocks.ListingID == row.ListingID).values(
+                        OrderNo = row.OrderNo,
+                        AdjustPrice = row.AdjustPrice,
+                        UpdateDatetime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                )
+            db.execute(query)
+        db.commit()
+
+    return JSONResponse(
+        status_code=status.HTTP_200_OK,
         content={
             "message": "ok"
         }

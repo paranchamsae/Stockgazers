@@ -121,7 +121,7 @@
             materialTabControl1.Multiline = true;
             materialTabControl1.Name = "materialTabControl1";
             materialTabControl1.SelectedIndex = 0;
-            materialTabControl1.Size = new Size(1275, 678);
+            materialTabControl1.Size = new Size(1291, 717);
             materialTabControl1.TabIndex = 0;
             // 
             // tabPage1
@@ -140,7 +140,7 @@
             tabPage1.Location = new Point(4, 24);
             tabPage1.Name = "tabPage1";
             tabPage1.Padding = new Padding(3);
-            tabPage1.Size = new Size(1267, 650);
+            tabPage1.Size = new Size(1283, 689);
             tabPage1.TabIndex = 0;
             tabPage1.Text = "메인";
             tabPage1.UseVisualStyleBackColor = true;
@@ -381,7 +381,7 @@
             materialCard5.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
             materialCard5.Name = "materialCard5";
             materialCard5.Padding = new Padding(14);
-            materialCard5.Size = new Size(1261, 46);
+            materialCard5.Size = new Size(1277, 46);
             materialCard5.TabIndex = 7;
             // 
             // materialLabel20
@@ -390,7 +390,7 @@
             materialLabel20.Depth = 0;
             materialLabel20.Font = new Font("Roboto Medium", 20F, FontStyle.Bold, GraphicsUnit.Pixel);
             materialLabel20.FontType = ReaLTaiizor.Manager.MaterialSkinManager.FontType.H6;
-            materialLabel20.Location = new Point(570, 11);
+            materialLabel20.Location = new Point(12, 11);
             materialLabel20.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
             materialLabel20.Name = "materialLabel20";
             materialLabel20.Size = new Size(86, 24);
@@ -861,7 +861,7 @@
             tabPage3.ImageKey = "icons8-설정-3-16.png";
             tabPage3.Location = new Point(4, 24);
             tabPage3.Name = "tabPage3";
-            tabPage3.Size = new Size(1424, 1005);
+            tabPage3.Size = new Size(1267, 650);
             tabPage3.TabIndex = 2;
             tabPage3.Text = "설정";
             tabPage3.UseVisualStyleBackColor = true;
@@ -1023,7 +1023,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1281, 745);
+            ClientSize = new Size(1297, 784);
             Controls.Add(materialTabControl1);
             DrawerShowIconsWhenHidden = true;
             DrawerTabControl = materialTabControl1;

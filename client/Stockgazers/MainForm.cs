@@ -108,7 +108,7 @@ namespace Stockgazers
             #endregion
 
             #region 2. 내 재고 목록을 서버에서 가지고 와서 클라이언트에 뿌려줌
-
+            materialLabel20.Text = "StockX DB와 동기화 중입니다. 일부 데이터가 정확하게 노출되지 않을 수 있습니다.";
             #region 2-1. 딱스에 등록된 내 전체 판매현황
             url = $"https://api.stockx.com/v2/selling/listings";
             common.session.DefaultRequestHeaders.Add("Authorization", $"Bearer {common.AccessToken}");
@@ -215,8 +215,10 @@ namespace Stockgazers
             {
                 url = $"{API.GetServer()}/api/stocks/order";
                 var sendData = new StringContent(JsonConvert.SerializeObject(order), Encoding.UTF8, "application/json");
-                response = await common.session.PostAsync(url, sendData);
+                response = await common.session.PatchAsync(url, sendData);
             }
+
+            materialLabel20.Text = "동기화 완료";
             #endregion
 
             #region 4. 판매현황 탭 리스트뷰 데이터 집어넣기
@@ -243,6 +245,11 @@ namespace Stockgazers
 
         }
 
+        /// <summary>
+        /// 구매원가 업로드용 csv 파일 다운로드
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void materialButton4_Click(object sender, EventArgs e)
         {
             string url = $"{API.GetServer()}/api/stocks/export/{common.StockgazersUserID}";
@@ -264,6 +271,11 @@ namespace Stockgazers
             }
         }
 
+        /// <summary>
+        /// 구매원가 csv파일 업로드
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void materialButton5_Click(object sender, EventArgs e)
         {
             OpenFileDialog dlg = new()

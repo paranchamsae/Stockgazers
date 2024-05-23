@@ -33,3 +33,8 @@ class RequestAddStocks(BaseModel):
 
 # class ResponseStocks(BaseModel):
 #     Data: list[Stocks] | None = None
+
+class RequestPatchOrder(BaseModel):
+    OrderNo: str
+    ListingID: str
+    AdjustPrice: float
