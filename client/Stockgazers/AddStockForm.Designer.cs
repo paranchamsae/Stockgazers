@@ -31,13 +31,13 @@
             materialTextBoxEdit1 = new ReaLTaiizor.Controls.MaterialTextBoxEdit();
             materialButton1 = new ReaLTaiizor.Controls.MaterialButton();
             materialButton2 = new ReaLTaiizor.Controls.MaterialButton();
-            materialListView1 = new ReaLTaiizor.Controls.MaterialListView();
-            columnHeader1 = new ColumnHeader();
             materialTextBoxEdit2 = new ReaLTaiizor.Controls.MaterialTextBoxEdit();
             materialTextBoxEdit3 = new ReaLTaiizor.Controls.MaterialTextBoxEdit();
             materialTextBoxEdit4 = new ReaLTaiizor.Controls.MaterialTextBoxEdit();
             materialTextBoxEdit5 = new ReaLTaiizor.Controls.MaterialTextBoxEdit();
-            materialListBox1 = new ReaLTaiizor.Controls.MaterialListBox();
+            listView1 = new ListView();
+            materialComboBox1 = new ReaLTaiizor.Controls.MaterialComboBox();
+            materialTextBoxEdit6 = new ReaLTaiizor.Controls.MaterialTextBoxEdit();
             SuspendLayout();
             // 
             // materialTextBoxEdit1
@@ -83,7 +83,7 @@
             materialButton1.HighEmphasis = true;
             materialButton1.Icon = null;
             materialButton1.IconType = ReaLTaiizor.Controls.MaterialButton.MaterialIconType.Rebase;
-            materialButton1.Location = new Point(299, 632);
+            materialButton1.Location = new Point(289, 632);
             materialButton1.Margin = new Padding(5, 8, 5, 8);
             materialButton1.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
             materialButton1.Name = "materialButton1";
@@ -117,31 +117,6 @@
             materialButton2.UseAccentColor = false;
             materialButton2.UseVisualStyleBackColor = true;
             materialButton2.Click += materialButton2_Click;
-            // 
-            // materialListView1
-            // 
-            materialListView1.AutoSizeTable = false;
-            materialListView1.BackColor = Color.FromArgb(255, 255, 255);
-            materialListView1.BorderStyle = BorderStyle.None;
-            materialListView1.Columns.AddRange(new ColumnHeader[] { columnHeader1 });
-            materialListView1.Depth = 0;
-            materialListView1.FullRowSelect = true;
-            materialListView1.HeaderStyle = ColumnHeaderStyle.Nonclickable;
-            materialListView1.Location = new Point(8, 140);
-            materialListView1.MinimumSize = new Size(200, 100);
-            materialListView1.MouseLocation = new Point(-1, -1);
-            materialListView1.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.OUT;
-            materialListView1.Name = "materialListView1";
-            materialListView1.OwnerDraw = true;
-            materialListView1.Size = new Size(429, 147);
-            materialListView1.TabIndex = 3;
-            materialListView1.UseCompatibleStateImageBehavior = false;
-            materialListView1.View = View.Details;
-            // 
-            // columnHeader1
-            // 
-            columnHeader1.Text = "검색결과";
-            columnHeader1.Width = 429;
             // 
             // materialTextBoxEdit2
             // 
@@ -253,7 +228,7 @@
             materialTextBoxEdit5.HideSelection = true;
             materialTextBoxEdit5.Hint = "Limit(USD)";
             materialTextBoxEdit5.LeadingIcon = Properties.Resources.icons8_수색_24;
-            materialTextBoxEdit5.Location = new Point(8, 555);
+            materialTextBoxEdit5.Location = new Point(221, 555);
             materialTextBoxEdit5.Margin = new Padding(4);
             materialTextBoxEdit5.MaxLength = 32767;
             materialTextBoxEdit5.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.OUT;
@@ -266,38 +241,91 @@
             materialTextBoxEdit5.SelectionLength = 0;
             materialTextBoxEdit5.SelectionStart = 0;
             materialTextBoxEdit5.ShortcutsEnabled = true;
-            materialTextBoxEdit5.Size = new Size(429, 48);
+            materialTextBoxEdit5.Size = new Size(216, 48);
             materialTextBoxEdit5.TabIndex = 7;
             materialTextBoxEdit5.TabStop = false;
             materialTextBoxEdit5.TextAlign = HorizontalAlignment.Left;
             materialTextBoxEdit5.TrailingIcon = null;
             materialTextBoxEdit5.UseSystemPasswordChar = false;
             // 
-            // materialListBox1
+            // listView1
             // 
-            materialListBox1.BackColor = Color.White;
-            materialListBox1.BorderColor = Color.LightGray;
-            materialListBox1.Depth = 0;
-            materialListBox1.Font = new Font("Roboto", 16F, FontStyle.Regular, GraphicsUnit.Pixel);
-            materialListBox1.Location = new Point(8, 424);
-            materialListBox1.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
-            materialListBox1.Name = "materialListBox1";
-            materialListBox1.SelectedIndex = -1;
-            materialListBox1.SelectedItem = null;
-            materialListBox1.Size = new Size(429, 48);
-            materialListBox1.TabIndex = 8;
+            listView1.Location = new Point(8, 140);
+            listView1.MultiSelect = false;
+            listView1.Name = "listView1";
+            listView1.Size = new Size(429, 147);
+            listView1.TabIndex = 9;
+            listView1.UseCompatibleStateImageBehavior = false;
+            listView1.View = View.List;
+            listView1.MouseDoubleClick += listView1_MouseDoubleClick;
+            // 
+            // materialComboBox1
+            // 
+            materialComboBox1.AutoResize = false;
+            materialComboBox1.BackColor = Color.FromArgb(255, 255, 255);
+            materialComboBox1.Depth = 0;
+            materialComboBox1.DrawMode = DrawMode.OwnerDrawVariable;
+            materialComboBox1.DropDownHeight = 174;
+            materialComboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
+            materialComboBox1.DropDownWidth = 121;
+            materialComboBox1.Font = new Font("Microsoft Sans Serif", 14F, FontStyle.Bold, GraphicsUnit.Pixel);
+            materialComboBox1.ForeColor = Color.FromArgb(222, 0, 0, 0);
+            materialComboBox1.FormattingEnabled = true;
+            materialComboBox1.Hint = "Size";
+            materialComboBox1.IntegralHeight = false;
+            materialComboBox1.ItemHeight = 43;
+            materialComboBox1.Location = new Point(8, 425);
+            materialComboBox1.MaxDropDownItems = 4;
+            materialComboBox1.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.OUT;
+            materialComboBox1.Name = "materialComboBox1";
+            materialComboBox1.Size = new Size(429, 49);
+            materialComboBox1.StartIndex = 0;
+            materialComboBox1.TabIndex = 10;
+            // 
+            // materialTextBoxEdit6
+            // 
+            materialTextBoxEdit6.AnimateReadOnly = false;
+            materialTextBoxEdit6.AutoCompleteMode = AutoCompleteMode.None;
+            materialTextBoxEdit6.AutoCompleteSource = AutoCompleteSource.None;
+            materialTextBoxEdit6.BackgroundImageLayout = ImageLayout.None;
+            materialTextBoxEdit6.CharacterCasing = CharacterCasing.Normal;
+            materialTextBoxEdit6.Depth = 0;
+            materialTextBoxEdit6.Font = new Font("Roboto", 16F, FontStyle.Regular, GraphicsUnit.Pixel);
+            materialTextBoxEdit6.HideSelection = true;
+            materialTextBoxEdit6.Hint = "Price";
+            materialTextBoxEdit6.LeadingIcon = Properties.Resources.icons8_수색_24;
+            materialTextBoxEdit6.Location = new Point(8, 555);
+            materialTextBoxEdit6.Margin = new Padding(4);
+            materialTextBoxEdit6.MaxLength = 32767;
+            materialTextBoxEdit6.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.OUT;
+            materialTextBoxEdit6.Name = "materialTextBoxEdit6";
+            materialTextBoxEdit6.PasswordChar = '\0';
+            materialTextBoxEdit6.PrefixSuffixText = null;
+            materialTextBoxEdit6.ReadOnly = false;
+            materialTextBoxEdit6.RightToLeft = RightToLeft.No;
+            materialTextBoxEdit6.SelectedText = "";
+            materialTextBoxEdit6.SelectionLength = 0;
+            materialTextBoxEdit6.SelectionStart = 0;
+            materialTextBoxEdit6.ShortcutsEnabled = true;
+            materialTextBoxEdit6.Size = new Size(205, 48);
+            materialTextBoxEdit6.TabIndex = 11;
+            materialTextBoxEdit6.TabStop = false;
+            materialTextBoxEdit6.TextAlign = HorizontalAlignment.Left;
+            materialTextBoxEdit6.TrailingIcon = null;
+            materialTextBoxEdit6.UseSystemPasswordChar = false;
             // 
             // AddStockForm
             // 
             AutoScaleDimensions = new SizeF(9F, 19F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(445, 680);
-            Controls.Add(materialListBox1);
+            Controls.Add(materialTextBoxEdit6);
+            Controls.Add(materialComboBox1);
+            Controls.Add(listView1);
             Controls.Add(materialTextBoxEdit5);
             Controls.Add(materialTextBoxEdit4);
             Controls.Add(materialTextBoxEdit3);
             Controls.Add(materialTextBoxEdit2);
-            Controls.Add(materialListView1);
             Controls.Add(materialButton2);
             Controls.Add(materialButton1);
             Controls.Add(materialTextBoxEdit1);
@@ -309,7 +337,6 @@
             Padding = new Padding(4, 81, 4, 4);
             StartPosition = FormStartPosition.CenterParent;
             Text = "재고추가";
-            MouseDoubleClick += materialListView1_MouseDoubleClick;
             ResumeLayout(false);
             PerformLayout();
         }
@@ -319,12 +346,12 @@
         private ReaLTaiizor.Controls.MaterialTextBoxEdit materialTextBoxEdit1;
         private ReaLTaiizor.Controls.MaterialButton materialButton1;
         private ReaLTaiizor.Controls.MaterialButton materialButton2;
-        private ReaLTaiizor.Controls.MaterialListView materialListView1;
         private ReaLTaiizor.Controls.MaterialTextBoxEdit materialTextBoxEdit2;
         private ReaLTaiizor.Controls.MaterialTextBoxEdit materialTextBoxEdit3;
         private ReaLTaiizor.Controls.MaterialTextBoxEdit materialTextBoxEdit4;
         private ReaLTaiizor.Controls.MaterialTextBoxEdit materialTextBoxEdit5;
-        private ReaLTaiizor.Controls.MaterialListBox materialListBox1;
-        private ColumnHeader columnHeader1;
+        private ListView listView1;
+        private ReaLTaiizor.Controls.MaterialComboBox materialComboBox1;
+        private ReaLTaiizor.Controls.MaterialTextBoxEdit materialTextBoxEdit6;
     }
 }
