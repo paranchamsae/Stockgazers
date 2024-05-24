@@ -1,22 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using ReaLTaiizor.Child.Material;
 using ReaLTaiizor.Colors;
 using ReaLTaiizor.Controls;
 using ReaLTaiizor.Forms;
 using ReaLTaiizor.Manager;
 using ReaLTaiizor.Util;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using Stockgazers.APIs;
+using Stockgazers.Models;
+
+#pragma warning disable CS8600
+#pragma warning disable CS8601
+#pragma warning disable CS8602
 
 namespace Stockgazers
 {
@@ -24,6 +20,7 @@ namespace Stockgazers
     {
         private readonly MaterialSkinManager materialSkinManager;
         Common common;
+        string selectedProductID = string.Empty;
 
         public AddStockForm(Common c)
         {
@@ -99,7 +96,7 @@ namespace Stockgazers
             }
         }
 
-        private void materialButton1_Click(object sender, EventArgs e)
+        private async void materialButton1_Click(object sender, EventArgs e)
         {
             string message = $@"아래의 정보로 재고 추가 및 StockX에 판매 입찰이 등록됩니다.
 
@@ -113,6 +110,72 @@ namespace Stockgazers
 
             if (MessageBox.Show(message, "재고추가", MessageBoxButtons.YesNo, MessageBoxIcon.Asterisk) == DialogResult.Yes)
             {
+                string url = "https://api.stockx.com/v2/selling/listings";
+                CreateListing createListing = new()
+                {
+                    amount = materialTextBoxEdit6.Text,
+                    variantId = materialComboBox1.SelectedValue.ToString()
+                };
+                var sendData = new StringContent(JsonConvert.SerializeObject(createListing), Encoding.UTF8, "application/json");
+                var response = await common.session.PostAsync(url, sendData);
+
+                string createdListingID = string.Empty;
+                try
+                {
+                    response.EnsureSuccessStatusCode();
+                    string result = response.Content.ReadAsStringAsync().Result;
+                    JObject resultJson = JsonConvert.DeserializeObject<JObject>(result);
+                    createdListingID = resultJson["listingId"].ToString();
+                }
+                catch (Exception)
+                {
+                    MaterialSnackBar snackBar = new("재고 추가에 실패했습니다.", "OK", true);
+                    snackBar.Show(this);
+                    return;
+                }
+
+                if (createdListingID.Length > 0)
+                {
+                    try
+                    {
+                        int buyprice = Convert.ToInt32(materialTextBoxEdit4.Text.ToString());
+                        float buypriceUsd = (float)buyprice / 1300;
+                        Stock newStock = new()
+                        {
+                            UserID = common.StockgazersUserID,
+                            IsDelete = "F",
+                            ListingID = createdListingID,
+                            StyleID = materialTextBoxEdit2.Text,
+                            ProductID = selectedProductID,
+                            Title = materialTextBoxEdit3.Text,
+                            VariantID = materialComboBox1.SelectedValue.ToString(),
+                            VariantValue = materialComboBox1.Text,
+                            BuyPrice = buyprice,
+                            BuyPriceUSD = (float)Math.Round(buypriceUsd, 2),
+                            Price = Convert.ToInt32(materialTextBoxEdit6.Text.ToString()),
+                            Limit = Convert.ToInt32(materialTextBoxEdit5.Text.ToString()),
+                            OrderNo = string.Empty,
+                            SellDatetime = null,
+                            SendDatetime = null,
+                            AdjustPrice = 0.0f,
+                            Profit = 0.0f
+                        };
+                        List<Stock> stockArray = new List<Stock>() { newStock };
+                        url = $"{API.GetServer()}/api/stocks";
+                        sendData = new StringContent(JsonConvert.SerializeObject(stockArray), Encoding.UTF8, "application/json");
+                        response = await common.session.PostAsync(url, sendData);
+
+                        response.EnsureSuccessStatusCode();
+                    }
+                    catch (Exception)
+                    {
+                        MaterialSnackBar snackBar = new("재고 추가에 실패했습니다.", "OK", true);
+                        snackBar.Show(this);
+                        return;
+                    }
+                }
+
+                MainForm.isNewStockCreated = true;
                 this.Close();
             }
         }
@@ -156,6 +219,7 @@ namespace Stockgazers
 
                     materialTextBoxEdit2.Text = item.ToolTipText;
                     materialTextBoxEdit3.Text = item.Text;
+                    selectedProductID = item.Tag.ToString();
                 }
                 catch (Exception ex)
                 {

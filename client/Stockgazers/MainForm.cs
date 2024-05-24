@@ -21,6 +21,7 @@ namespace Stockgazers
 #pragma warning disable CS8604
     public partial class MainForm : MaterialForm
     {
+        public static bool isNewStockCreated = false;
         private readonly MaterialSkinManager materialSkinManager;
         Common common;
 
@@ -364,6 +365,15 @@ namespace Stockgazers
         {
             AddStockForm addStockForm = new AddStockForm(common);
             addStockForm.ShowDialog();
+
+            if (isNewStockCreated)
+            {
+                isNewStockCreated = false;
+                MaterialSnackBar snackBar = new($"재고 추가가 완료되었어요", "OK", true);
+                snackBar.Show(this);
+
+                RefreshSellStatus();
+            }
         }
     }
 }

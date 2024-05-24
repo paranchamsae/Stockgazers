@@ -34,4 +34,10 @@ namespace Stockgazers.Models
         public int SalePrice { get; set; }
         public double AdjustPrice { get; set; }
     }
+
+    public class CreateListing
+    {
+        public string amount { get; set; } = string.Empty;
+        public string variantId { get; set; } = string.Empty;
+    }
 }
