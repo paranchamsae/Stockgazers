@@ -14,6 +14,7 @@ using System.Security.Policy;
 using System.Net.Http.Headers;
 using System.Windows.Forms;
 using System;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Stockgazers
 {
@@ -236,7 +237,9 @@ namespace Stockgazers
                     row["AdjustPrice"].ToString(),
                     row["Profit"].ToString(),
                 };
-                materialListView1.Items.Add(new ListViewItem(element));
+                ListViewItem item = new ListViewItem(element);
+                item.Tag = row["ListingID"].ToString();
+                materialListView1.Items.Add(item);
             }
 
             #endregion
@@ -303,7 +306,7 @@ namespace Stockgazers
                     MaterialSnackBar snackBar2 = new("구매원가 데이터가 업로드 되었어요", "OK", true);
                     snackBar2.Show(this);
 
-                    RefreshSellStatus();
+                    await RefreshSellStatus();
                 }
                 catch (Exception ex)
                 {
@@ -316,10 +319,10 @@ namespace Stockgazers
                 return;
         }
 
-        private async void RefreshSellStatus(bool isClearGrid = true)
+        private async Task<bool> RefreshSellStatus(bool isClearGrid = true)
         {
             if (isClearGrid)
-                materialListView1.Clear();
+                materialListView1.Items.Clear();
 
             string url = $"{API.GetServer()}/api/stocks/{common.StockgazersUserID}";
             var response = await common.session.GetAsync(url);
@@ -351,17 +354,23 @@ namespace Stockgazers
                         row["AdjustPrice"].ToString(),
                         row["Profit"].ToString(),
                     };
+                    ListViewItem item = new ListViewItem(element);
+                    item.Tag = row["ListingID"].ToString();
                     materialListView1.Items.Add(new ListViewItem(element));
                 }
+
+                materialListView1.Invalidate();
+                return true;
             }
             catch (Exception ex)
             {
                 MaterialSnackBar snackBar = new($"RefreshSellStatus: {ex.Message}", "OK", true);
                 snackBar.Show(this);
+                return false;
             }
         }
 
-        private void materialFloatingActionButton1_Click(object sender, EventArgs e)
+        private async void materialFloatingActionButton1_Click(object sender, EventArgs e)
         {
             AddStockForm addStockForm = new AddStockForm(common);
             addStockForm.ShowDialog();
@@ -372,8 +381,53 @@ namespace Stockgazers
                 MaterialSnackBar snackBar = new($"재고 추가가 완료되었어요", "OK", true);
                 snackBar.Show(this);
 
-                RefreshSellStatus();
+                await RefreshSellStatus();
             }
+        }
+
+        private void materialListView1_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                ListViewItem item = materialListView1.GetItemAt(e.X, e.Y);
+                if (item != null)
+                {
+                    item.Selected = true;
+
+                    contextMenuStrip1.Items[0].Text = item.SubItems[1].Text;
+                    contextMenuStrip1.Items[0].Tag = item.Tag;
+                    contextMenuStrip1.Items[0].Enabled = false;
+                    contextMenuStrip1.Show(materialListView1, e.Location);
+                }
+            }
+        }
+
+        private void toolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            ModifyStockForm modifyStockForm = new ModifyStockForm(common);
+            modifyStockForm.ShowDialog();
+        }
+
+        private async void toolStripMenuItem3_Click(object sender, EventArgs e)
+        {
+            string message = $"{contextMenuStrip1.Items[0].Text} 모델의 입찰 등록을 삭제할까요?";
+            if (MessageBox.Show(message, "입찰 등록 삭제", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                #region 딱스 입찰등록 삭제
+                MessageBox.Show($"{contextMenuStrip1.Items[0].Tag}");
+                #endregion
+
+                #region Stockgazers DB 업데이트
+
+                #endregion
+
+                await RefreshSellStatus();
+            }
+        }
+
+        private async void materialButton6_Click(object sender, EventArgs e)
+        {
+            await RefreshSellStatus();
         }
     }
 }
