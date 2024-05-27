@@ -397,15 +397,36 @@ namespace Stockgazers
                     contextMenuStrip1.Items[0].Text = item.SubItems[1].Text;
                     contextMenuStrip1.Items[0].Tag = item.Tag;
                     contextMenuStrip1.Items[0].Enabled = false;
+
+                    if (item.SubItems[5].Text == "판매완료")
+                    {
+                        contextMenuStrip1.Items[1].Enabled = false;
+                        contextMenuStrip1.Items[2].Enabled = false;
+                    }
+                    else
+                    {
+                        contextMenuStrip1.Items[1].Enabled = true;
+                        contextMenuStrip1.Items[2].Enabled = true;
+                    }
+
                     contextMenuStrip1.Show(materialListView1, e.Location);
                 }
             }
         }
 
-        private void toolStripMenuItem2_Click(object sender, EventArgs e)
+        private async void toolStripMenuItem2_Click(object sender, EventArgs e)
         {
-            ModifyStockForm modifyStockForm = new ModifyStockForm(common);
+            ModifyStockForm modifyStockForm = new ModifyStockForm(common, contextMenuStrip1.Items[0].Tag.ToString());
             modifyStockForm.ShowDialog();
+
+            if (isNewStockCreated)
+            {
+                isNewStockCreated = false;
+                MaterialSnackBar snackBar = new($"입찰 수정이 완료되었어요", "OK", true);
+                snackBar.Show(this);
+
+                await RefreshSellStatus();
+            }
         }
 
         private async void toolStripMenuItem3_Click(object sender, EventArgs e)
@@ -425,8 +446,10 @@ namespace Stockgazers
                 {
                     response.EnsureSuccessStatusCode();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
+                    MaterialSnackBar snackBar = new($"서버와의 통신에 실패했어요 :(", "OK", true);
+                    snackBar.Show(this);
                     return;
                 }
                 #endregion
@@ -438,8 +461,10 @@ namespace Stockgazers
                 {
                     response.EnsureSuccessStatusCode();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
+                    MaterialSnackBar snackBar = new($"서버와의 통신에 실패했어요 :(", "OK", true);
+                    snackBar.Show(this);
                     return;
                 }
                 #endregion

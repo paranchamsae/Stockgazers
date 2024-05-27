@@ -34,8 +34,11 @@
             materialTextBoxEdit3 = new ReaLTaiizor.Controls.MaterialTextBoxEdit();
             materialTextBoxEdit4 = new ReaLTaiizor.Controls.MaterialTextBoxEdit();
             materialTextBoxEdit5 = new ReaLTaiizor.Controls.MaterialTextBoxEdit();
-            materialComboBox1 = new ReaLTaiizor.Controls.MaterialComboBox();
             materialTextBoxEdit6 = new ReaLTaiizor.Controls.MaterialTextBoxEdit();
+            materialTextBoxEdit1 = new ReaLTaiizor.Controls.MaterialTextBoxEdit();
+            button1 = new Button();
+            button2 = new Button();
+            button3 = new Button();
             SuspendLayout();
             // 
             // materialButton1
@@ -47,7 +50,7 @@
             materialButton1.HighEmphasis = true;
             materialButton1.Icon = null;
             materialButton1.IconType = ReaLTaiizor.Controls.MaterialButton.MaterialIconType.Rebase;
-            materialButton1.Location = new Point(289, 423);
+            materialButton1.Location = new Point(289, 519);
             materialButton1.Margin = new Padding(5, 8, 5, 8);
             materialButton1.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
             materialButton1.Name = "materialButton1";
@@ -69,7 +72,7 @@
             materialButton2.HighEmphasis = true;
             materialButton2.Icon = null;
             materialButton2.IconType = ReaLTaiizor.Controls.MaterialButton.MaterialIconType.Rebase;
-            materialButton2.Location = new Point(373, 423);
+            materialButton2.Location = new Point(373, 519);
             materialButton2.Margin = new Padding(5, 8, 5, 8);
             materialButton2.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
             materialButton2.Name = "materialButton2";
@@ -192,7 +195,7 @@
             materialTextBoxEdit5.HideSelection = true;
             materialTextBoxEdit5.Hint = "Limit(USD)";
             materialTextBoxEdit5.LeadingIcon = Properties.Resources.icons8_수색_24;
-            materialTextBoxEdit5.Location = new Point(221, 346);
+            materialTextBoxEdit5.Location = new Point(221, 442);
             materialTextBoxEdit5.Margin = new Padding(4);
             materialTextBoxEdit5.MaxLength = 32767;
             materialTextBoxEdit5.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.OUT;
@@ -212,30 +215,6 @@
             materialTextBoxEdit5.TrailingIcon = null;
             materialTextBoxEdit5.UseSystemPasswordChar = false;
             // 
-            // materialComboBox1
-            // 
-            materialComboBox1.AutoResize = false;
-            materialComboBox1.BackColor = Color.FromArgb(255, 255, 255);
-            materialComboBox1.Depth = 0;
-            materialComboBox1.DrawMode = DrawMode.OwnerDrawVariable;
-            materialComboBox1.DropDownHeight = 174;
-            materialComboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
-            materialComboBox1.DropDownWidth = 121;
-            materialComboBox1.Enabled = false;
-            materialComboBox1.Font = new Font("Microsoft Sans Serif", 14F, FontStyle.Bold, GraphicsUnit.Pixel);
-            materialComboBox1.ForeColor = Color.FromArgb(222, 0, 0, 0);
-            materialComboBox1.FormattingEnabled = true;
-            materialComboBox1.Hint = "Size";
-            materialComboBox1.IntegralHeight = false;
-            materialComboBox1.ItemHeight = 43;
-            materialComboBox1.Location = new Point(8, 216);
-            materialComboBox1.MaxDropDownItems = 4;
-            materialComboBox1.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.OUT;
-            materialComboBox1.Name = "materialComboBox1";
-            materialComboBox1.Size = new Size(429, 49);
-            materialComboBox1.StartIndex = 0;
-            materialComboBox1.TabIndex = 10;
-            // 
             // materialTextBoxEdit6
             // 
             materialTextBoxEdit6.AnimateReadOnly = false;
@@ -248,7 +227,7 @@
             materialTextBoxEdit6.HideSelection = true;
             materialTextBoxEdit6.Hint = "Price";
             materialTextBoxEdit6.LeadingIcon = Properties.Resources.icons8_수색_24;
-            materialTextBoxEdit6.Location = new Point(8, 346);
+            materialTextBoxEdit6.Location = new Point(8, 442);
             materialTextBoxEdit6.Margin = new Padding(4);
             materialTextBoxEdit6.MaxLength = 32767;
             materialTextBoxEdit6.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.OUT;
@@ -268,13 +247,79 @@
             materialTextBoxEdit6.TrailingIcon = null;
             materialTextBoxEdit6.UseSystemPasswordChar = false;
             // 
+            // materialTextBoxEdit1
+            // 
+            materialTextBoxEdit1.AnimateReadOnly = false;
+            materialTextBoxEdit1.AutoCompleteMode = AutoCompleteMode.None;
+            materialTextBoxEdit1.AutoCompleteSource = AutoCompleteSource.None;
+            materialTextBoxEdit1.BackgroundImageLayout = ImageLayout.None;
+            materialTextBoxEdit1.CharacterCasing = CharacterCasing.Normal;
+            materialTextBoxEdit1.Depth = 0;
+            materialTextBoxEdit1.Enabled = false;
+            materialTextBoxEdit1.Font = new Font("Roboto", 16F, FontStyle.Regular, GraphicsUnit.Pixel);
+            materialTextBoxEdit1.HideSelection = true;
+            materialTextBoxEdit1.Hint = "Size";
+            materialTextBoxEdit1.LeadingIcon = Properties.Resources.icons8_수색_24;
+            materialTextBoxEdit1.Location = new Point(8, 217);
+            materialTextBoxEdit1.Margin = new Padding(4);
+            materialTextBoxEdit1.MaxLength = 32767;
+            materialTextBoxEdit1.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.OUT;
+            materialTextBoxEdit1.Name = "materialTextBoxEdit1";
+            materialTextBoxEdit1.PasswordChar = '\0';
+            materialTextBoxEdit1.PrefixSuffixText = null;
+            materialTextBoxEdit1.ReadOnly = false;
+            materialTextBoxEdit1.RightToLeft = RightToLeft.No;
+            materialTextBoxEdit1.SelectedText = "";
+            materialTextBoxEdit1.SelectionLength = 0;
+            materialTextBoxEdit1.SelectionStart = 0;
+            materialTextBoxEdit1.ShortcutsEnabled = true;
+            materialTextBoxEdit1.Size = new Size(429, 48);
+            materialTextBoxEdit1.TabIndex = 12;
+            materialTextBoxEdit1.TabStop = false;
+            materialTextBoxEdit1.TextAlign = HorizontalAlignment.Left;
+            materialTextBoxEdit1.TrailingIcon = null;
+            materialTextBoxEdit1.UseSystemPasswordChar = false;
+            // 
+            // button1
+            // 
+            button1.Location = new Point(8, 335);
+            button1.Name = "button1";
+            button1.Size = new Size(140, 100);
+            button1.TabIndex = 13;
+            button1.Text = "button1";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click_1;
+            // 
+            // button2
+            // 
+            button2.Location = new Point(154, 335);
+            button2.Name = "button2";
+            button2.Size = new Size(140, 100);
+            button2.TabIndex = 14;
+            button2.Text = "button2";
+            button2.UseVisualStyleBackColor = true;
+            button2.Click += button2_Click;
+            // 
+            // button3
+            // 
+            button3.Location = new Point(297, 335);
+            button3.Name = "button3";
+            button3.Size = new Size(140, 100);
+            button3.TabIndex = 15;
+            button3.Text = "button3";
+            button3.UseVisualStyleBackColor = true;
+            button3.Click += button3_Click;
+            // 
             // ModifyStockForm
             // 
             AutoScaleDimensions = new SizeF(9F, 19F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(445, 680);
+            Controls.Add(button3);
+            Controls.Add(button2);
+            Controls.Add(button1);
+            Controls.Add(materialTextBoxEdit1);
             Controls.Add(materialTextBoxEdit6);
-            Controls.Add(materialComboBox1);
             Controls.Add(materialTextBoxEdit5);
             Controls.Add(materialTextBoxEdit4);
             Controls.Add(materialTextBoxEdit3);
@@ -289,6 +334,7 @@
             Padding = new Padding(4, 81, 4, 4);
             StartPosition = FormStartPosition.CenterParent;
             Text = "재고 수정";
+            Load += ModifyStockForm_Load;
             ResumeLayout(false);
             PerformLayout();
         }
@@ -300,7 +346,10 @@
         private ReaLTaiizor.Controls.MaterialTextBoxEdit materialTextBoxEdit3;
         private ReaLTaiizor.Controls.MaterialTextBoxEdit materialTextBoxEdit4;
         private ReaLTaiizor.Controls.MaterialTextBoxEdit materialTextBoxEdit5;
-        private ReaLTaiizor.Controls.MaterialComboBox materialComboBox1;
         private ReaLTaiizor.Controls.MaterialTextBoxEdit materialTextBoxEdit6;
+        private ReaLTaiizor.Controls.MaterialTextBoxEdit materialTextBoxEdit1;
+        private Button button1;
+        private Button button2;
+        private Button button3;
     }
 }

@@ -40,4 +40,12 @@ namespace Stockgazers.Models
         public string amount { get; set; } = string.Empty;
         public string variantId { get; set; } = string.Empty;
     }
+
+    public class RequestPatchListing
+    {
+        public string ListingID { get; set; } = string.Empty;
+        public int BuyPrice { get; set; }
+        public int Price { get; set; }
+        public int Limit { get; set; }
+    }
 }

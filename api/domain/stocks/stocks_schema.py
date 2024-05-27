@@ -38,3 +38,9 @@ class RequestPatchOrder(BaseModel):
     OrderNo: str
     ListingID: str
     AdjustPrice: float
+
+class RequestPatchListing(BaseModel):
+    ListingID: str
+    BuyPrice: int
+    Price: int
+    Limit: int

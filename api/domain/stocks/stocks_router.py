@@ -178,3 +178,33 @@ async def deletestock(ListingID: str):
             "message": "ok"
         }
     )
+
+@router.get("/listing/{ListingID}")
+async def getstock(ListingID: str):
+    with get_db() as db:
+        results = db.query(Stocks).filter(and_(Stocks.ListingID == ListingID, Stocks.IsDelete == "F")).all()
+
+    return results
+
+@router.patch("/listing")
+async def patchstock(request: stocks_schema.RequestPatchListing):
+    BuyPriceUSD = 0
+    if request.BuyPrice > 0:
+        BuyPriceUSD = request.BuyPrice/1300
+    with get_db() as db:
+        query = update(Stocks).filter(Stocks.ListingID == request.ListingID).values(
+            BuyPrice = request.BuyPrice,
+            BuyPriceUSD = BuyPriceUSD,
+            Price = request.Price,
+            Limit = request.Limit,
+            UpdateDatetime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        )
+        db.execute(query)
+        db.commit()
+
+    return JSONResponse(
+        status_code=status.HTTP_202_ACCEPTED,
+        content={
+            "message": "accepted"
+        }
+    )
