@@ -356,7 +356,7 @@ namespace Stockgazers
                     };
                     ListViewItem item = new ListViewItem(element);
                     item.Tag = row["ListingID"].ToString();
-                    materialListView1.Items.Add(new ListViewItem(element));
+                    materialListView1.Items.Add(item);
                 }
 
                 materialListView1.Invalidate();
@@ -414,11 +414,34 @@ namespace Stockgazers
             if (MessageBox.Show(message, "입찰 등록 삭제", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 #region 딱스 입찰등록 삭제
-                MessageBox.Show($"{contextMenuStrip1.Items[0].Tag}");
+                string ListingID = contextMenuStrip1.Items[0].Tag.ToString() ?? string.Empty;
+                if (ListingID.Length == 0)
+                    return;
+
+                string url = $"https://api.stockx.com/v2/selling/listings/{ListingID}";
+                var response = await common.session.DeleteAsync(url);
+
+                try
+                {
+                    response.EnsureSuccessStatusCode();
+                }
+                catch (Exception ex)
+                {
+                    return;
+                }
                 #endregion
 
                 #region Stockgazers DB 업데이트
-
+                url = $"{API.GetServer()}/api/stocks/{ListingID}";
+                response = await common.session.DeleteAsync(url);
+                try
+                {
+                    response.EnsureSuccessStatusCode();
+                }
+                catch (Exception ex)
+                {
+                    return;
+                }
                 #endregion
 
                 await RefreshSellStatus();

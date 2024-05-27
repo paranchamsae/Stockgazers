@@ -8,7 +8,7 @@ from datetime import datetime
 from pandas import pandas       # excel export library
 from io import BytesIO, StringIO
 
-from sqlalchemy import select, text, update
+from sqlalchemy import select, text, update, and_
 from models import Stocks
 
 from domain.stocks import stocks_schema
@@ -21,7 +21,7 @@ router = APIRouter(
 @router.get("/{UserID}", summary="내 재고 현황 불러오기")
 async def get_stocks(UserID: str):
     with get_db() as db:
-        result = db.query(Stocks).filter(Stocks.UserID == int(UserID)).all()
+        result = db.query(Stocks).filter(and_(Stocks.UserID == int(UserID), Stocks.IsDelete == "F")).all()
 
     return result
 
@@ -154,6 +154,22 @@ async def patchorder(request: list[stocks_schema.RequestPatchOrder]):
                         UpdateDatetime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                 )
             db.execute(query)
+        db.commit()
+
+    return JSONResponse(
+        status_code=status.HTTP_200_OK,
+        content={
+            "message": "ok"
+        }
+    )
+
+@router.delete("/{ListingID}")
+async def deletestock(ListingID: str):
+    with get_db() as db:
+        query = update(Stocks).filter(Stocks.ListingID == ListingID).values(
+            IsDelete = "T"
+        )
+        db.execute(query)
         db.commit()
 
     return JSONResponse(
