@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Security.Policy;
 using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -9,6 +10,7 @@ using ReaLTaiizor.Manager;
 using ReaLTaiizor.Util;
 using Stockgazers.APIs;
 using Stockgazers.Models;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 #pragma warning disable CS8600
 #pragma warning disable CS8601
@@ -101,7 +103,7 @@ namespace Stockgazers
             string message = $@"아래의 정보로 재고 추가 및 StockX에 판매 입찰이 등록됩니다.
 
                 모델명: {materialTextBoxEdit2.Text}
-                사이즈: { materialComboBox1.Text },
+                사이즈: {materialComboBox1.Text},
                 구매원가: {materialTextBoxEdit4.Text} KRW,
                 입찰가: {materialTextBoxEdit6.Text} USD,
                 입찰하한제한: {materialTextBoxEdit5.Text} USD
@@ -205,9 +207,9 @@ namespace Stockgazers
                         materialComboBox1.DataSource = null;
 
                     BindingList<KeyValuePair<string, string>> elements = new BindingList<KeyValuePair<string, string>>();
-                    foreach(var token in data)
+                    foreach (var token in data)
                     {
-                        elements.Add(new KeyValuePair<string, string>(token["variantValue"].ToString(), token["variantId"].ToString() ));
+                        elements.Add(new KeyValuePair<string, string>(token["variantValue"].ToString(), token["variantId"].ToString()));
                     }
                     materialComboBox1.DataSource = elements;
                     materialComboBox1.DisplayMember = "Key";
@@ -227,6 +229,75 @@ namespace Stockgazers
                     snackBar.Show(this);
                 }
             }
+        }
+
+        private async void materialComboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (materialComboBox1.SelectedIndex == -1 || selectedProductID.Length == 0)
+                return;
+
+            string VariantID = materialComboBox1.SelectedValue.ToString();
+
+            string url = $"https://api.stockx.com/v2/catalog/products/{selectedProductID}/variants/{VariantID}/market-data";
+            var response = await common.session.GetAsync(url);
+            try
+            {
+                response.EnsureSuccessStatusCode();
+
+                var result = response.Content.ReadAsStringAsync().Result;
+                var data = JsonConvert.DeserializeObject<JToken>(result);
+
+                button1.Text = "더 많은 수익\n" + data["earnMoreAmount"].ToString() + " USD";
+                button1.Tag = data["earnMoreAmount"].ToString();
+                button2.Text = "더 빨리 판매하기\n" + data["sellFasterAmount"].ToString() + " USD";
+                button2.Tag = data["sellFasterAmount"].ToString();
+                button3.Text = "즉시 판매하기\n" + data["highestBidAmount"].ToString() + " USD";
+                button3.Tag = data["highestBidAmount"].ToString();
+            }
+            catch (Exception ex)
+            {
+                MaterialSnackBar snackBar = new($"{ex.Message}", "OK", true);
+                snackBar.Show(this);
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            button1.ForeColor = Color.White;
+            button1.BackColor = Color.Black;
+
+            button2.ForeColor = Color.Black;
+            button2.BackColor = Color.White;
+            button3.ForeColor = Color.Black;
+            button3.BackColor = Color.White;
+
+            materialTextBoxEdit6.Text = button1.Tag.ToString();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            button2.ForeColor = Color.White;
+            button2.BackColor = Color.Black;
+
+            button1.ForeColor = Color.Black;
+            button1.BackColor = Color.White;
+            button3.ForeColor = Color.Black;
+            button3.BackColor = Color.White;
+
+            materialTextBoxEdit6.Text = button2.Tag.ToString();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            button3.ForeColor = Color.White;
+            button3.BackColor = Color.Black;
+
+            button1.ForeColor = Color.Black;
+            button1.BackColor = Color.White;
+            button2.ForeColor = Color.Black;
+            button2.BackColor = Color.White;
+
+            materialTextBoxEdit6.Text = button3.Tag.ToString();
         }
     }
 }
