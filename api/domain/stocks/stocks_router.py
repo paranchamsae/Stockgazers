@@ -223,3 +223,19 @@ async def patchstock(request: stocks_schema.RequestPatchListing):
             "message": "accepted"
         }
     )
+
+@router.patch("/listing/price")
+async def patchstock_price(request: stocks_schema.RequestPatchListingPrice):
+    with get_db() as db:
+        query = update(Stocks).filter(Stocks.ListingID == request.ListingID).values(
+            Price = int(request.Price)
+        )
+        db.execute(query)
+        db.commit()
+
+    return JSONResponse(
+        status_code = status.HTTP_200_OK,
+        content = {
+            "message": "ok"
+        }
+    )

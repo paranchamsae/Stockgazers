@@ -15,6 +15,7 @@ using System.Net.Http.Headers;
 using System.Windows.Forms;
 using System;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using static System.Net.WebRequestMethods;
 
 namespace Stockgazers
 {
@@ -64,7 +65,7 @@ namespace Stockgazers
 
             Timer = new System.Windows.Forms.Timer();
             Timer.Tick += Timer_Tick;
-            Timer.Interval = 1 * 60000;        // 30분
+            Timer.Interval = 30 * 60000;        // 30분
         }
 
         private async void TimerFuncTest()
@@ -73,21 +74,27 @@ namespace Stockgazers
             string url = $"{API.GetServer()}/api/stocks/{common.StockgazersUserID}/active";
             var response = await common.session.GetAsync(url);
 
-            //Tuple<string, string> bids = new Tuple<string, string>();
-            List<Tuple<string, string>> bids = new List<Tuple<string, string>>();
+            List<AutoPricingData> bids = new List<AutoPricingData>();
             try
             {
                 response.EnsureSuccessStatusCode();
                 var result = response.Content.ReadAsStringAsync().Result;
                 foreach (JToken element in JsonConvert.DeserializeObject<JToken>(result)["data"])
                 {
-                    //bids.Add(element["ProductID"].ToString(), element["VariantID"].ToString());
-                    bids.Add(new Tuple<string, string>(element["ProductID"].ToString(), element["VariantID"].ToString()));
+                    bids.Add(new AutoPricingData
+                    {
+                        ListingID = element["ListingID"].ToString(),
+                        ProductID = element["ProductID"].ToString(),
+                        VariantID = element["VariantID"].ToString(),
+                        LimitPrice = Convert.ToInt32(element["Limit"]),
+                        BidPrice = Convert.ToInt32(element["Price"])
+                    });
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MaterialSnackBar snackBar = new(ex.Message, "OK", true);
+                snackBar.Show(this);
                 return;
             }
             #endregion
@@ -95,24 +102,66 @@ namespace Stockgazers
             #region 2. foreach to StockX
             if (bids.Count > 0)
             {
-                foreach(Tuple<string, string> item in bids)
+                foreach(AutoPricingData item in bids)
                 {
-                    url = $"https://api.stockx.com/v2/catalog/products/{item.Item1}/variants/{item.Item2}/market-data";
+                    url = $"https://api.stockx.com/v2/catalog/products/{item.ProductID}/variants/{item.VariantID}/market-data";
                     response = await common.session.GetAsync(url);
                     try
                     {
                         response.EnsureSuccessStatusCode();
                         var result = response.Content.ReadAsStringAsync().Result;
                         var data = JsonConvert.DeserializeObject<JObject>(result);
+
+                        // 현재 StockX의 최저 입찰가와 내 입찰가를 비교
+                        int LowestAskAmount = Convert.ToInt32(data["lowestAskAmount"]);
+                        int UpdatePrice = -1;
+                        // 내 가격이 현재 최저가라면(LowestAskAmount == item.BidPrice) 가격을 업데이트 할 필요가 없음
+                        // 내 가격이 현재 최저가보다 더 낮은 가격일수는 없음(그 가격이 LowestAskAmount로 리턴될 것이기 때문)
+                        if (LowestAskAmount < item.BidPrice)            // 내 입찰가가 현재 최저가가 아님
+                        {
+                            if (LowestAskAmount - 1 > item.LimitPrice)       // $1 낮춘 입찰이 하한가보다 낮지 않은 경우라면 최저입찰가-1불로 입찰 업데이트
+                                UpdatePrice = LowestAskAmount - 1;
+                            else if (LowestAskAmount - 1 == item.LimitPrice)
+                                UpdatePrice = item.LimitPrice;
+                        }
+
+                        if (UpdatePrice > -1)
+                        {
+                            // 딱스에 입찰 업데이트
+                            url = $"https://api.stockx.com/v2/selling/listings/{item.ListingID}";
+                            Dictionary<string, string> updateData = new()
+                            {
+                                { "amount", UpdatePrice.ToString() }
+                            };
+                            var sendData = new StringContent(JsonConvert.SerializeObject(updateData), Encoding.UTF8, "application/json");
+                            response = await common.session.PatchAsync(url, sendData);
+                            response.EnsureSuccessStatusCode();
+
+                            // Stockgazers DB에도 업데이트
+                            url = $"{API.GetServer()}/api/stocks/listing/price";
+                            updateData.Clear();
+                            updateData = new Dictionary<string, string>
+                            {
+                                { "ListingID", item.ListingID },
+                                { "Price", UpdatePrice.ToString() }
+                            };
+                            sendData = new StringContent(JsonConvert.SerializeObject(updateData), Encoding.UTF8, "application/json");
+                            response = await common.session.PatchAsync(url, sendData);
+                            response.EnsureSuccessStatusCode();
+                        }
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
                         if (response.StatusCode == HttpStatusCode.Unauthorized)
                         {
 
                         }
                         else
+                        {
+                            MaterialSnackBar snackBar = new(ex.Message, "OK", true);
+                            snackBar.Show(this);
                             continue;
+                        }
                     }
                 }
             }
@@ -386,7 +435,7 @@ namespace Stockgazers
                 sendData.Headers.ContentType.MediaType = "multipart/form-data";
 
                 string filepath = dlg.FileName;
-                byte[] bytes = File.ReadAllBytes(filepath);
+                byte[] bytes = System.IO.File.ReadAllBytes(filepath);
                 sendData.Add(new StreamContent(new MemoryStream(bytes)), "csvfile", "data.csv");
 
                 var response = await common.session.PostAsync(API.GetServer() + "/api/stocks/import", sendData);

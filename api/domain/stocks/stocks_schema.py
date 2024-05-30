@@ -45,3 +45,7 @@ class RequestPatchListing(BaseModel):
     BuyPrice: int
     Price: int
     Limit: int
+
+class RequestPatchListingPrice(BaseModel):
+    ListingID: str
+    Price: str

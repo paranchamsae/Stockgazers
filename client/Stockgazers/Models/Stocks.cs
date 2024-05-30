@@ -49,4 +49,18 @@ namespace Stockgazers.Models
         public int Price { get; set; }
         public int Limit { get; set; }
     }
+
+    public class RequestPutListing
+    {
+        public int amount { get; set; }
+    }
+
+    public class AutoPricingData
+    {
+        public string ListingID { get; set; } = string.Empty;
+        public string ProductID { get; set; } = string.Empty;
+        public string VariantID { get; set; } = string.Empty;
+        public int LimitPrice { get; set; }
+        public int BidPrice { get; set; }
+    }
 }
