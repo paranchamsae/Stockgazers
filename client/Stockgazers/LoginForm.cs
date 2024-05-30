@@ -56,7 +56,10 @@ namespace Stockgazers
                 {
                     JToken? userData = resultjson["data"];
                     if(userData != null)
+                    {
                         common.StockgazersUserID = userData.Value<int>("ID");
+                        common.UserTier = userData.Value<int>("Tier");
+                    }
 
                     JToken? core = resultjson["core"];
 
@@ -85,7 +88,7 @@ namespace Stockgazers
 
         private void materialButton2_Click(object sender, EventArgs e)
         {
-            MaterialSnackBar snackBar = new("현재 준비 중인 기능입니다 :)", "OK", true);
+            MaterialSnackBar snackBar = new("현재 버전에서는 지원하지 않아요", "OK", true);
             snackBar.Show(this);
         }
 

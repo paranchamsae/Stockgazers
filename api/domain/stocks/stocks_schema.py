@@ -19,6 +19,7 @@ class RequestAddStocks(BaseModel):
     SendDatetime: AwareDatetime | None = None
     AdjustPrice: float
     Profit: float
+    Status: str
     # CreateDatetime: AwareDatetime
     # UpdateDatetime: AwareDatetime | None = None
 

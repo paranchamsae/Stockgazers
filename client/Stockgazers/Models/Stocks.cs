@@ -20,6 +20,7 @@ namespace Stockgazers.Models
         public float BuyPriceUSD { get; set; }
         public int Price { get; set; }
         public int Limit { get; set; }
+        public string Status { get; set; } = string.Empty;
         public string OrderNo { get; set; } = string.Empty;
         public DateTime? SellDatetime { get; set; } = null;
         public DateTime? SendDatetime { get; set; } = null;

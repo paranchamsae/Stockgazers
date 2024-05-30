@@ -56,7 +56,8 @@ async def getUser(userid: str):
                           User.UserID.label("LoginID"),
                           User.ExchangeRate,
                           User.IsAutoDiscount,
-                          User.DiscountPrice).filter(User.ID==int(userid)).all()
+                          User.DiscountPrice,
+                          User.Tier).filter(User.ID==int(userid)).all()
         
         if len(result) < 1:
             raise HTTPException(status.HTTP_404_NOT_FOUND)
@@ -68,7 +69,8 @@ async def getUser(userid: str):
                     LoginID=element["LoginID"],
                     ExchangeRate=element["ExchangeRate"],
                     IsAutoDiscount=element["IsAutoDiscount"],
-                    DiscountPrice=element["DiscountPrice"]
+                    DiscountPrice=element["DiscountPrice"],
+                    Tier = element["Tier"]
                 )
     return response
 

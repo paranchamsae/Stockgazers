@@ -24,3 +24,4 @@ class ResponseUserInfo(BaseModel):
     ExchangeRate: int | None = None
     IsAutoDiscount: bool | None = None
     DiscountPrice: int | None = None
+    Tier: int

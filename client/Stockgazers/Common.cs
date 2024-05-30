@@ -19,5 +19,6 @@ namespace Stockgazers
         public string IDToken = string.Empty;
 
         public int StockgazersUserID = -1;
+        public int UserTier = -1;
     }
 }

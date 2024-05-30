@@ -1,6 +1,7 @@
 #-*- coding:utf-8 -*-
 from fastapi import APIRouter, HTTPException, status, File, UploadFile
 from fastapi.responses import JSONResponse, FileResponse
+from fastapi.encoders import jsonable_encoder
 import math
 from database import get_db
 from datetime import datetime
@@ -24,6 +25,19 @@ async def get_stocks(UserID: str):
         result = db.query(Stocks).filter(and_(Stocks.UserID == int(UserID), Stocks.IsDelete == "F")).all()
 
     return result
+
+@router.get("/{UserID}/{Status}")
+async def get_stocks_conditions(UserID: int, Status: str):
+    with get_db() as db:
+        result = db.query(Stocks).filter(and_(Stocks.UserID == UserID, Stocks.IsDelete == "F", Stocks.Status == Status.upper())).all()
+    
+    return JSONResponse(
+        status_code=status.HTTP_200_OK,
+        content={
+            "message": "ok",
+            "data": jsonable_encoder(result)
+        }
+    )
 
 @router.get("/export/{UserID}", summary="내 재고 현황 엑셀로 내려받기(구매원가 업로드용)")
 async def get_stocks_excel(UserID: str):
@@ -122,7 +136,8 @@ async def addStocks(request: list[stocks_schema.RequestAddStocks]):
                 AdjustPrice = row.AdjustPrice,
                 Profit = row.Profit,
                 CreateDatetime = datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-                UpdateDatetime = None
+                UpdateDatetime = None,
+                Status = row.Status
             )
             db.add(new_stock)
         db.commit()

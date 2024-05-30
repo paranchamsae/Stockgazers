@@ -25,6 +25,7 @@ namespace Stockgazers
         public static bool isNewStockCreated = false;
         private readonly MaterialSkinManager materialSkinManager;
         Common common;
+        System.Windows.Forms.Timer Timer;
 
         private string authcode = string.Empty;
         private string state = string.Empty;
@@ -60,6 +61,68 @@ namespace Stockgazers
             //materialSkinManager.ColorScheme = new MaterialColorScheme("#00480157", "#370142", "DC2EFF", "00BB5FCF", MaterialTextShade.LIGHT);
             //materialSkinManager.ColorScheme = new MaterialColorScheme(Color.Orange, Color.DarkOrange, Color.Orchid, Color.OrangeRed, Color.MediumOrchid);
             materialSkinManager.ColorScheme = new MaterialColorScheme(MaterialPrimary.Indigo500, MaterialPrimary.Indigo700, MaterialPrimary.Indigo100, MaterialAccent.Pink200, MaterialTextShade.LIGHT);
+
+            Timer = new System.Windows.Forms.Timer();
+            Timer.Tick += Timer_Tick;
+            Timer.Interval = 1 * 60000;        // 30분
+        }
+
+        private async void TimerFuncTest()
+        {
+            #region 1. Stockgazers DB에서 현재 입찰 중인 상태의 아이템을 획득
+            string url = $"{API.GetServer()}/api/stocks/{common.StockgazersUserID}/active";
+            var response = await common.session.GetAsync(url);
+
+            //Tuple<string, string> bids = new Tuple<string, string>();
+            List<Tuple<string, string>> bids = new List<Tuple<string, string>>();
+            try
+            {
+                response.EnsureSuccessStatusCode();
+                var result = response.Content.ReadAsStringAsync().Result;
+                foreach (JToken element in JsonConvert.DeserializeObject<JToken>(result)["data"])
+                {
+                    //bids.Add(element["ProductID"].ToString(), element["VariantID"].ToString());
+                    bids.Add(new Tuple<string, string>(element["ProductID"].ToString(), element["VariantID"].ToString()));
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return;
+            }
+            #endregion
+
+            #region 2. foreach to StockX
+            if (bids.Count > 0)
+            {
+                foreach(Tuple<string, string> item in bids)
+                {
+                    url = $"https://api.stockx.com/v2/catalog/products/{item.Item1}/variants/{item.Item2}/market-data";
+                    response = await common.session.GetAsync(url);
+                    try
+                    {
+                        response.EnsureSuccessStatusCode();
+                        var result = response.Content.ReadAsStringAsync().Result;
+                        var data = JsonConvert.DeserializeObject<JObject>(result);
+                    }
+                    catch (Exception)
+                    {
+                        if (response.StatusCode == HttpStatusCode.Unauthorized)
+                        {
+
+                        }
+                        else
+                            continue;
+                    }
+                }
+            }
+            #endregion
+        }
+
+        private async void Timer_Tick(object? sender, EventArgs e)
+        {
+            
+
 
         }
 
@@ -105,8 +168,8 @@ namespace Stockgazers
                 JToken ID = tokenJson.Value<string>("id_token");
                 common.IDToken = ID?.ToString() ?? string.Empty;
 
-                Trace.WriteLine(API.APIKey);
-                Trace.WriteLine(common.AccessToken);
+                //Trace.WriteLine(API.APIKey);
+                //Trace.WriteLine(common.AccessToken);
             }
             #endregion
 
@@ -170,6 +233,7 @@ namespace Stockgazers
                     BuyPriceUSD = 0.0f,
                     Price = Convert.ToInt32(list["amount"].ToString()),
                     Limit = 0,
+                    Status = list["status"].ToString(),
                 };
 
                 if (list["order"].Count() > 0)
@@ -227,13 +291,36 @@ namespace Stockgazers
             #region 4. 판매현황 탭 리스트뷰 데이터 집어넣기
             foreach (var row in StockgazersReference)
             {
+                string status = string.Empty;
+                switch(row["Status"].ToString())
+                {
+                    case "ACTIVE":
+                        status = "입찰 중";
+                        break;
+                    case "INACTIVE":
+                        status = "비활성화";
+                        break;
+                    case "DELETED":
+                        status = "삭제됨";
+                        break;
+                    case "CANCELED":
+                        status = "인증실패";
+                        break;
+                    case "MATCHED":
+                        status = "판매대기";
+                        break;
+                    case "COMPLETED":
+                        status = "판매완료";
+                        break;
+                }
+
                 string[] element = new[] {
                     "",
                     row["StyleId"].ToString(),
                     row["Title"].ToString(),
                     row["BuyPrice"].ToString(),
                     row["Price"].ToString(),
-                    row["OrderNo"].ToString().Length > 0 ? "판매완료" : "입찰 중",
+                    status,
                     row["AdjustPrice"].ToString(),
                     row["Profit"].ToString(),
                 };
@@ -242,6 +329,9 @@ namespace Stockgazers
                 materialListView1.Items.Add(item);
             }
 
+            if (common.UserTier > 2)
+                //Timer.Start();
+                TimerFuncTest();
             #endregion
         }
 
