@@ -19,14 +19,14 @@ router = APIRouter(
     tags=["Stocks"]
 )
 
-@router.get("/{UserID}", summary="내 재고 현황 불러오기")
+@router.get("/{UserID}", summary="내 입찰 현황 불러오기")
 async def get_stocks(UserID: str):
     with get_db() as db:
         result = db.query(Stocks).filter(and_(Stocks.UserID == int(UserID), Stocks.IsDelete == "F")).all()
 
     return result
 
-@router.get("/{UserID}/{Status}")
+@router.get("/{UserID}/{Status}", summary="입찰 상태값별 입찰 현황 불러오기")
 async def get_stocks_conditions(UserID: int, Status: str):
     with get_db() as db:
         result = db.query(Stocks).filter(and_(Stocks.UserID == UserID, Stocks.IsDelete == "F", Stocks.Status == Status.upper())).all()
@@ -237,5 +237,31 @@ async def patchstock_price(request: stocks_schema.RequestPatchListingPrice):
         status_code = status.HTTP_200_OK,
         content = {
             "message": "ok"
+        }
+    )
+
+@router.get("/listing/statistics/{UserID}")
+async def get_stat(UserID: int):
+    query = "SELECT styleid, title, COUNT(*) AS cnt FROM SGStocks WHERE userid="+str(UserID)+" GROUP BY styleid, title ORDER BY COUNT(*) DESC LIMIT 1"
+    query2 = """
+        SELECT 
+            COUNT(*) AS TotalRow,
+            sum(case when STATUS='ACTIVE' then 1 ELSE 0 END) AS ActiveRow,
+            sum(case when STATUS='MATCHED' then 1 ELSE 0 END) AS MatchedRow
+        FROM SGStocks
+        WHERE UserID="""+str(UserID)+""" AND IsDelete='F'
+    """
+
+    with get_db() as db:
+        result = db.execute(text(query)).all()
+        print(result)
+        result = db.execute(text(query2)).all()
+        print(result)
+
+    return JSONResponse(
+        status_code=status.HTTP_200_OK,
+        content={
+            "message": "ok",
+            # "data": jsonable_encoder(result)
         }
     )
