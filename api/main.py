@@ -3,6 +3,9 @@ from starlette.middleware.cors import CORSMiddleware
 
 from domain.user import user_router
 from domain.stocks import stocks_router
+from domain.main import main_router
+from domain.listing import listing_router
+from domain.data import data_router
 from domain.callback import callback_router
 
 app = FastAPI()
@@ -23,8 +26,11 @@ app = FastAPI()
 # def hello():
 #     return "hello fastapi"
 
+app.include_router(main_router.router)
 app.include_router(user_router.router)
 app.include_router(stocks_router.router)
+app.include_router(data_router.router)
+app.include_router(listing_router.router)
 app.include_router(callback_router.router)
 
 # @stockx_callback_router.post(

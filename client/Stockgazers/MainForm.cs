@@ -27,6 +27,8 @@ namespace Stockgazers
         private readonly MaterialSkinManager materialSkinManager;
         Common common;
         System.Windows.Forms.Timer Timer;
+        //System.Windows.Forms.ListView.ListViewItemCollection originCollection = null;
+        List<ListViewItem> originCollection = null;
 
         private string authcode = string.Empty;
         private string state = string.Empty;
@@ -46,6 +48,7 @@ namespace Stockgazers
         {
             InitializeComponent();
             common = c;
+            originCollection = new List<ListViewItem>();
 
             // Initialize MaterialSkinManager
             materialSkinManager = MaterialSkinManager.Instance;
@@ -102,7 +105,7 @@ namespace Stockgazers
             #region 2. foreach to StockX
             if (bids.Count > 0)
             {
-                foreach(AutoPricingData item in bids)
+                foreach (AutoPricingData item in bids)
                 {
                     url = $"https://api.stockx.com/v2/catalog/products/{item.ProductID}/variants/{item.VariantID}/market-data";
                     response = await common.session.GetAsync(url);
@@ -138,7 +141,7 @@ namespace Stockgazers
                             response.EnsureSuccessStatusCode();
 
                             // Stockgazers DB에도 업데이트
-                            url = $"{API.GetServer()}/api/stocks/listing/price";
+                            url = $"{API.GetServer()}/api/listing/price";
                             updateData.Clear();
                             updateData = new Dictionary<string, string>
                             {
@@ -170,9 +173,7 @@ namespace Stockgazers
 
         private async void Timer_Tick(object? sender, EventArgs e)
         {
-            
-
-
+            throw new NotImplementedException();
         }
 
         private async void Form1_Load(object sender, EventArgs e)
@@ -216,9 +217,6 @@ namespace Stockgazers
                 common.RefreshToken = Refresh?.ToString() ?? string.Empty;
                 JToken ID = tokenJson.Value<string>("id_token");
                 common.IDToken = ID?.ToString() ?? string.Empty;
-
-                //Trace.WriteLine(API.APIKey);
-                //Trace.WriteLine(common.AccessToken);
             }
             #endregion
 
@@ -338,10 +336,13 @@ namespace Stockgazers
             #endregion
 
             #region 4. 판매현황 탭 리스트뷰 데이터 집어넣기
+            if (originCollection?.Count > 0)
+                originCollection.Clear();
+
             foreach (var row in StockgazersReference)
             {
                 string status = string.Empty;
-                switch(row["Status"].ToString())
+                switch (row["Status"].ToString())
                 {
                     case "ACTIVE":
                         status = "입찰 중";
@@ -376,11 +377,13 @@ namespace Stockgazers
                 ListViewItem item = new ListViewItem(element);
                 item.Tag = row["ListingID"].ToString();
                 materialListView1.Items.Add(item);
+
+                originCollection.Add(item);
             }
 
-            if (common.UserTier > 2)
-                //Timer.Start();
-                TimerFuncTest();
+            //if (common.UserTier > 2)
+            //    //Timer.Start();
+            //    TimerFuncTest();
             #endregion
         }
 
@@ -396,7 +399,7 @@ namespace Stockgazers
         /// <param name="e"></param>
         private async void materialButton4_Click(object sender, EventArgs e)
         {
-            string url = $"{API.GetServer()}/api/stocks/export/{common.StockgazersUserID}";
+            string url = $"{API.GetServer()}/api/data/export/{common.StockgazersUserID}";
             var response = await common.session.GetAsync(url);
             string? path = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
 
@@ -461,7 +464,10 @@ namespace Stockgazers
         private async Task<bool> RefreshSellStatus(bool isClearGrid = true)
         {
             if (isClearGrid)
-                materialListView1.Items.Clear();
+            {
+                materialListView1.Items?.Clear();
+                originCollection?.Clear();
+            }
 
             string url = $"{API.GetServer()}/api/stocks/{common.StockgazersUserID}";
             var response = await common.session.GetAsync(url);
@@ -496,6 +502,9 @@ namespace Stockgazers
                     ListViewItem item = new ListViewItem(element);
                     item.Tag = row["ListingID"].ToString();
                     materialListView1.Items.Add(item);
+
+                    originCollection ??= new List<ListViewItem>();
+                    originCollection.Add(item);
                 }
 
                 materialListView1.Invalidate();
@@ -594,7 +603,7 @@ namespace Stockgazers
                 #endregion
 
                 #region Stockgazers DB 업데이트
-                url = $"{API.GetServer()}/api/stocks/{ListingID}";
+                url = $"{API.GetServer()}/api/listing/{ListingID}";
                 response = await common.session.DeleteAsync(url);
                 try
                 {
@@ -615,6 +624,20 @@ namespace Stockgazers
         private async void materialButton6_Click(object sender, EventArgs e)
         {
             await RefreshSellStatus();
+        }
+
+        private void materialTextBoxEdit2_TextChanged(object sender, EventArgs e)
+        {
+            materialListView1.Items.Clear();
+            if (materialTextBoxEdit2.Text == string.Empty)
+            {
+                foreach (var element in originCollection)
+                    materialListView1.Items.Add(element);
+            }
+            else
+            {
+                materialListView1.Items.AddRange(originCollection.Where(x => x.SubItems[1].ToString().ToLower().Replace("-", "").Contains(materialTextBoxEdit2.Text)).ToArray());
+            }
         }
     }
 }

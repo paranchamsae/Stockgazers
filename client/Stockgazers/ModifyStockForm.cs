@@ -49,7 +49,7 @@ namespace Stockgazers
 
         private async void ModifyStockForm_Load(object sender, EventArgs e)
         {
-            string url = $"{API.GetServer()}/api/stocks/listing/{ListingID}";
+            string url = $"{API.GetServer()}/api/listing/{ListingID}";
             var response = await common.session.GetAsync(url);
 
             try
@@ -111,7 +111,7 @@ namespace Stockgazers
                 try
                 {
                     response.EnsureSuccessStatusCode();
-                    url = $"{API.GetServer()}/api/stocks/listing";
+                    url = $"{API.GetServer()}/api/listing";
                     RequestPatchListing data2 = new()
                     {
                         ListingID = ListingID,

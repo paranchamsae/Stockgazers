@@ -50,14 +50,14 @@ async def createUser(request: user_schema.RequestCreateUser):
     )
 
 @router.get("/{userid}", summary="Stockgazers 클라이언트 접속자 정보", response_model=user_schema.ResponseUserInfo)
-async def getUser(userid: str):
+async def getUser(userid: int):
     with get_db() as db:
         result = db.query(User.ID.label("UserID"),
                           User.UserID.label("LoginID"),
                           User.ExchangeRate,
                           User.IsAutoDiscount,
                           User.DiscountPrice,
-                          User.Tier).filter(User.ID==int(userid)).all()
+                          User.Tier).filter(User.ID==userid).all()
         
         if len(result) < 1:
             raise HTTPException(status.HTTP_404_NOT_FOUND)
