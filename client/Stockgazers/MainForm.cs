@@ -489,13 +489,36 @@ namespace Stockgazers
 
                 foreach (var row in StockgazersReference)
                 {
+                    string status = string.Empty;
+                    switch (row["Status"].ToString())
+                    {
+                        case "ACTIVE":
+                            status = "입찰 중";
+                            break;
+                        case "INACTIVE":
+                            status = "비활성화";
+                            break;
+                        case "DELETED":
+                            status = "삭제됨";
+                            break;
+                        case "CANCELED":
+                            status = "인증실패";
+                            break;
+                        case "MATCHED":
+                            status = "판매대기";
+                            break;
+                        case "COMPLETED":
+                            status = "판매완료";
+                            break;
+                    }
+
                     string[] element = new[] {
                         "",
                         row["StyleId"].ToString(),
                         row["Title"].ToString(),
                         row["BuyPrice"].ToString(),
                         row["Price"].ToString(),
-                        row["OrderNo"].ToString().Length > 0 ? "판매완료" : "입찰 중",
+                        status,
                         row["AdjustPrice"].ToString(),
                         row["Profit"].ToString(),
                     };
@@ -631,12 +654,94 @@ namespace Stockgazers
             materialListView1.Items.Clear();
             if (materialTextBoxEdit2.Text == string.Empty)
             {
-                foreach (var element in originCollection)
-                    materialListView1.Items.Add(element);
+                // 라디오버튼이 적용된 상태의 경우
+                if (materialRadioButton4.Checked)
+                {
+                    materialListView1.Items.AddRange(originCollection.Where(x => x.SubItems[5].Text == "입찰 중" || x.SubItems[5].Text == "판매대기").ToArray());
+                }
+                else if (materialRadioButton5.Checked)
+                {
+                    materialListView1.Items.AddRange(originCollection.Where(x => x.SubItems[5].Text == "인증실패" || x.SubItems[5].Text == "판매완료").ToArray());
+                }
+                else
+                {
+                    foreach (var element in originCollection)
+                        materialListView1.Items.Add(element);
+                }
             }
             else
             {
-                materialListView1.Items.AddRange(originCollection.Where(x => x.SubItems[1].ToString().ToLower().Replace("-", "").Contains(materialTextBoxEdit2.Text)).ToArray());
+                // 라디오버튼이 적용된 상태의 경우 = 라디오버튼 + 검색어 이중중첩
+                if (materialRadioButton4.Checked)
+                    materialListView1.Items.AddRange(originCollection.Where(x => (x.SubItems[5].Text == "입찰 중" || x.SubItems[5].Text == "판매대기") &&
+                        x.SubItems[1].Text.ToLower().Replace("-", "").Contains(materialTextBoxEdit2.Text)).ToArray());
+                else if (materialRadioButton5.Checked)
+                    materialListView1.Items.AddRange(originCollection.Where(x => (x.SubItems[5].Text == "인증실패" || x.SubItems[5].Text == "판매완료") &&
+                        x.SubItems[1].Text.ToLower().Replace("-", "").Contains(materialTextBoxEdit2.Text)).ToArray());
+                else
+                    materialListView1.Items.AddRange(originCollection.Where(x => x.SubItems[1].Text.ToLower().Replace("-", "").Contains(materialTextBoxEdit2.Text)).ToArray());
+            }
+        }
+
+        /// <summary>
+        /// 라디오버튼 - 전체
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void materialRadioButton3_CheckedChanged(object sender, EventArgs e)
+        {
+            if (materialRadioButton3.Checked)
+            {
+                materialListView1.Items.Clear();
+
+                
+                if (materialTextBoxEdit2.Text.Length > 0)
+                {
+                    materialListView1.Items.AddRange(originCollection.Where(x => x.SubItems[1].Text.ToLower().Replace("-", "").Contains(materialTextBoxEdit2.Text)).ToArray());
+                }
+                else
+                {
+                    foreach (var element in originCollection)
+                        materialListView1.Items.Add(element);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 라디오버튼 - 입찰 중
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void materialRadioButton4_CheckedChanged_1(object sender, EventArgs e)
+        {
+            if (materialRadioButton4.Checked)
+            {
+                materialListView1.Items.Clear();
+
+                IEnumerable<ListViewItem> filteredItem = originCollection.Where(x => x.SubItems[5].Text == "입찰 중" || x.SubItems[5].Text == "판매대기");
+                if (materialTextBoxEdit2.Text.Length > 0)
+                    filteredItem = filteredItem.Where(x => x.SubItems[1].Text.ToLower().Replace("-", "").Contains(materialTextBoxEdit2.Text));
+
+                materialListView1.Items.AddRange(filteredItem.ToArray());
+            }
+        }
+
+        /// <summary>
+        /// 라디오버튼 - 완료
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void materialRadioButton5_CheckedChanged(object sender, EventArgs e)
+        {
+            if (materialRadioButton5.Checked)
+            {
+                materialListView1.Items.Clear();
+
+                IEnumerable<ListViewItem> filteredItem = originCollection.Where(x => x.SubItems[5].Text == "인증실패" || x.SubItems[5].Text == "판매완료");
+                if (materialTextBoxEdit2.Text.Length > 0)
+                    filteredItem = filteredItem.Where(x => x.SubItems[1].Text.ToLower().Replace("-", "").Contains(materialTextBoxEdit2.Text));
+
+                materialListView1.Items.AddRange(filteredItem.ToArray());
             }
         }
     }
