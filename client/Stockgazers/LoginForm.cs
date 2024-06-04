@@ -10,6 +10,7 @@ namespace Stockgazers
     public partial class LoginForm : MaterialForm
     {
         Common common;
+        public static bool isSignedUp = false;
 
         class Login
         {
@@ -88,8 +89,15 @@ namespace Stockgazers
 
         private void materialButton2_Click(object sender, EventArgs e)
         {
-            MaterialSnackBar snackBar = new("현재 버전에서는 지원하지 않아요", "OK", true);
-            snackBar.Show(this);
+            SignupForm signupForm = new SignupForm(common);
+            signupForm.ShowDialog();
+
+            if(isSignedUp)
+            {
+                isSignedUp = false;
+                MaterialSnackBar snackBar = new("계정 생성이 완료되었어요!", "OK", true);
+                snackBar.Show(this);
+            }
         }
 
         private void materialTextBoxEdit1_KeyDown(object sender, KeyEventArgs e)
