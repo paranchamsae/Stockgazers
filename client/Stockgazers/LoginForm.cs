@@ -94,7 +94,7 @@ namespace Stockgazers
             SignupForm signupForm = new SignupForm(common);
             signupForm.ShowDialog();
 
-            if(isSignedUp)
+            if (isSignedUp)
             {
                 isSignedUp = false;
                 MaterialSnackBar snackBar = new("계정 생성이 완료되었어요!", "OK", true);

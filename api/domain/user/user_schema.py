@@ -5,6 +5,9 @@ from pydantic import BaseModel
 class RequestCreateUser(BaseModel):
     LoginID: str
     Password: str
+    Email: str
+    DiscountType: str
+    Tier: str
 
 class RequestLogin(BaseModel):
     ID: str

@@ -22,7 +22,7 @@ async def createUser(request: user_schema.RequestCreateUser):
     with get_db() as db:
         result = db.query(User).filter(User.UserID == request.LoginID).all()
         if len(result) > 0:     # 이미 존재하는 계정 정보라면 http 409 conflict를 리턴
-            raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="exist id")
+            raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="이미 사용 중인 아이디입니다.")
         
         result = db.execute(text("select sha2('"+request.Password+"', 256)"))
         shapw = result.first()
@@ -36,7 +36,10 @@ async def createUser(request: user_schema.RequestCreateUser):
             UpdateDatetime = None,
             IsAutoDiscount = "F",
             ExchangeRate = 1300,
-            DiscountPrice = 1
+            DiscountPrice = 1,
+            Tier = int(request.Tier),
+            Email = request.Email,
+            DiscountType = request.DiscountType
         )
         
         db.add(new_user)
@@ -45,7 +48,7 @@ async def createUser(request: user_schema.RequestCreateUser):
     return JSONResponse(
         status_code=status.HTTP_201_CREATED,
         content={
-            "message": "created/"+new_user.UserID
+            "message": "created"
         }
     )
 

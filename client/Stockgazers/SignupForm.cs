@@ -15,7 +15,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using System.Security.Cryptography;
 
 namespace Stockgazers
 {
@@ -49,7 +49,8 @@ namespace Stockgazers
         private async void materialButton1_Click(object sender, EventArgs e)
         {
             // 입력되지 않은 항목이 있는지 검사
-            if(materialTextBoxEdit1.Text.Length == 0 || materialTextBoxEdit2.Text.Length == 0 || materialTextBoxEdit3.Text.Length == 0 || materialTextBoxEdit4.Text.Length == 0)
+            if(materialTextBoxEdit1.Text.Length == 0 || materialTextBoxEdit2.Text.Length == 0 || materialTextBoxEdit3.Text.Length == 0 || materialTextBoxEdit4.Text.Length == 0 ||
+                (!materialRadioButton1.Checked && !materialRadioButton2.Checked) )
             {
                 MaterialSnackBar snackBar = new("입력되지 않은 항목이 있어요", "OK", true);
                 snackBar.Show(this);
@@ -74,11 +75,28 @@ namespace Stockgazers
                 return;
             }
 
+            // 암호화 전송 로직 정리 필요함
+            // 클라이언트에서 양방향 암호화 한번 해서 서버로 넘기고
+            // 서버에서 복호화 한번 한 다음에 그걸 다시 단방향 암호화로 저장 해야할 것 같다.
+            //SHA256 sha256 = SHA256.Create();
+            //byte[] encrypted = sha256.ComputeHash(Encoding.UTF8.GetBytes(materialTextBoxEdit2.Text));
+
             // 아이디 중복검사는 서버에 API 요청시 검증 가능 > 중복 아이디가 있을때 http 409를 리턴함
             string url = $"{API.GetServer()}/api/user";
             Dictionary<string, string> data = new Dictionary<string, string>
             {
-                { "", "" }
+                /*
+                 LoginID: str
+                Password: str
+                Email: str
+                DiscountType: str
+                Tier: int
+                 */
+                { "LoginID", $"{materialTextBoxEdit1.Text}" },
+                { "Password", $"{materialTextBoxEdit2.Text}" },
+                { "Email", $"{materialTextBoxEdit4.Text}" },
+                { "DiscountType", $"{(materialRadioButton1.Checked ? "LOCAL" : "GLOBAL")}" },
+                { "Tier", "1" }
             };
             var sendData = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
             var response = await common.session.PostAsync(url, sendData);
@@ -86,6 +104,8 @@ namespace Stockgazers
             try
             {
                 response.EnsureSuccessStatusCode();
+                LoginForm.isSignedUp = true;
+                this.Close();
             }
             catch (Exception ex)
             {

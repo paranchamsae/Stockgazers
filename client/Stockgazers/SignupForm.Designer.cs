@@ -33,6 +33,9 @@
             materialTextBoxEdit2 = new ReaLTaiizor.Controls.MaterialTextBoxEdit();
             materialTextBoxEdit3 = new ReaLTaiizor.Controls.MaterialTextBoxEdit();
             materialTextBoxEdit4 = new ReaLTaiizor.Controls.MaterialTextBoxEdit();
+            materialRadioButton1 = new ReaLTaiizor.Controls.MaterialRadioButton();
+            materialRadioButton2 = new ReaLTaiizor.Controls.MaterialRadioButton();
+            materialLabel1 = new ReaLTaiizor.Controls.MaterialLabel();
             SuspendLayout();
             // 
             // materialButton1
@@ -44,7 +47,7 @@
             materialButton1.HighEmphasis = true;
             materialButton1.Icon = null;
             materialButton1.IconType = ReaLTaiizor.Controls.MaterialButton.MaterialIconType.Rebase;
-            materialButton1.Location = new Point(136, 393);
+            materialButton1.Location = new Point(136, 486);
             materialButton1.Margin = new Padding(4, 6, 4, 6);
             materialButton1.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
             materialButton1.Name = "materialButton1";
@@ -185,11 +188,60 @@
             materialTextBoxEdit4.TrailingIcon = null;
             materialTextBoxEdit4.UseSystemPasswordChar = false;
             // 
+            // materialRadioButton1
+            // 
+            materialRadioButton1.AutoSize = true;
+            materialRadioButton1.Depth = 0;
+            materialRadioButton1.Location = new Point(136, 310);
+            materialRadioButton1.Margin = new Padding(0);
+            materialRadioButton1.MouseLocation = new Point(-1, -1);
+            materialRadioButton1.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
+            materialRadioButton1.Name = "materialRadioButton1";
+            materialRadioButton1.Ripple = true;
+            materialRadioButton1.Size = new Size(74, 37);
+            materialRadioButton1.TabIndex = 6;
+            materialRadioButton1.TabStop = true;
+            materialRadioButton1.Text = "Local";
+            materialRadioButton1.UseAccentColor = false;
+            materialRadioButton1.UseVisualStyleBackColor = true;
+            // 
+            // materialRadioButton2
+            // 
+            materialRadioButton2.AutoSize = true;
+            materialRadioButton2.Depth = 0;
+            materialRadioButton2.Location = new Point(236, 310);
+            materialRadioButton2.Margin = new Padding(0);
+            materialRadioButton2.MouseLocation = new Point(-1, -1);
+            materialRadioButton2.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
+            materialRadioButton2.Name = "materialRadioButton2";
+            materialRadioButton2.Ripple = true;
+            materialRadioButton2.Size = new Size(81, 37);
+            materialRadioButton2.TabIndex = 7;
+            materialRadioButton2.TabStop = true;
+            materialRadioButton2.Text = "Global";
+            materialRadioButton2.UseAccentColor = false;
+            materialRadioButton2.UseVisualStyleBackColor = true;
+            // 
+            // materialLabel1
+            // 
+            materialLabel1.AutoSize = true;
+            materialLabel1.Depth = 0;
+            materialLabel1.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
+            materialLabel1.Location = new Point(19, 320);
+            materialLabel1.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
+            materialLabel1.Name = "materialLabel1";
+            materialLabel1.Size = new Size(77, 19);
+            materialLabel1.TabIndex = 8;
+            materialLabel1.Text = "판매타겟 설정";
+            // 
             // SignupForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(340, 438);
+            ClientSize = new Size(340, 531);
+            Controls.Add(materialLabel1);
+            Controls.Add(materialRadioButton2);
+            Controls.Add(materialRadioButton1);
             Controls.Add(materialTextBoxEdit4);
             Controls.Add(materialTextBoxEdit3);
             Controls.Add(materialTextBoxEdit2);
@@ -212,5 +264,8 @@
         private ReaLTaiizor.Controls.MaterialTextBoxEdit materialTextBoxEdit2;
         private ReaLTaiizor.Controls.MaterialTextBoxEdit materialTextBoxEdit3;
         private ReaLTaiizor.Controls.MaterialTextBoxEdit materialTextBoxEdit4;
+        private ReaLTaiizor.Controls.MaterialRadioButton materialRadioButton1;
+        private ReaLTaiizor.Controls.MaterialRadioButton materialRadioButton2;
+        private ReaLTaiizor.Controls.MaterialLabel materialLabel1;
     }
 }
