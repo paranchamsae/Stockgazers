@@ -25,3 +25,4 @@ class ResponseUserInfo(BaseModel):
     IsAutoDiscount: bool | None = None
     DiscountPrice: int | None = None
     Tier: int
+    DiscountType: str

@@ -5,6 +5,7 @@ using System.Text;
 using ReaLTaiizor.Forms;
 using ReaLTaiizor.Controls;
 
+#pragma warning disable CS8601
 namespace Stockgazers
 {
     public partial class LoginForm : MaterialForm
@@ -60,6 +61,7 @@ namespace Stockgazers
                     {
                         common.StockgazersUserID = userData.Value<int>("ID");
                         common.UserTier = userData.Value<int>("Tier");
+                        common.DiscountType = userData.Value<string>("DiscountType");
                     }
 
                     JToken? core = resultjson["core"];

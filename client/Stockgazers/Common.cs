@@ -20,5 +20,6 @@ namespace Stockgazers
 
         public int StockgazersUserID = -1;
         public int UserTier = -1;
+        public string DiscountType = string.Empty;
     }
 }

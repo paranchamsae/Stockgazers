@@ -115,6 +115,8 @@ namespace Stockgazers
                         var result = response.Content.ReadAsStringAsync().Result;
                         var data = JsonConvert.DeserializeObject<JObject>(result);
 
+                        #region 구로직
+                        /*
                         // 현재 StockX의 최저 입찰가와 내 입찰가를 비교
                         int LowestAskAmount = Convert.ToInt32(data["lowestAskAmount"]);
                         int UpdatePrice = -1;
@@ -127,6 +129,32 @@ namespace Stockgazers
                             else if (LowestAskAmount - 1 == item.LimitPrice)
                                 UpdatePrice = item.LimitPrice;
                         }
+                        //*/
+                        #endregion
+
+                        #region 신로직
+
+                        /*
+                         US/EU 마켓을 제외한 시장에서는 lowestAskAmount 필드가 리턴되지 않는 것이 의도된 것이라고 함.
+                        사용자에게 옵션을 선택하게 해서 지역 최저가로 갈지 글로벌 최저가로 갈지 결정하게 한 다음에 업데이트를 진행해야 할 듯 함
+                        (지역 최저가로 선택했을 때 earnMoreAmount, 글로벌 최저가로 선택하면 sellFasterAmount)
+                         */
+                        int LowestAskAmount = -1;
+                        int UpdatePrice = -1;
+
+                        if (common.DiscountType == "LOCAL")
+                            LowestAskAmount = Convert.ToInt32(data["earnMoreAmount"]);
+                        else if (common.DiscountType == "GLOBAL")
+                            LowestAskAmount = Convert.ToInt32(data["sellFasterAmount"]);
+
+                        if (LowestAskAmount < item.BidPrice)        // 내 입찰가가 현재 최저가가 아님
+                        {
+                            if(LowestAskAmount > item.LimitPrice)       // 내 입찰 하한가가 현재 최저가보다는 높다면
+                                UpdatePrice = LowestAskAmount;          // 해당 최저가로 업데이트
+                            else if (LowestAskAmount <= item.LimitPrice)        // 입찰 하한가가 현재 최저가보다 크거나 같다면
+                                UpdatePrice = item.LimitPrice;          // 입찰 하한가로 업데이트
+                        }
+                        #endregion
 
                         if (UpdatePrice > -1)
                         {
@@ -381,9 +409,9 @@ namespace Stockgazers
                 originCollection.Add(item);
             }
 
-            //if (common.UserTier > 2)
-            //    //Timer.Start();
-            //    TimerFuncTest();
+            if (common.UserTier > 2)
+                //Timer.Start();
+                TimerFuncTest();
             #endregion
         }
 

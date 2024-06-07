@@ -12,6 +12,8 @@ class User(Base):
     IsDelete = Column(String, nullable=False, default=False)
     UserID = Column(String, nullable=False)
     UserPassword = Column(String, nullable=False)
+    Email = Column(String, nullable=True)
+    DiscountType = Column(String, nullable=False)
     CreateDatetime = Column(DateTime, nullable=False)
     UpdateDatetime = Column(DateTime, nullable=True)
     Tier = Column(Integer, nullable=False)
