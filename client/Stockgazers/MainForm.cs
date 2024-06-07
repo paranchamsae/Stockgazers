@@ -96,9 +96,16 @@ namespace Stockgazers
             }
             catch (Exception ex)
             {
-                MaterialSnackBar snackBar = new(ex.Message, "OK", true);
-                snackBar.Show(this);
-                return;
+                if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+
+                }
+                else
+                {
+                    MaterialSnackBar snackBar = new(ex.Message, "OK", true);
+                    snackBar.Show(this);
+                    return;
+                }
             }
             #endregion
 
@@ -107,6 +114,9 @@ namespace Stockgazers
             {
                 foreach (AutoPricingData item in bids)
                 {
+                    if (item.LimitPrice == 0)           // 하한가 설정이 되지 않았다면 업데이트 하지 않는다.
+                        continue;
+
                     url = $"https://api.stockx.com/v2/catalog/products/{item.ProductID}/variants/{item.VariantID}/market-data";
                     response = await common.session.GetAsync(url);
                     try
@@ -133,7 +143,6 @@ namespace Stockgazers
                         #endregion
 
                         #region 신로직
-
                         /*
                          US/EU 마켓을 제외한 시장에서는 lowestAskAmount 필드가 리턴되지 않는 것이 의도된 것이라고 함.
                         사용자에게 옵션을 선택하게 해서 지역 최저가로 갈지 글로벌 최저가로 갈지 결정하게 한 다음에 업데이트를 진행해야 할 듯 함
@@ -324,6 +333,74 @@ namespace Stockgazers
                 url = $"{API.GetServer()}/api/stocks";
                 var sendData = new StringContent(JsonConvert.SerializeObject(stocks), Encoding.UTF8, "application/json");
                 response = await common.session.PostAsync(url, sendData);
+            }
+            #endregion
+
+            #region 2-4. 디비상의 ACTIVE 상태에 대해 재동기화
+            List<JToken> tempCompare = StockxListingsListOrigin.Where(x => x["status"].ToString() == "ACTIVE").ToList();
+            foreach (var active in tempCompare)
+            {
+                url = $"{API.GetServer()}/api/listing/{active["listingId"]}";
+                response = await common.session.GetAsync(url);
+                try
+                {
+                    response.EnsureSuccessStatusCode();
+
+                    // 240607 price, status 정도만 확인해주고 업데이트 해주면 좋을 것 같다.
+                    var result = response.Content.ReadAsStringAsync().Result;
+                    var resultData = JsonConvert.DeserializeObject<JToken>(result);
+                    int sgPrice = Convert.ToInt32(resultData[0]["Price"].ToString());
+                    string sgStatus = resultData[0]["Status"].ToString();
+
+                    url = $"https://api.stockx.com/v2/selling/listings/{active["listingId"]}";
+                    response = await common.session.GetAsync(url);
+                    try
+                    {
+                        response.EnsureSuccessStatusCode();
+                        var resultStockx = response.Content.ReadAsStringAsync().Result;
+                        var resultDataStockx = JsonConvert.DeserializeObject<JObject>(resultStockx);
+                        if (Convert.ToInt32(resultDataStockx["amount"]) != sgPrice || resultDataStockx["status"].ToString() != sgStatus)
+                        {
+                            RequestPatchListing patchData = new()
+                            {
+                                ListingID = resultDataStockx["listingId"].ToString(),
+                                BuyPrice = Convert.ToInt32(resultData[0]["BuyPrice"]),
+                                Price = Convert.ToInt32(resultDataStockx["amount"]),
+                                Limit = Convert.ToInt32(resultData[0]["Limit"])
+                            };
+                            url = $"{API.GetServer()}/api/listing";
+                            var sendData = new StringContent(JsonConvert.SerializeObject(patchData), Encoding.UTF8, "application/json");
+                            response = await common.session.PatchAsync(url, sendData);
+                            response.EnsureSuccessStatusCode();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        if (response.StatusCode == HttpStatusCode.Unauthorized)
+                        {
+                            
+                        }
+                        else
+                        {
+                            MaterialSnackBar snackBar = new(ex.Message, "OK", true);
+                            snackBar.Show(this);
+                            continue;
+                        }
+                    }
+                }
+                catch(Exception ex)
+                {
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+
+                    }
+                    else
+                    {
+                        MaterialSnackBar snackBar = new(ex.Message, "OK", true);
+                        snackBar.Show(this);
+                        continue;
+                    }
+                }
             }
             #endregion
 
@@ -645,11 +722,18 @@ namespace Stockgazers
                 {
                     response.EnsureSuccessStatusCode();
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    MaterialSnackBar snackBar = new($"서버와의 통신에 실패했어요 :(", "OK", true);
-                    snackBar.Show(this);
-                    return;
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+
+                    }
+                    else
+                    {
+                        MaterialSnackBar snackBar = new(ex.Message, "OK", true);
+                        snackBar.Show(this);
+                        return;
+                    }
                 }
                 #endregion
 
