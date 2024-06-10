@@ -22,8 +22,13 @@ async def get_statistics(UserID: int):
     query2 = """
         SELECT 
             COUNT(*) AS TotalRow,
+            SUM(case when CreateDatetime<DATE_FORMAT(NOW(), '%Y-%m-01 00:00:00') then 1 ELSE 0 END) AS LastMonthTotalRow,
             sum(case when STATUS='ACTIVE' then 1 ELSE 0 END) AS ActiveRow,
-            sum(case when STATUS='MATCHED' then 1 ELSE 0 END) AS MatchedRow
+            SUM(case when STATUS='ACTIVE' AND CreateDatetime<DATE_FORMAT(NOW(), '%Y-%m-01 00:00:00') then 1 ELSE 0 END) AS LastMonthActiveRow,
+            sum(case when STATUS='MATCHED' then 1 ELSE 0 END) AS MatchedRow,
+            AVG(BuyPrice) AS AvgBuyPrice,
+            AVG(AdjustPrice) AS AvgAdjuctPrice,
+            AVG(Profit) AS AvgProfit
         FROM SGStocks
         WHERE UserID="""+str(UserID)+""" AND IsDelete='F'
     """
