@@ -17,18 +17,17 @@ using System;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using static System.Net.WebRequestMethods;
 
-namespace Stockgazers
-{
 #pragma warning disable CS8602
 #pragma warning disable CS8604
+namespace Stockgazers
+{
     public partial class MainForm : MaterialForm
     {
         public static bool isNewStockCreated = false;
         private readonly MaterialSkinManager materialSkinManager;
         Common common;
         System.Windows.Forms.Timer Timer;
-        //System.Windows.Forms.ListView.ListViewItemCollection originCollection = null;
-        List<ListViewItem> originCollection = null;
+        List<ListViewItem> originCollection;
 
         private string authcode = string.Empty;
         private string state = string.Empty;
@@ -43,7 +42,7 @@ namespace Stockgazers
             get { return state; }
             set { state = value; }
         }
-
+        
         public MainForm(Common c)
         {
             InitializeComponent();
@@ -71,7 +70,7 @@ namespace Stockgazers
             Timer.Interval = 30 * 60000;        // 30분
         }
 
-        private async void TimerFuncTest()
+        private async void Timer_Tick(object? sender, EventArgs e)
         {
             #region 1. Stockgazers DB에서 현재 입찰 중인 상태의 아이템을 획득
             string url = $"{API.GetServer()}/api/stocks/{common.StockgazersUserID}/active";
@@ -158,7 +157,7 @@ namespace Stockgazers
 
                         if (LowestAskAmount < item.BidPrice)        // 내 입찰가가 현재 최저가가 아님
                         {
-                            if(LowestAskAmount > item.LimitPrice)       // 내 입찰 하한가가 현재 최저가보다는 높다면
+                            if (LowestAskAmount > item.LimitPrice)       // 내 입찰 하한가가 현재 최저가보다는 높다면
                                 UpdatePrice = LowestAskAmount;          // 해당 최저가로 업데이트
                             else if (LowestAskAmount <= item.LimitPrice)        // 입찰 하한가가 현재 최저가보다 크거나 같다면
                                 UpdatePrice = item.LimitPrice;          // 입찰 하한가로 업데이트
@@ -206,11 +205,6 @@ namespace Stockgazers
                 }
             }
             #endregion
-        }
-
-        private async void Timer_Tick(object? sender, EventArgs e)
-        {
-            throw new NotImplementedException();
         }
 
         private async void Form1_Load(object sender, EventArgs e)
@@ -337,6 +331,7 @@ namespace Stockgazers
             #endregion
 
             #region 2-4. 디비상의 ACTIVE 상태에 대해 재동기화
+            retry:
             List<JToken> tempCompare = StockxListingsListOrigin.Where(x => x["status"].ToString() == "ACTIVE").ToList();
             foreach (var active in tempCompare)
             {
@@ -378,7 +373,10 @@ namespace Stockgazers
                     {
                         if (response.StatusCode == HttpStatusCode.Unauthorized)
                         {
-                            
+                            if (await API.RefreshToken(common))
+                                goto retry;
+                            else
+                                return;
                         }
                         else
                         {
@@ -392,7 +390,10 @@ namespace Stockgazers
                 {
                     if (response.StatusCode == HttpStatusCode.Unauthorized)
                     {
-
+                        if (await API.RefreshToken(common))
+                            goto retry;
+                        else
+                            return;
                     }
                     else
                     {
@@ -407,25 +408,29 @@ namespace Stockgazers
             #endregion
 
             #region 3. 홈 화면 데이터 업데이트 - 판매 완료이력 조회(판매금액, 정산금액 획득 후 서버에서 profit 계산)
-            List<JToken> ordersRaw = StockxListingsListOrigin.Where(x => x["order"] != null && x["order"]!.Any()).ToList();
-            List<Order> order = new List<Order>();
-            if (StockgazersReference.Where(x => Convert.ToInt32(x["Price"]) == 0).Any())
+            List<JToken> ordersRaw = StockxListingsListOrigin.Where(x => x["order"] != null && x["order"]!.Any()).ToList();         // 딱스에서 가져온 전체 입찰정보
+            List<Order> order = new List<Order>();      // 갱신할 데이터를 저장할 리스트
+            if (StockgazersReference.Where(x => Convert.ToInt32(x["AdjustPrice"]) == 0).Any())
             {
                 foreach (var row in ordersRaw)
                 {
-                    url = $"https://api.stockx.com/v2/selling/orders/{row["order"]["orderNumber"]}";
-                    response = await common.session.GetAsync(url);
-                    if (response.StatusCode == HttpStatusCode.OK)
+                    var a = StockgazersReference.Where(x => x["ListingID"].ToString() == row["listingId"].ToString());
+                    if (a.Any() && Convert.ToInt32(a.First()["AdjustPrice"]) == 0 && a.First()["Status"].ToString() == "COMPLETED")
                     {
-                        JToken? tempOrder = JsonConvert.DeserializeObject<JToken>(response.Content.ReadAsStringAsync().Result);
-                        Order o = new()
+                        url = $"https://api.stockx.com/v2/selling/orders/{row["order"]["orderNumber"]}";
+                        response = await common.session.GetAsync(url);
+                        if (response.StatusCode == HttpStatusCode.OK)
                         {
-                            OrderNo = tempOrder["orderNumber"].ToString(),
-                            ListingID = tempOrder["listingId"].ToString(),
-                            SalePrice = Convert.ToInt32(tempOrder["payout"]["salePrice"]),
-                            AdjustPrice = Convert.ToDouble(tempOrder["payout"]["totalPayout"])
-                        };
-                        order.Add(o);
+                            JToken? tempOrder = JsonConvert.DeserializeObject<JToken>(response.Content.ReadAsStringAsync().Result);
+                            Order o = new()
+                            {
+                                OrderNo = tempOrder["orderNumber"].ToString(),
+                                ListingID = tempOrder["listingId"].ToString(),
+                                SalePrice = Convert.ToInt32(tempOrder["payout"]["salePrice"]),
+                                AdjustPrice = Convert.ToDouble(tempOrder["payout"]["totalPayout"])
+                            };
+                            order.Add(o);
+                        }
                     }
                 }
             }
@@ -486,9 +491,10 @@ namespace Stockgazers
                 originCollection.Add(item);
             }
 
-            if (common.UserTier > 2)
-                //Timer.Start();
-                TimerFuncTest();
+            //if (common.UserTier > 2)
+            //    //Timer.Start();
+            //    //TimerFuncTest();
+            //    await API.RefreshToken(common);
             #endregion
         }
 
