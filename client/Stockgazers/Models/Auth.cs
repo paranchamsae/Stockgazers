@@ -14,4 +14,13 @@ namespace Stockgazers.Models
         public required string code { get; set; }
         public required string redirect_uri { get; set; }
     }
+
+    public class RefreshToken
+    {
+        public required string grant_type { get; set; }
+        public required string client_id { get; set; }
+        public required string client_secret { get; set; }
+        public required string audience { get; set; }
+        public required string refresh_token { get; set; }
+    }
 }
