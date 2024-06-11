@@ -37,7 +37,6 @@
             materialLabel28 = new ReaLTaiizor.Controls.MaterialLabel();
             materialLabel29 = new ReaLTaiizor.Controls.MaterialLabel();
             materialCard9 = new ReaLTaiizor.Controls.MaterialCard();
-            materialLabel24 = new ReaLTaiizor.Controls.MaterialLabel();
             materialLabel25 = new ReaLTaiizor.Controls.MaterialLabel();
             materialLabel26 = new ReaLTaiizor.Controls.MaterialLabel();
             materialCard8 = new ReaLTaiizor.Controls.MaterialCard();
@@ -75,11 +74,11 @@
             materialRadioButton3 = new ReaLTaiizor.Controls.MaterialRadioButton();
             materialTextBoxEdit2 = new ReaLTaiizor.Controls.MaterialTextBoxEdit();
             materialListView1 = new ReaLTaiizor.Controls.MaterialListView();
-            columnHeader8 = new ColumnHeader();
             columnHeader1 = new ColumnHeader();
             columnHeader2 = new ColumnHeader();
             columnHeader3 = new ColumnHeader();
             columnHeader4 = new ColumnHeader();
+            columnHeader9 = new ColumnHeader();
             columnHeader5 = new ColumnHeader();
             columnHeader6 = new ColumnHeader();
             columnHeader7 = new ColumnHeader();
@@ -126,7 +125,7 @@
             materialTabControl1.Multiline = true;
             materialTabControl1.Name = "materialTabControl1";
             materialTabControl1.SelectedIndex = 0;
-            materialTabControl1.Size = new Size(1110, 665);
+            materialTabControl1.Size = new Size(1311, 733);
             materialTabControl1.TabIndex = 0;
             // 
             // tabPage1
@@ -145,7 +144,7 @@
             tabPage1.Location = new Point(4, 24);
             tabPage1.Name = "tabPage1";
             tabPage1.Padding = new Padding(3);
-            tabPage1.Size = new Size(1263, 1005);
+            tabPage1.Size = new Size(1303, 705);
             tabPage1.TabIndex = 0;
             tabPage1.Text = "메인";
             tabPage1.UseVisualStyleBackColor = true;
@@ -163,7 +162,7 @@
             materialCard10.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
             materialCard10.Name = "materialCard10";
             materialCard10.Padding = new Padding(14);
-            materialCard10.Size = new Size(381, 180);
+            materialCard10.Size = new Size(333, 180);
             materialCard10.TabIndex = 12;
             // 
             // materialLabel27
@@ -189,9 +188,9 @@
             materialLabel28.Location = new Point(17, 65);
             materialLabel28.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
             materialLabel28.Name = "materialLabel28";
-            materialLabel28.Size = new Size(157, 58);
+            materialLabel28.Size = new Size(130, 58);
             materialLabel28.TabIndex = 11;
-            materialLabel28.Text = "12.34%";
+            materialLabel28.Text = "0.00%";
             // 
             // materialLabel29
             // 
@@ -209,7 +208,6 @@
             // materialCard9
             // 
             materialCard9.BackColor = Color.FromArgb(255, 255, 255);
-            materialCard9.Controls.Add(materialLabel24);
             materialCard9.Controls.Add(materialLabel25);
             materialCard9.Controls.Add(materialLabel26);
             materialCard9.Depth = 0;
@@ -219,22 +217,8 @@
             materialCard9.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
             materialCard9.Name = "materialCard9";
             materialCard9.Padding = new Padding(14);
-            materialCard9.Size = new Size(381, 180);
+            materialCard9.Size = new Size(336, 180);
             materialCard9.TabIndex = 11;
-            // 
-            // materialLabel24
-            // 
-            materialLabel24.AutoSize = true;
-            materialLabel24.Depth = 0;
-            materialLabel24.Font = new Font("Roboto Medium", 20F, FontStyle.Bold, GraphicsUnit.Pixel);
-            materialLabel24.FontType = ReaLTaiizor.Manager.MaterialSkinManager.FontType.H6;
-            materialLabel24.HighEmphasis = true;
-            materialLabel24.Location = new Point(71, 123);
-            materialLabel24.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
-            materialLabel24.Name = "materialLabel24";
-            materialLabel24.Size = new Size(30, 24);
-            materialLabel24.TabIndex = 12;
-            materialLabel24.Text = "▼ 1";
             // 
             // materialLabel25
             // 
@@ -245,9 +229,9 @@
             materialLabel25.Location = new Point(17, 65);
             materialLabel25.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
             materialLabel25.Name = "materialLabel25";
-            materialLabel25.Size = new Size(157, 58);
+            materialLabel25.Size = new Size(86, 58);
             materialLabel25.TabIndex = 11;
-            materialLabel25.Text = "12.34%";
+            materialLabel25.Text = "N/A";
             // 
             // materialLabel26
             // 
@@ -301,9 +285,9 @@
             materialLabel18.Location = new Point(17, 65);
             materialLabel18.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
             materialLabel18.Name = "materialLabel18";
-            materialLabel18.Size = new Size(251, 58);
+            materialLabel18.Size = new Size(197, 58);
             materialLabel18.TabIndex = 11;
-            materialLabel18.Text = "123.45 USD";
+            materialLabel18.Text = "0.00 USD";
             // 
             // materialLabel19
             // 
@@ -357,9 +341,9 @@
             materialLabel15.Location = new Point(17, 65);
             materialLabel15.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
             materialLabel15.Name = "materialLabel15";
-            materialLabel15.Size = new Size(157, 58);
+            materialLabel15.Size = new Size(130, 58);
             materialLabel15.TabIndex = 11;
-            materialLabel15.Text = "12.34%";
+            materialLabel15.Text = "0.00%";
             // 
             // materialLabel16
             // 
@@ -386,7 +370,7 @@
             materialCard5.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
             materialCard5.Name = "materialCard5";
             materialCard5.Padding = new Padding(14);
-            materialCard5.Size = new Size(1257, 46);
+            materialCard5.Size = new Size(1297, 46);
             materialCard5.TabIndex = 7;
             // 
             // materialLabel20
@@ -443,7 +427,7 @@
             materialLabel22.Name = "materialLabel22";
             materialLabel22.Size = new Size(28, 58);
             materialLabel22.TabIndex = 13;
-            materialLabel22.Text = "8";
+            materialLabel22.Text = "0";
             // 
             // materialLabel11
             // 
@@ -497,9 +481,9 @@
             materialLabel21.Location = new Point(12, 61);
             materialLabel21.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
             materialLabel21.Name = "materialLabel21";
-            materialLabel21.Size = new Size(354, 58);
+            materialLabel21.Size = new Size(210, 58);
             materialLabel21.TabIndex = 12;
-            materialLabel21.Text = "123,456.78 KRW";
+            materialLabel21.Text = "0.00 KRW";
             // 
             // materialLabel10
             // 
@@ -555,7 +539,7 @@
             materialLabel9.Name = "materialLabel9";
             materialLabel9.Size = new Size(28, 58);
             materialLabel9.TabIndex = 11;
-            materialLabel9.Text = "1";
+            materialLabel9.Text = "0";
             // 
             // materialLabel6
             // 
@@ -609,9 +593,9 @@
             materialLabel8.Location = new Point(49, 65);
             materialLabel8.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
             materialLabel8.Name = "materialLabel8";
-            materialLabel8.Size = new Size(55, 58);
+            materialLabel8.Size = new Size(28, 58);
             materialLabel8.TabIndex = 10;
-            materialLabel8.Text = "89";
+            materialLabel8.Text = "0";
             // 
             // materialLabel7
             // 
@@ -641,7 +625,7 @@
             tabPage2.Location = new Point(4, 24);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(3);
-            tabPage2.Size = new Size(1102, 637);
+            tabPage2.Size = new Size(1287, 705);
             tabPage2.TabIndex = 1;
             tabPage2.Text = "판매현황";
             tabPage2.UseVisualStyleBackColor = true;
@@ -651,7 +635,7 @@
             materialFloatingActionButton1.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             materialFloatingActionButton1.Depth = 0;
             materialFloatingActionButton1.Icon = Properties.Resources.plus;
-            materialFloatingActionButton1.Location = new Point(1040, 575);
+            materialFloatingActionButton1.Location = new Point(1193, 643);
             materialFloatingActionButton1.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
             materialFloatingActionButton1.Name = "materialFloatingActionButton1";
             materialFloatingActionButton1.Size = new Size(56, 56);
@@ -796,7 +780,7 @@
             materialListView1.BackColor = Color.FromArgb(255, 255, 255);
             materialListView1.BorderStyle = BorderStyle.None;
             materialListView1.CheckBoxes = true;
-            materialListView1.Columns.AddRange(new ColumnHeader[] { columnHeader8, columnHeader1, columnHeader2, columnHeader3, columnHeader4, columnHeader5, columnHeader6, columnHeader7 });
+            materialListView1.Columns.AddRange(new ColumnHeader[] { columnHeader1, columnHeader2, columnHeader3, columnHeader4, columnHeader9, columnHeader5, columnHeader6, columnHeader7 });
             materialListView1.Depth = 0;
             materialListView1.FullRowSelect = true;
             materialListView1.HeaderStyle = ColumnHeaderStyle.Nonclickable;
@@ -806,16 +790,11 @@
             materialListView1.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.OUT;
             materialListView1.Name = "materialListView1";
             materialListView1.OwnerDraw = true;
-            materialListView1.Size = new Size(1093, 571);
+            materialListView1.Size = new Size(1246, 639);
             materialListView1.TabIndex = 0;
             materialListView1.UseCompatibleStateImageBehavior = false;
             materialListView1.View = View.Details;
             materialListView1.MouseClick += materialListView1_MouseClick;
-            // 
-            // columnHeader8
-            // 
-            columnHeader8.Text = "자동 가격조정 설정";
-            columnHeader8.Width = 120;
             // 
             // columnHeader1
             // 
@@ -837,18 +816,27 @@
             columnHeader4.Text = "입찰금액";
             columnHeader4.Width = 100;
             // 
+            // columnHeader9
+            // 
+            columnHeader9.DisplayIndex = 7;
+            columnHeader9.Text = "등록시각";
+            columnHeader9.Width = 150;
+            // 
             // columnHeader5
             // 
+            columnHeader5.DisplayIndex = 4;
             columnHeader5.Text = "상태";
             columnHeader5.Width = 100;
             // 
             // columnHeader6
             // 
+            columnHeader6.DisplayIndex = 5;
             columnHeader6.Text = "정산금액";
             columnHeader6.Width = 100;
             // 
             // columnHeader7
             // 
+            columnHeader7.DisplayIndex = 6;
             columnHeader7.Text = "이익률";
             columnHeader7.Width = 100;
             // 
@@ -866,7 +854,7 @@
             tabPage3.ImageKey = "icons8-설정-3-16.png";
             tabPage3.Location = new Point(4, 24);
             tabPage3.Name = "tabPage3";
-            tabPage3.Size = new Size(1247, 1005);
+            tabPage3.Size = new Size(1287, 705);
             tabPage3.TabIndex = 2;
             tabPage3.Text = "설정";
             tabPage3.UseVisualStyleBackColor = true;
@@ -1054,7 +1042,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1116, 732);
+            ClientSize = new Size(1317, 800);
             Controls.Add(materialTabControl1);
             DrawerShowIconsWhenHidden = true;
             DrawerTabControl = materialTabControl1;
@@ -1142,7 +1130,6 @@
         private ReaLTaiizor.Controls.MaterialLabel materialLabel28;
         private ReaLTaiizor.Controls.MaterialLabel materialLabel29;
         private ReaLTaiizor.Controls.MaterialCard materialCard9;
-        private ReaLTaiizor.Controls.MaterialLabel materialLabel24;
         private ReaLTaiizor.Controls.MaterialLabel materialLabel25;
         private ReaLTaiizor.Controls.MaterialLabel materialLabel26;
         private ReaLTaiizor.Controls.MaterialLabel materialLabel23;
@@ -1151,7 +1138,6 @@
         private ReaLTaiizor.Controls.MaterialRadioButton materialRadioButton4;
         private ReaLTaiizor.Controls.MaterialRadioButton materialRadioButton3;
         private ReaLTaiizor.Controls.MaterialTextBoxEdit materialTextBoxEdit2;
-        private ColumnHeader columnHeader8;
         private ColumnHeader columnHeader6;
         private ColumnHeader columnHeader7;
         private ReaLTaiizor.Controls.MaterialButton materialButton5;
@@ -1161,5 +1147,6 @@
         private ToolStripMenuItem toolStripMenuItem1;
         private ToolStripMenuItem toolStripMenuItem2;
         private ToolStripMenuItem toolStripMenuItem3;
+        private ColumnHeader columnHeader9;
     }
 }

@@ -475,11 +475,11 @@ namespace Stockgazers
                 }
 
                 string[] element = new[] {
-                    "",
                     row["StyleId"].ToString(),
                     row["Title"].ToString(),
                     row["BuyPrice"].ToString(),
                     row["Price"].ToString(),
+                    row["CreateDatetime"].ToString(),
                     status,
                     row["AdjustPrice"].ToString(),
                     row["Profit"].ToString(),
@@ -490,12 +490,42 @@ namespace Stockgazers
 
                 originCollection.Add(item);
             }
+            #endregion
 
+            #region 5. 메인 탭 판매통계 데이터 불러와서 집어넣기
+            GetStatistics(common);
+            #endregion
+
+            #region 6. 사용자 티어에 따라 가격경쟁 타이머 시작여부 결정
             //if (common.UserTier > 2)
             //    //Timer.Start();
             //    //TimerFuncTest();
             //    await API.RefreshToken(common);
             #endregion
+        }
+
+        private async void GetStatistics(Common common)
+        {
+            string url = $"{API.GetServer()}/api/main/statistics/{common.StockgazersUserID}";
+            var response = await common.session.GetAsync(url);
+            try
+            {
+                response.EnsureSuccessStatusCode();
+                var resultRaw = response.Content.ReadAsStringAsync().Result;
+                var data = JsonConvert.DeserializeObject<JObject>(resultRaw);
+                data = JsonConvert.DeserializeObject<JObject>(data["data"].ToString());
+                materialLabel8.Text = data["TotalRow"].ToString();
+                materialLabel9.Text = data["MatchedRow"].ToString();
+                materialLabel22.Text = data["ActiveRow"].ToString();
+                materialLabel15.Text = $"{data["AvgProfit"].ToString()}%";
+                materialLabel21.Text = $"{data["AvgBuyPrice"].ToString()} KRW";
+                materialLabel18.Text = $"{data["AvgAdjustPrice"].ToString()} USD";
+            }
+            catch (Exception ex)
+            {
+                MaterialSnackBar snackBar = new(ex.Message, "OK", true);
+                snackBar.Show(this);
+            }
         }
 
         private void materialRadioButton4_CheckedChanged(object sender, EventArgs e)
@@ -624,11 +654,12 @@ namespace Stockgazers
                     }
 
                     string[] element = new[] {
-                        "",
+                        //"",
                         row["StyleId"].ToString(),
                         row["Title"].ToString(),
                         row["BuyPrice"].ToString(),
                         row["Price"].ToString(),
+                        row["CreateDatetime"].ToString(),
                         status,
                         row["AdjustPrice"].ToString(),
                         row["Profit"].ToString(),
