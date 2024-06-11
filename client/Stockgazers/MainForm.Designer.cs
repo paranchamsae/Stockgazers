@@ -83,7 +83,6 @@
             columnHeader6 = new ColumnHeader();
             columnHeader7 = new ColumnHeader();
             tabPage3 = new TabPage();
-            materialButton2 = new ReaLTaiizor.Controls.MaterialButton();
             materialButton1 = new ReaLTaiizor.Controls.MaterialButton();
             materialTextBoxEdit1 = new ReaLTaiizor.Controls.MaterialTextBoxEdit();
             materialRadioButton2 = new ReaLTaiizor.Controls.MaterialRadioButton();
@@ -125,7 +124,7 @@
             materialTabControl1.Multiline = true;
             materialTabControl1.Name = "materialTabControl1";
             materialTabControl1.SelectedIndex = 0;
-            materialTabControl1.Size = new Size(1311, 733);
+            materialTabControl1.Size = new Size(1375, 733);
             materialTabControl1.TabIndex = 0;
             // 
             // tabPage1
@@ -144,7 +143,7 @@
             tabPage1.Location = new Point(4, 24);
             tabPage1.Name = "tabPage1";
             tabPage1.Padding = new Padding(3);
-            tabPage1.Size = new Size(1303, 705);
+            tabPage1.Size = new Size(1367, 705);
             tabPage1.TabIndex = 0;
             tabPage1.Text = "메인";
             tabPage1.UseVisualStyleBackColor = true;
@@ -370,7 +369,7 @@
             materialCard5.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
             materialCard5.Name = "materialCard5";
             materialCard5.Padding = new Padding(14);
-            materialCard5.Size = new Size(1297, 46);
+            materialCard5.Size = new Size(1361, 46);
             materialCard5.TabIndex = 7;
             // 
             // materialLabel20
@@ -625,7 +624,7 @@
             tabPage2.Location = new Point(4, 24);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(3);
-            tabPage2.Size = new Size(1287, 705);
+            tabPage2.Size = new Size(1367, 705);
             tabPage2.TabIndex = 1;
             tabPage2.Text = "판매현황";
             tabPage2.UseVisualStyleBackColor = true;
@@ -635,7 +634,7 @@
             materialFloatingActionButton1.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             materialFloatingActionButton1.Depth = 0;
             materialFloatingActionButton1.Icon = Properties.Resources.plus;
-            materialFloatingActionButton1.Location = new Point(1193, 643);
+            materialFloatingActionButton1.Location = new Point(1305, 643);
             materialFloatingActionButton1.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
             materialFloatingActionButton1.Name = "materialFloatingActionButton1";
             materialFloatingActionButton1.Size = new Size(56, 56);
@@ -790,7 +789,7 @@
             materialListView1.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.OUT;
             materialListView1.Name = "materialListView1";
             materialListView1.OwnerDraw = true;
-            materialListView1.Size = new Size(1246, 639);
+            materialListView1.Size = new Size(1358, 639);
             materialListView1.TabIndex = 0;
             materialListView1.UseCompatibleStateImageBehavior = false;
             materialListView1.View = View.Details;
@@ -842,7 +841,6 @@
             // 
             // tabPage3
             // 
-            tabPage3.Controls.Add(materialButton2);
             tabPage3.Controls.Add(materialButton1);
             tabPage3.Controls.Add(materialTextBoxEdit1);
             tabPage3.Controls.Add(materialRadioButton2);
@@ -854,30 +852,10 @@
             tabPage3.ImageKey = "icons8-설정-3-16.png";
             tabPage3.Location = new Point(4, 24);
             tabPage3.Name = "tabPage3";
-            tabPage3.Size = new Size(1287, 705);
+            tabPage3.Size = new Size(1367, 705);
             tabPage3.TabIndex = 2;
             tabPage3.Text = "설정";
             tabPage3.UseVisualStyleBackColor = true;
-            // 
-            // materialButton2
-            // 
-            materialButton2.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            materialButton2.Density = ReaLTaiizor.Controls.MaterialButton.MaterialButtonDensity.Default;
-            materialButton2.Depth = 0;
-            materialButton2.HighEmphasis = true;
-            materialButton2.Icon = null;
-            materialButton2.IconType = ReaLTaiizor.Controls.MaterialButton.MaterialIconType.Rebase;
-            materialButton2.Location = new Point(624, 313);
-            materialButton2.Margin = new Padding(4, 6, 4, 6);
-            materialButton2.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
-            materialButton2.Name = "materialButton2";
-            materialButton2.NoAccentTextColor = Color.Empty;
-            materialButton2.Size = new Size(158, 36);
-            materialButton2.TabIndex = 7;
-            materialButton2.Text = "materialButton2";
-            materialButton2.Type = ReaLTaiizor.Controls.MaterialButton.MaterialButtonType.Contained;
-            materialButton2.UseAccentColor = false;
-            materialButton2.UseVisualStyleBackColor = true;
             // 
             // materialButton1
             // 
@@ -892,9 +870,9 @@
             materialButton1.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
             materialButton1.Name = "materialButton1";
             materialButton1.NoAccentTextColor = Color.Empty;
-            materialButton1.Size = new Size(158, 36);
+            materialButton1.Size = new Size(77, 36);
             materialButton1.TabIndex = 6;
-            materialButton1.Text = "materialButton1";
+            materialButton1.Text = "Accept";
             materialButton1.Type = ReaLTaiizor.Controls.MaterialButton.MaterialButtonType.Contained;
             materialButton1.UseAccentColor = false;
             materialButton1.UseVisualStyleBackColor = true;
@@ -910,7 +888,7 @@
             materialTextBoxEdit1.Font = new Font("Microsoft Sans Serif", 16F, FontStyle.Regular, GraphicsUnit.Pixel);
             materialTextBoxEdit1.HideSelection = true;
             materialTextBoxEdit1.LeadingIcon = null;
-            materialTextBoxEdit1.Location = new Point(305, 238);
+            materialTextBoxEdit1.Location = new Point(304, 203);
             materialTextBoxEdit1.MaxLength = 32767;
             materialTextBoxEdit1.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.OUT;
             materialTextBoxEdit1.Name = "materialTextBoxEdit1";
@@ -933,16 +911,16 @@
             // 
             materialRadioButton2.AutoSize = true;
             materialRadioButton2.Depth = 0;
-            materialRadioButton2.Location = new Point(510, 133);
+            materialRadioButton2.Location = new Point(399, 133);
             materialRadioButton2.Margin = new Padding(0);
             materialRadioButton2.MouseLocation = new Point(-1, -1);
             materialRadioButton2.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
             materialRadioButton2.Name = "materialRadioButton2";
             materialRadioButton2.Ripple = true;
-            materialRadioButton2.Size = new Size(190, 37);
+            materialRadioButton2.Size = new Size(84, 37);
             materialRadioButton2.TabIndex = 4;
             materialRadioButton2.TabStop = true;
-            materialRadioButton2.Text = "materialRadioButton2";
+            materialRadioButton2.Text = "LOCAL";
             materialRadioButton2.UseAccentColor = false;
             materialRadioButton2.UseVisualStyleBackColor = true;
             // 
@@ -957,10 +935,10 @@
             materialRadioButton1.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
             materialRadioButton1.Name = "materialRadioButton1";
             materialRadioButton1.Ripple = true;
-            materialRadioButton1.Size = new Size(190, 37);
+            materialRadioButton1.Size = new Size(95, 37);
             materialRadioButton1.TabIndex = 3;
             materialRadioButton1.TabStop = true;
-            materialRadioButton1.Text = "materialRadioButton1";
+            materialRadioButton1.Text = "GLOBAL";
             materialRadioButton1.UseAccentColor = false;
             materialRadioButton1.UseVisualStyleBackColor = true;
             // 
@@ -972,9 +950,9 @@
             materialLabel3.Location = new Point(128, 232);
             materialLabel3.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
             materialLabel3.Name = "materialLabel3";
-            materialLabel3.Size = new Size(107, 19);
+            materialLabel3.Size = new Size(25, 19);
             materialLabel3.TabIndex = 2;
-            materialLabel3.Text = "materialLabel3";
+            materialLabel3.Text = "환율";
             // 
             // materialLabel2
             // 
@@ -984,9 +962,9 @@
             materialLabel2.Location = new Point(128, 143);
             materialLabel2.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
             materialLabel2.Name = "materialLabel2";
-            materialLabel2.Size = new Size(107, 19);
+            materialLabel2.Size = new Size(49, 19);
             materialLabel2.TabIndex = 1;
-            materialLabel2.Text = "materialLabel2";
+            materialLabel2.Text = "가격경쟁";
             // 
             // materialLabel1
             // 
@@ -996,9 +974,9 @@
             materialLabel1.Location = new Point(128, 61);
             materialLabel1.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
             materialLabel1.Name = "materialLabel1";
-            materialLabel1.Size = new Size(107, 19);
+            materialLabel1.Size = new Size(49, 19);
             materialLabel1.TabIndex = 0;
-            materialLabel1.Text = "materialLabel1";
+            materialLabel1.Text = "기본설정";
             // 
             // imageList1
             // 
@@ -1042,7 +1020,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1317, 800);
+            ClientSize = new Size(1381, 800);
             Controls.Add(materialTabControl1);
             DrawerShowIconsWhenHidden = true;
             DrawerTabControl = materialTabControl1;
@@ -1096,7 +1074,6 @@
         private ReaLTaiizor.Controls.MaterialLabel materialLabel3;
         private ReaLTaiizor.Controls.MaterialLabel materialLabel2;
         private ReaLTaiizor.Controls.MaterialLabel materialLabel1;
-        private ReaLTaiizor.Controls.MaterialButton materialButton2;
         private ReaLTaiizor.Controls.MaterialButton materialButton1;
         private ReaLTaiizor.Controls.MaterialTextBoxEdit materialTextBoxEdit1;
         private ReaLTaiizor.Controls.MaterialRadioButton materialRadioButton2;

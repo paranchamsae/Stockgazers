@@ -42,7 +42,7 @@ namespace Stockgazers
             get { return state; }
             set { state = value; }
         }
-        
+
         public MainForm(Common c)
         {
             InitializeComponent();
@@ -216,7 +216,8 @@ namespace Stockgazers
 
             if (AuthCode == string.Empty || AuthCode.Length <= 0)       // 인증 실패(인증 코드가 없음)
             {
-                MessageBox.Show("인증 코드 획득 실패, 딱스 재로그인 필요", "Stockgazers", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("인증 코드 획득에 실패했습니다.\n프로그램 재 실행 후 StockX 로그인을 진행 해 주세요.", "Stockgazers", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                materialLabel20.Text = "StockX DB와 동기화할 수 없습니다. 프로그램 재 실행이 필요합니다.";
                 return;
             }
             #endregion
@@ -328,10 +329,10 @@ namespace Stockgazers
                 var sendData = new StringContent(JsonConvert.SerializeObject(stocks), Encoding.UTF8, "application/json");
                 response = await common.session.PostAsync(url, sendData);
             }
-            #endregion
+        #endregion
 
-            #region 2-4. 디비상의 ACTIVE 상태에 대해 재동기화
-            retry:
+        #region 2-4. 디비상의 ACTIVE 상태에 대해 재동기화
+        retry:
             List<JToken> tempCompare = StockxListingsListOrigin.Where(x => x["status"].ToString() == "ACTIVE").ToList();
             foreach (var active in tempCompare)
             {
@@ -386,7 +387,7 @@ namespace Stockgazers
                         }
                     }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     if (response.StatusCode == HttpStatusCode.Unauthorized)
                     {
@@ -843,7 +844,7 @@ namespace Stockgazers
             {
                 materialListView1.Items.Clear();
 
-                
+
                 if (materialTextBoxEdit2.Text.Length > 0)
                 {
                     materialListView1.Items.AddRange(originCollection.Where(x => x.SubItems[1].Text.ToLower().Replace("-", "").Contains(materialTextBoxEdit2.Text)).ToArray());

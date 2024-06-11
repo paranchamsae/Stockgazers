@@ -17,6 +17,10 @@ namespace Stockgazers
 
             if (common.IsAppLogin)
             {
+                string cachePath = Path.Combine(Application.StartupPath, @"Stockgazers.exe.WebView2\EBWebView");
+                DirectoryInfo dir = new(cachePath);
+                dir.Delete(true);
+
                 Application.Run(new MainForm(common));
             }
         }
