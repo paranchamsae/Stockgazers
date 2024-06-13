@@ -590,18 +590,25 @@ namespace Stockgazers
                 sendData.Headers.ContentType.MediaType = "multipart/form-data";
 
                 string filepath = dlg.FileName;
-                byte[] bytes = System.IO.File.ReadAllBytes(filepath);
-                sendData.Add(new StreamContent(new MemoryStream(bytes)), "csvfile", "data.csv");
-
-                var response = await common.session.PostAsync(API.GetServer() + "/api/stocks/import", sendData);
                 try
                 {
+                    string url = $"{API.GetServer()}/api/data/import";
+                    byte[] bytes = System.IO.File.ReadAllBytes(filepath);
+                    sendData.Add(new StreamContent(new MemoryStream(bytes)), "csvfile", "data.csv");
+
+                    var response = await common.session.PostAsync(url, sendData);
                     response.EnsureSuccessStatusCode();
                     MaterialSnackBar snackBar2 = new("구매원가 데이터가 업로드 되었어요", "OK", true);
                     snackBar2.Show(this);
 
                     await RefreshSellStatus();          // 판매현황 그리드 다시 그리기
                     GetStatistics(common);          // 메인화면 통계정보 업데이트
+                }
+                catch (IOException ex)
+                {
+                    MaterialSnackBar snackBar = new("CSV파일이 열려있어 업로드 할 수 없습니다.", "OK", true);
+                    snackBar.Show(this);
+                    return;
                 }
                 catch (Exception ex)
                 {
