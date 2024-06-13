@@ -83,17 +83,20 @@ async def patchorder(request: list[stocks_schema.RequestPatchOrder]):
             # 해당 레코드에 구매원가 데이터가 있다면 profit 데이터도 계산하여 업데이트 같이 쳐줌
             result = db.query(Stocks).filter(Stocks.ListingID == row.ListingID).all()
             if result[0].BuyPrice > 0 and result[0].BuyPriceUSD > 0:
+                tempAdjustPrice = row.AdjustPrice/1300 if row.AdjustPrice > 1000 else row.AdjustPrice
+                tempProfit = (tempAdjustPrice-result[0].BuyPriceUSD)/result[0].BuyPriceUSD*100
                 query = update(Stocks).where(Stocks.ListingID == row.ListingID).values(
                     OrderNo = row.OrderNo,
-                    AdjustPrice = row.AdjustPrice,
-                    Profit = round((result[0].BuyPriceUSD-row.AdjustPrice)/row.AdjustPrice*100, 2),
+                    AdjustPrice = tempAdjustPrice,
+                    # 이익률 = 차익/구매원가*100 = (정산금액-구매원가)/구매원가*100
+                    Profit = round( tempProfit, 2 ),
                     UpdateDatetime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                 )
             else:
                 query = update(Stocks).where(Stocks.ListingID == row.ListingID).values(
-                        OrderNo = row.OrderNo,
-                        AdjustPrice = row.AdjustPrice,
-                        UpdateDatetime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                    OrderNo = row.OrderNo,
+                    AdjustPrice = tempAdjustPrice,
+                    UpdateDatetime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                 )
             db.execute(query)
         db.commit()

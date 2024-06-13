@@ -62,7 +62,12 @@ async def set_stocks_excel(csvfile: UploadFile = File(...)):
                 continue            
 
             if result[0]["AdjustPrice"] > 0:
-                tempProfit = ((int(row[1][4])/1300)-result[0]["AdjustPrice"])/(int(row[1][4])/1300)*100
+                if int(row[1][4]) == 0:
+                    tempProfit = 100
+                else:
+                    # tempProfit = ((int(row[1][4])/1300)-result[0]["AdjustPrice"])/(int(row[1][4])/1300)*100
+                    # 이익률 = (차익/구매원가)*100 = (정산금액-구매원가)/구매원가*100
+                    tempProfit = ((result[0]["AdjustPrice"])-(int(row[1][4])/1300))/(int(row[1][4])/1300)*100
                 query = update(Stocks).where(Stocks.ListingID == row[1][3]).values(
                     BuyPrice = int(row[1][4]),
                     BuyPriceUSD = int(row[1][4])/1300,
@@ -78,13 +83,13 @@ async def set_stocks_excel(csvfile: UploadFile = File(...)):
             
             try:
                 db.execute(query)
-                print(query)
+                # print(query)
             except Exception as e:
                 db.rollback()
-                print(e)
+                # print(e)
             finally:
                 db.commit()
-                print("")
+                # print("")
 
     return JSONResponse(
         status_code=status.HTTP_200_OK,
