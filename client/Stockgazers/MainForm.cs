@@ -450,6 +450,16 @@ namespace Stockgazers
             if (originCollection?.Count > 0)
                 originCollection.Clear();
 
+            if (order.Count > 0)
+            {
+                url = $"{API.GetServer()}/api/stocks/{common.StockgazersUserID}";
+                response = await common.session.GetAsync(url);
+                response.EnsureSuccessStatusCode();
+
+                var StockgazersRaw = response.Content.ReadAsStringAsync().Result;
+                StockgazersReference = JsonConvert.DeserializeObject<JToken>(StockgazersRaw);
+            }
+
             foreach (var row in StockgazersReference)
             {
                 string status = string.Empty;
@@ -590,7 +600,8 @@ namespace Stockgazers
                     MaterialSnackBar snackBar2 = new("구매원가 데이터가 업로드 되었어요", "OK", true);
                     snackBar2.Show(this);
 
-                    await RefreshSellStatus();
+                    await RefreshSellStatus();          // 판매현황 그리드 다시 그리기
+                    GetStatistics(common);          // 메인화면 통계정보 업데이트
                 }
                 catch (Exception ex)
                 {
