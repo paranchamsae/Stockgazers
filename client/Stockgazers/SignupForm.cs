@@ -96,7 +96,7 @@ namespace Stockgazers
                 { "Password", $"{materialTextBoxEdit2.Text}" },
                 { "Email", $"{materialTextBoxEdit4.Text}" },
                 { "DiscountType", $"{(materialRadioButton1.Checked ? "LOCAL" : "GLOBAL")}" },
-                { "Tier", "1" }
+                { "Tier", "-1" }
             };
             var sendData = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
             var response = await common.session.PostAsync(url, sendData);

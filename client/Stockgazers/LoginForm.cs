@@ -79,6 +79,13 @@ namespace Stockgazers
                         API.ClientSecret = null;
                         return;
                     }
+
+                    if (common.UserTier == -1)
+                    {
+                        MaterialSnackBar snackBar = new("알파 버전에서는 승인받은 사용자만 이용할 수 있습니다.", "OK", true);
+                        snackBar.Show(this);
+                        return;
+                    }
                     common.IsAppLogin = true;
                 }
             }
