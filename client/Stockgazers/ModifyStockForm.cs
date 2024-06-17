@@ -58,7 +58,7 @@ namespace Stockgazers
                 var result = response.Content.ReadAsStringAsync().Result;
                 var data = JsonConvert.DeserializeObject<JToken>(result);
 
-                materialTextBoxEdit2.Text = data[0]["StyleId"].ToString();
+                materialTextBoxEdit2.Text = data[0]["StyleID"].ToString();
                 materialTextBoxEdit3.Text = data[0]["Title"].ToString();
                 materialTextBoxEdit1.Text = data[0]["VariantValue"].ToString();
                 materialTextBoxEdit4.Text = data[0]["BuyPrice"].ToString();

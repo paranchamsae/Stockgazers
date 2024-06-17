@@ -66,6 +66,10 @@
             materialLabel8 = new ReaLTaiizor.Controls.MaterialLabel();
             materialLabel7 = new ReaLTaiizor.Controls.MaterialLabel();
             tabPage2 = new TabPage();
+            materialButton2 = new ReaLTaiizor.Controls.MaterialButton();
+            panel1 = new ReaLTaiizor.Controls.Panel();
+            runningStatusTextEdit = new ReaLTaiizor.Controls.MaterialMultiLineTextBoxEdit();
+            sidePanelClose = new ReaLTaiizor.Controls.MaterialButton();
             materialFloatingActionButton1 = new ReaLTaiizor.Controls.MaterialFloatingActionButton();
             materialButton5 = new ReaLTaiizor.Controls.MaterialButton();
             materialButton4 = new ReaLTaiizor.Controls.MaterialButton();
@@ -107,6 +111,7 @@
             materialCard2.SuspendLayout();
             materialCard1.SuspendLayout();
             tabPage2.SuspendLayout();
+            panel1.SuspendLayout();
             tabPage3.SuspendLayout();
             contextMenuStrip1.SuspendLayout();
             SuspendLayout();
@@ -124,7 +129,7 @@
             materialTabControl1.Multiline = true;
             materialTabControl1.Name = "materialTabControl1";
             materialTabControl1.SelectedIndex = 0;
-            materialTabControl1.Size = new Size(1375, 733);
+            materialTabControl1.Size = new Size(1194, 733);
             materialTabControl1.TabIndex = 0;
             // 
             // tabPage1
@@ -143,7 +148,7 @@
             tabPage1.Location = new Point(4, 24);
             tabPage1.Name = "tabPage1";
             tabPage1.Padding = new Padding(3);
-            tabPage1.Size = new Size(1367, 705);
+            tabPage1.Size = new Size(1543, 939);
             tabPage1.TabIndex = 0;
             tabPage1.Text = "메인";
             tabPage1.UseVisualStyleBackColor = true;
@@ -369,7 +374,7 @@
             materialCard5.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
             materialCard5.Name = "materialCard5";
             materialCard5.Padding = new Padding(14);
-            materialCard5.Size = new Size(1361, 46);
+            materialCard5.Size = new Size(1537, 46);
             materialCard5.TabIndex = 7;
             // 
             // materialLabel20
@@ -611,6 +616,8 @@
             // 
             // tabPage2
             // 
+            tabPage2.Controls.Add(materialButton2);
+            tabPage2.Controls.Add(panel1);
             tabPage2.Controls.Add(materialFloatingActionButton1);
             tabPage2.Controls.Add(materialButton5);
             tabPage2.Controls.Add(materialButton4);
@@ -624,17 +631,101 @@
             tabPage2.Location = new Point(4, 24);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(3);
-            tabPage2.Size = new Size(1367, 705);
+            tabPage2.Size = new Size(1186, 705);
             tabPage2.TabIndex = 1;
             tabPage2.Text = "판매현황";
             tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // materialButton2
+            // 
+            materialButton2.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            materialButton2.Density = ReaLTaiizor.Controls.MaterialButton.MaterialButtonDensity.Default;
+            materialButton2.Depth = 0;
+            materialButton2.HighEmphasis = true;
+            materialButton2.Icon = Properties.Resources.icons8_수색_24;
+            materialButton2.IconType = ReaLTaiizor.Controls.MaterialButton.MaterialIconType.Rebase;
+            materialButton2.Location = new Point(456, 9);
+            materialButton2.Margin = new Padding(4, 6, 4, 6);
+            materialButton2.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
+            materialButton2.Name = "materialButton2";
+            materialButton2.NoAccentTextColor = Color.Empty;
+            materialButton2.Size = new Size(149, 36);
+            materialButton2.TabIndex = 11;
+            materialButton2.Text = "동작상태 보기";
+            materialButton2.Type = ReaLTaiizor.Controls.MaterialButton.MaterialButtonType.Contained;
+            materialButton2.UseAccentColor = false;
+            materialButton2.UseVisualStyleBackColor = true;
+            materialButton2.Click += materialButton2_Click;
+            // 
+            // panel1
+            // 
+            panel1.BackColor = Color.FromArgb(39, 51, 63);
+            panel1.Controls.Add(runningStatusTextEdit);
+            panel1.Controls.Add(sidePanelClose);
+            panel1.Dock = DockStyle.Right;
+            panel1.EdgeColor = Color.FromArgb(32, 41, 50);
+            panel1.Location = new Point(664, 3);
+            panel1.Name = "panel1";
+            panel1.Padding = new Padding(5);
+            panel1.Size = new Size(519, 699);
+            panel1.SmoothingType = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+            panel1.TabIndex = 10;
+            panel1.Text = "panel1";
+            panel1.Visible = false;
+            // 
+            // runningStatusTextEdit
+            // 
+            runningStatusTextEdit.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            runningStatusTextEdit.AnimateReadOnly = true;
+            runningStatusTextEdit.BackgroundImageLayout = ImageLayout.None;
+            runningStatusTextEdit.CharacterCasing = CharacterCasing.Normal;
+            runningStatusTextEdit.Depth = 0;
+            runningStatusTextEdit.HideSelection = true;
+            runningStatusTextEdit.Location = new Point(8, 54);
+            runningStatusTextEdit.MaxLength = 32767;
+            runningStatusTextEdit.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.OUT;
+            runningStatusTextEdit.Name = "runningStatusTextEdit";
+            runningStatusTextEdit.PasswordChar = '\0';
+            runningStatusTextEdit.ReadOnly = true;
+            runningStatusTextEdit.ScrollBars = ScrollBars.Vertical;
+            runningStatusTextEdit.SelectedText = "";
+            runningStatusTextEdit.SelectionLength = 0;
+            runningStatusTextEdit.SelectionStart = 0;
+            runningStatusTextEdit.ShortcutsEnabled = true;
+            runningStatusTextEdit.Size = new Size(503, 637);
+            runningStatusTextEdit.TabIndex = 1;
+            runningStatusTextEdit.TabStop = false;
+            runningStatusTextEdit.TextAlign = HorizontalAlignment.Left;
+            runningStatusTextEdit.UseSystemPasswordChar = false;
+            // 
+            // sidePanelClose
+            // 
+            sidePanelClose.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            sidePanelClose.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            sidePanelClose.Density = ReaLTaiizor.Controls.MaterialButton.MaterialButtonDensity.Default;
+            sidePanelClose.Depth = 0;
+            sidePanelClose.HighEmphasis = true;
+            sidePanelClose.Icon = null;
+            sidePanelClose.IconType = ReaLTaiizor.Controls.MaterialButton.MaterialIconType.Rebase;
+            sidePanelClose.Location = new Point(449, 11);
+            sidePanelClose.Margin = new Padding(4, 6, 4, 6);
+            sidePanelClose.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
+            sidePanelClose.Name = "sidePanelClose";
+            sidePanelClose.NoAccentTextColor = Color.Empty;
+            sidePanelClose.Size = new Size(66, 36);
+            sidePanelClose.TabIndex = 0;
+            sidePanelClose.Text = "CLOSE";
+            sidePanelClose.Type = ReaLTaiizor.Controls.MaterialButton.MaterialButtonType.Contained;
+            sidePanelClose.UseAccentColor = false;
+            sidePanelClose.UseVisualStyleBackColor = true;
+            sidePanelClose.Click += sidePanelClose_Click;
             // 
             // materialFloatingActionButton1
             // 
             materialFloatingActionButton1.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             materialFloatingActionButton1.Depth = 0;
             materialFloatingActionButton1.Icon = Properties.Resources.plus;
-            materialFloatingActionButton1.Location = new Point(1305, 643);
+            materialFloatingActionButton1.Location = new Point(1124, 643);
             materialFloatingActionButton1.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
             materialFloatingActionButton1.Name = "materialFloatingActionButton1";
             materialFloatingActionButton1.Size = new Size(56, 56);
@@ -651,7 +742,7 @@
             materialButton5.HighEmphasis = true;
             materialButton5.Icon = Properties.Resources.icons8_붙이다_24;
             materialButton5.IconType = ReaLTaiizor.Controls.MaterialButton.MaterialIconType.Rebase;
-            materialButton5.Location = new Point(840, 9);
+            materialButton5.Location = new Point(853, 9);
             materialButton5.Margin = new Padding(4, 6, 4, 6);
             materialButton5.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
             materialButton5.Name = "materialButton5";
@@ -672,7 +763,7 @@
             materialButton4.HighEmphasis = true;
             materialButton4.Icon = Properties.Resources.icons8_다운로드_업데이트_24;
             materialButton4.IconType = ReaLTaiizor.Controls.MaterialButton.MaterialIconType.Rebase;
-            materialButton4.Location = new Point(600, 9);
+            materialButton4.Location = new Point(613, 8);
             materialButton4.Margin = new Padding(4, 6, 4, 6);
             materialButton4.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
             materialButton4.Name = "materialButton4";
@@ -789,7 +880,7 @@
             materialListView1.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.OUT;
             materialListView1.Name = "materialListView1";
             materialListView1.OwnerDraw = true;
-            materialListView1.Size = new Size(1358, 639);
+            materialListView1.Size = new Size(1177, 639);
             materialListView1.TabIndex = 0;
             materialListView1.UseCompatibleStateImageBehavior = false;
             materialListView1.View = View.Details;
@@ -852,7 +943,7 @@
             tabPage3.ImageKey = "icons8-설정-3-16.png";
             tabPage3.Location = new Point(4, 24);
             tabPage3.Name = "tabPage3";
-            tabPage3.Size = new Size(1367, 705);
+            tabPage3.Size = new Size(1527, 900);
             tabPage3.TabIndex = 2;
             tabPage3.Text = "설정";
             tabPage3.UseVisualStyleBackColor = true;
@@ -1020,7 +1111,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1381, 800);
+            ClientSize = new Size(1200, 800);
             Controls.Add(materialTabControl1);
             DrawerShowIconsWhenHidden = true;
             DrawerTabControl = materialTabControl1;
@@ -1052,6 +1143,8 @@
             materialCard1.PerformLayout();
             tabPage2.ResumeLayout(false);
             tabPage2.PerformLayout();
+            panel1.ResumeLayout(false);
+            panel1.PerformLayout();
             tabPage3.ResumeLayout(false);
             tabPage3.PerformLayout();
             contextMenuStrip1.ResumeLayout(false);
@@ -1125,5 +1218,9 @@
         private ToolStripMenuItem toolStripMenuItem2;
         private ToolStripMenuItem toolStripMenuItem3;
         private ColumnHeader columnHeader9;
+        private ReaLTaiizor.Controls.Panel panel1;
+        private ReaLTaiizor.Controls.MaterialButton sidePanelClose;
+        private ReaLTaiizor.Controls.MaterialMultiLineTextBoxEdit runningStatusTextEdit;
+        private ReaLTaiizor.Controls.MaterialButton materialButton2;
     }
 }

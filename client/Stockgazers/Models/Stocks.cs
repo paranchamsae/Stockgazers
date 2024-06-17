@@ -57,6 +57,7 @@ namespace Stockgazers.Models
 
     public class AutoPricingData
     {
+        public string StyleID { get; set; } = string.Empty;
         public string ListingID { get; set; } = string.Empty;
         public string ProductID { get; set; } = string.Empty;
         public string VariantID { get; set; } = string.Empty;

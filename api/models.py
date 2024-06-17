@@ -28,7 +28,7 @@ class Stocks(Base):
     UserID = Column(Integer, ForeignKey("SGUser.ID"), nullable=False)
     IsDelete = Column(String, nullable=False)
     ListingID = Column(String, nullable=False)
-    StyleId = Column(String, nullable=False)
+    StyleID = Column(String, nullable=False)
     ProductID = Column(String, nullable=False)
     Title = Column(String, nullable=False)
     VariantID = Column(String, nullable=False)

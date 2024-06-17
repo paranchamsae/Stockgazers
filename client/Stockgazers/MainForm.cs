@@ -67,11 +67,21 @@ namespace Stockgazers
 
             Timer = new System.Windows.Forms.Timer();
             Timer.Tick += Timer_Tick;
-            Timer.Interval = 30 * 60000;        // 30분
+            //Timer.Interval = 30 * 60000;        // 30분
+            Timer.Interval = 1 * 60000;
+        }
+
+
+        private void AppendRunningStatus(string text)
+        {
+            runningStatusTextEdit.Text = $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] {text}\r\n" + runningStatusTextEdit.Text;
         }
 
         private async void Timer_Tick(object? sender, EventArgs e)
         {
+            Timer.Stop();
+            AppendRunningStatus("입찰 순회를 시작합니다.");
+
             #region 1. Stockgazers DB에서 현재 입찰 중인 상태의 아이템을 획득
             string url = $"{API.GetServer()}/api/stocks/{common.StockgazersUserID}/active";
             var response = await common.session.GetAsync(url);
@@ -85,6 +95,7 @@ namespace Stockgazers
                 {
                     bids.Add(new AutoPricingData
                     {
+                        StyleID = element["StyleID"].ToString(),
                         ListingID = element["ListingID"].ToString(),
                         ProductID = element["ProductID"].ToString(),
                         VariantID = element["VariantID"].ToString(),
@@ -106,8 +117,12 @@ namespace Stockgazers
             {
                 foreach (AutoPricingData item in bids)
                 {
+                    
                     if (item.LimitPrice == 0)           // 하한가 설정이 되지 않았다면 업데이트 하지 않는다.
+                    {
+                        AppendRunningStatus($"{item.StyleID} - 하한가 설정값 없음, 입찰정보를 업데이트하지 않습니다.");
                         continue;
+                    }
 
                     retry:
                     url = $"https://api.stockx.com/v2/catalog/products/{item.ProductID}/variants/{item.VariantID}/market-data";
@@ -160,6 +175,7 @@ namespace Stockgazers
 
                         if (UpdatePrice > -1)
                         {
+                            System.Threading.Thread.Sleep(1500);        // 딱스 API는 호출 사이에 1초 이상의 텀이 있어야 한다.
                             // 딱스에 입찰 업데이트
                             url = $"https://api.stockx.com/v2/selling/listings/{item.ListingID}";
                             Dictionary<string, string> updateData = new()
@@ -181,6 +197,11 @@ namespace Stockgazers
                             sendData = new StringContent(JsonConvert.SerializeObject(updateData), Encoding.UTF8, "application/json");
                             response = await common.session.PatchAsync(url, sendData);
                             response.EnsureSuccessStatusCode();
+                            AppendRunningStatus($"{item.StyleID} - 입찰가 업데이트 완료({item.BidPrice} USD → {UpdatePrice} USD)");
+                        }
+                        else
+                        {
+                            AppendRunningStatus($"{item.StyleID} - 변경이 필요하지 않습니다.");
                         }
                     }
                     catch (Exception ex)
@@ -206,6 +227,9 @@ namespace Stockgazers
                 }
             }
             #endregion
+
+            AppendRunningStatus($"입찰 순회 완료, 다음 확인 시각은 {DateTime.Now.AddMinutes(Timer.Interval/60000):HH:mm:ss} 입니다.");
+            Timer.Start();
         }
 
         private async void Form1_Load(object sender, EventArgs e)
@@ -495,7 +519,7 @@ namespace Stockgazers
                 }
 
                 string[] element = new[] {
-                    row["StyleId"].ToString(),
+                    row["StyleID"].ToString(),
                     row["Title"].ToString(),
                     row["BuyPrice"].ToString(),
                     row["Price"].ToString(),
@@ -518,9 +542,10 @@ namespace Stockgazers
 
             #region 6. 사용자 티어에 따라 가격경쟁 타이머 시작여부 결정
             if (common.UserTier > 2)
+            {
                 Timer.Start();
-            //    //TimerFuncTest();
-            //    await API.RefreshToken(common);
+                AppendRunningStatus("유료 사용자 확인 완료, 가격경쟁 타이머가 정상 시작 되었어요");
+            }
             #endregion
         }
 
@@ -683,7 +708,7 @@ namespace Stockgazers
 
                     string[] element = new[] {
                         //"",
-                        row["StyleId"].ToString(),
+                        row["StyleID"].ToString(),
                         row["Title"].ToString(),
                         row["BuyPrice"].ToString(),
                         row["Price"].ToString(),
@@ -775,7 +800,7 @@ namespace Stockgazers
             string message = $"{contextMenuStrip1.Items[0].Text} 모델의 입찰 등록을 삭제할까요?";
             if (MessageBox.Show(message, "입찰 등록 삭제", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                retry:
+            retry:
                 #region 딱스 입찰등록 삭제
                 string ListingID = contextMenuStrip1.Items[0].Tag.ToString() ?? string.Empty;
                 if (ListingID.Length == 0)
@@ -928,6 +953,16 @@ namespace Stockgazers
 
                 materialListView1.Items.AddRange(filteredItem.ToArray());
             }
+        }
+
+        private void sidePanelClose_Click(object sender, EventArgs e)
+        {
+            panel1.Visible = false;
+        }
+
+        private void materialButton2_Click(object sender, EventArgs e)
+        {
+            panel1.Visible = true;
         }
     }
 }
