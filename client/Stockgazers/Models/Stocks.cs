@@ -48,6 +48,7 @@ namespace Stockgazers.Models
         public int BuyPrice { get; set; }
         public int Price { get; set; }
         public int Limit { get; set; }
+        public string Status { get; set; } = string.Empty;
     }
 
     public class RequestPutListing

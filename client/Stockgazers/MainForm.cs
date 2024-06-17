@@ -67,8 +67,8 @@ namespace Stockgazers
 
             Timer = new System.Windows.Forms.Timer();
             Timer.Tick += Timer_Tick;
-            //Timer.Interval = 30 * 60000;        // 30분
-            Timer.Interval = 1 * 60000;
+            Timer.Interval = 30 * 60000;        // 30분
+            //Timer.Interval = 1 * 60000;
         }
 
 
@@ -175,7 +175,7 @@ namespace Stockgazers
 
                         if (UpdatePrice > -1)
                         {
-                            System.Threading.Thread.Sleep(1500);        // 딱스 API는 호출 사이에 1초 이상의 텀이 있어야 한다.
+                            Thread.Sleep(1500);        // 딱스 API는 호출 사이에 1초 이상의 텀이 있어야 한다.
                             // 딱스에 입찰 업데이트
                             url = $"https://api.stockx.com/v2/selling/listings/{item.ListingID}";
                             Dictionary<string, string> updateData = new()
@@ -358,11 +358,12 @@ namespace Stockgazers
 
         #region 2-4. 디비상의 ACTIVE 상태에 대해 재동기화
         retry:
-            List<JToken> tempCompare = StockxListingsListOrigin.Where(x => x["status"].ToString() == "ACTIVE").ToList();
+            //List<JToken> tempCompare = StockxListingsListOrigin.Where(x => x["status"].ToString() == "ACTIVE").ToList();
+            List<JToken> tempCompare = StockgazersReference.Where(x => x["Status"].ToString() == "ACTIVE").ToList();
             bool isActiveRefresh = false;
             foreach (var active in tempCompare)
             {
-                url = $"{API.GetServer()}/api/listing/{active["listingId"]}";
+                url = $"{API.GetServer()}/api/listing/{active["ListingID"]}";
                 response = await common.session.GetAsync(url);
                 try
                 {
@@ -374,7 +375,7 @@ namespace Stockgazers
                     int sgPrice = Convert.ToInt32(resultData[0]["Price"].ToString());
                     string sgStatus = resultData[0]["Status"].ToString();
 
-                    url = $"https://api.stockx.com/v2/selling/listings/{active["listingId"]}";
+                    url = $"https://api.stockx.com/v2/selling/listings/{active["ListingID"]}";
                     response = await common.session.GetAsync(url);
                     try
                     {
@@ -388,12 +389,34 @@ namespace Stockgazers
                                 ListingID = resultDataStockx["listingId"].ToString(),
                                 BuyPrice = Convert.ToInt32(resultData[0]["BuyPrice"]),
                                 Price = Convert.ToInt32(resultDataStockx["amount"]),
-                                Limit = Convert.ToInt32(resultData[0]["Limit"])
+                                Limit = Convert.ToInt32(resultData[0]["Limit"]),
+                                Status = resultDataStockx["status"].ToString()
                             };
                             url = $"{API.GetServer()}/api/listing";
                             var sendData = new StringContent(JsonConvert.SerializeObject(patchData), Encoding.UTF8, "application/json");
                             response = await common.session.PatchAsync(url, sendData);
                             response.EnsureSuccessStatusCode();
+
+                            if (resultDataStockx["order"] != null)
+                            {
+                                Thread.Sleep(1000);
+                                url = $"https://api.stockx.com/v2/selling/orders/{resultDataStockx["order"]["orderNumber"]}";
+                                response = await common.session.GetAsync(url);
+                                response.EnsureSuccessStatusCode();
+                                JToken? tempOrder = JsonConvert.DeserializeObject<JToken>(response.Content.ReadAsStringAsync().Result);
+                                List<Order> orders = new();
+                                Order o = new()
+                                {
+                                    OrderNo = tempOrder["orderNumber"].ToString(),
+                                    ListingID = tempOrder["listingId"].ToString(),
+                                    SalePrice = 0,
+                                    AdjustPrice = 0
+                                };
+                                orders.Add(o);
+                                url = $"{API.GetServer()}/api/stocks/order";
+                                sendData = new StringContent(JsonConvert.SerializeObject(orders), Encoding.UTF8, "application/json");
+                                response = await common.session.PatchAsync(url, sendData);
+                            }
 
                             if (!isActiveRefresh)
                                 isActiveRefresh = true;
@@ -544,7 +567,7 @@ namespace Stockgazers
             if (common.UserTier > 2)
             {
                 Timer.Start();
-                AppendRunningStatus("유료 사용자 확인 완료, 가격경쟁 타이머가 정상 시작 되었어요");
+                AppendRunningStatus($"유료 사용자 확인 완료, 가격경쟁 타이머 가동 완료\r\n다음 확인 시각은 {DateTime.Now.AddMinutes(Timer.Interval/60000):HH:mm:ss} 입니다.");
             }
             #endregion
         }
@@ -764,16 +787,26 @@ namespace Stockgazers
                     contextMenuStrip1.Items[0].Tag = item.Tag;
                     contextMenuStrip1.Items[0].Enabled = false;
 
-                    if (item.SubItems[5].Text == "판매완료")
-                    {
-                        contextMenuStrip1.Items[1].Enabled = false;
-                        contextMenuStrip1.Items[2].Enabled = false;
-                    }
-                    else
+                    if (item.SubItems[5].Text == "입찰 중")
                     {
                         contextMenuStrip1.Items[1].Enabled = true;
                         contextMenuStrip1.Items[2].Enabled = true;
                     }
+                    else
+                    {
+                        contextMenuStrip1.Items[1].Enabled = false;
+                        contextMenuStrip1.Items[2].Enabled = false;
+                    }
+                    //if (item.SubItems[5].Text == "판매완료" || item.SubItems[5].Text == "비활성화" || item.SubItems[5].)
+                    //{
+                    //    contextMenuStrip1.Items[1].Enabled = false;
+                    //    contextMenuStrip1.Items[2].Enabled = false;
+                    //}
+                    //else
+                    //{
+                    //    contextMenuStrip1.Items[1].Enabled = true;
+                    //    contextMenuStrip1.Items[2].Enabled = true;
+                    //}
 
                     contextMenuStrip1.Show(materialListView1, e.Location);
                 }

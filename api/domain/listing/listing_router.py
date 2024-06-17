@@ -35,6 +35,7 @@ async def patchstock(request: stocks_schema.RequestPatchListing):
             BuyPriceUSD = BuyPriceUSD,
             Price = request.Price,
             Limit = request.Limit,
+            Status = request.Status,
             UpdateDatetime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         )
         db.execute(query)
