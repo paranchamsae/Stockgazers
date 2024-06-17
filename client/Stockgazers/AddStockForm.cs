@@ -52,14 +52,15 @@ namespace Stockgazers
             // 딱스에서 모델정보 불러옴
             if (e.KeyCode == Keys.Enter)
             {
+                retry:
                 if (listView1.Items.Count > 0)
                     listView1.Items.Clear();
 
                 string url = $"https://api.stockx.com/v2/catalog/search?query={materialTextBoxEdit1.Text.Trim().ToLower()}&pageNumber=1&pageSize=30";
+                var response = await common.session.GetAsync(url);
 
                 try
                 {
-                    var response = await common.session.GetAsync(url);
                     response.EnsureSuccessStatusCode();
 
                     if (listView1.Items.Count > 0)
@@ -92,8 +93,22 @@ namespace Stockgazers
                 }
                 catch (Exception ex)
                 {
-                    MaterialSnackBar snackBar = new($"{ex.Message}", "OK", true);
-                    snackBar.Show(this);
+                    if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                    {
+                        if (await API.RefreshToken(common))
+                            goto retry;
+                        else
+                        {
+                            MaterialSnackBar snackBar = new("접근 토근 갱신에 실패하였습니다.", "OK", true);
+                            snackBar.Show();
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        MaterialSnackBar snackBar = new($"{ex.Message}", "OK", true);
+                        snackBar.Show(this);
+                    }
                 }
             }
         }
@@ -112,6 +127,7 @@ namespace Stockgazers
 
             if (MessageBox.Show(message, "재고추가", MessageBoxButtons.YesNo, MessageBoxIcon.Asterisk) == DialogResult.Yes)
             {
+                retry:
                 string url = "https://api.stockx.com/v2/selling/listings";
                 CreateListing createListing = new()
                 {
@@ -131,9 +147,23 @@ namespace Stockgazers
                 }
                 catch (Exception)
                 {
-                    MaterialSnackBar snackBar = new("재고 추가에 실패했습니다.", "OK", true);
-                    snackBar.Show(this);
-                    return;
+                    if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                    {
+                        if (await API.RefreshToken(common))
+                            goto retry;
+                        else
+                        {
+                            MaterialSnackBar snackBar = new("접근 토근 갱신에 실패하였습니다.", "OK", true);
+                            snackBar.Show();
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        MaterialSnackBar snackBar = new("재고 추가에 실패했습니다.", "OK", true);
+                        snackBar.Show(this);
+                        return;
+                    }
                 }
 
                 if (createdListingID.Length > 0)
@@ -194,6 +224,7 @@ namespace Stockgazers
 
             if (item != null)
             {
+                retry:
                 string url = $"https://api.stockx.com/v2/catalog/products/{item.Tag}/variants";
                 var response = await common.session.GetAsync(url);
 
@@ -225,8 +256,23 @@ namespace Stockgazers
                 }
                 catch (Exception ex)
                 {
-                    MaterialSnackBar snackBar = new($"{ex.Message}", "OK", true);
-                    snackBar.Show(this);
+                    if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                    {
+                        if (await API.RefreshToken(common))
+                            goto retry;
+                        else
+                        {
+                            MaterialSnackBar snackBar = new("접근 토근 갱신에 실패하였습니다.", "OK", true);
+                            snackBar.Show();
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        MaterialSnackBar snackBar = new($"{ex.Message}", "OK", true);
+                        snackBar.Show(this);
+                        return;
+                    }
                 }
             }
         }
@@ -238,8 +284,10 @@ namespace Stockgazers
 
             string VariantID = materialComboBox1.SelectedValue.ToString();
 
+            retry:
             string url = $"https://api.stockx.com/v2/catalog/products/{selectedProductID}/variants/{VariantID}/market-data";
             var response = await common.session.GetAsync(url);
+
             try
             {
                 response.EnsureSuccessStatusCode();
@@ -256,8 +304,23 @@ namespace Stockgazers
             }
             catch (Exception ex)
             {
-                MaterialSnackBar snackBar = new($"{ex.Message}", "OK", true);
-                snackBar.Show(this);
+                if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                {
+                    if (await API.RefreshToken(common))
+                        goto retry;
+                    else
+                    {
+                        MaterialSnackBar snackBar = new("접근 토근 갱신에 실패하였습니다.", "OK", true);
+                        snackBar.Show();
+                        return;
+                    }
+                }
+                else
+                {
+                    MaterialSnackBar snackBar = new($"{ex.Message}", "OK", true);
+                    snackBar.Show(this);
+                    return;
+                }
             }
         }
 

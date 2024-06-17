@@ -95,16 +95,9 @@ namespace Stockgazers
             }
             catch (Exception ex)
             {
-                if (response.StatusCode == HttpStatusCode.Unauthorized)
-                {
-
-                }
-                else
-                {
-                    MaterialSnackBar snackBar = new(ex.Message, "OK", true);
-                    snackBar.Show(this);
-                    return;
-                }
+                MaterialSnackBar snackBar = new(ex.Message, "OK", true);
+                snackBar.Show(this);
+                return;
             }
             #endregion
 
@@ -116,6 +109,7 @@ namespace Stockgazers
                     if (item.LimitPrice == 0)           // 하한가 설정이 되지 않았다면 업데이트 하지 않는다.
                         continue;
 
+                    retry:
                     url = $"https://api.stockx.com/v2/catalog/products/{item.ProductID}/variants/{item.VariantID}/market-data";
                     response = await common.session.GetAsync(url);
                     try
@@ -193,7 +187,14 @@ namespace Stockgazers
                     {
                         if (response.StatusCode == HttpStatusCode.Unauthorized)
                         {
-
+                            if (await API.RefreshToken(common))
+                                goto retry;
+                            else
+                            {
+                                MaterialSnackBar snackBar = new("접근 토근 갱신에 실패하였습니다.", "OK", true);
+                                snackBar.Show();
+                                return;
+                            }
                         }
                         else
                         {
@@ -334,6 +335,7 @@ namespace Stockgazers
         #region 2-4. 디비상의 ACTIVE 상태에 대해 재동기화
         retry:
             List<JToken> tempCompare = StockxListingsListOrigin.Where(x => x["status"].ToString() == "ACTIVE").ToList();
+            bool isActiveRefresh = false;
             foreach (var active in tempCompare)
             {
                 url = $"{API.GetServer()}/api/listing/{active["listingId"]}";
@@ -368,6 +370,9 @@ namespace Stockgazers
                             var sendData = new StringContent(JsonConvert.SerializeObject(patchData), Encoding.UTF8, "application/json");
                             response = await common.session.PatchAsync(url, sendData);
                             response.EnsureSuccessStatusCode();
+
+                            if (!isActiveRefresh)
+                                isActiveRefresh = true;
                         }
                     }
                     catch (Exception ex)
@@ -377,7 +382,11 @@ namespace Stockgazers
                             if (await API.RefreshToken(common))
                                 goto retry;
                             else
+                            {
+                                MaterialSnackBar snackBar = new("접근 토근 갱신에 실패하였습니다.", "OK", true);
+                                snackBar.Show();
                                 return;
+                            }
                         }
                         else
                         {
@@ -450,7 +459,7 @@ namespace Stockgazers
             if (originCollection?.Count > 0)
                 originCollection.Clear();
 
-            if (order.Count > 0)
+            if (order.Count > 0 || isActiveRefresh)
             {
                 url = $"{API.GetServer()}/api/stocks/{common.StockgazersUserID}";
                 response = await common.session.GetAsync(url);
@@ -508,8 +517,8 @@ namespace Stockgazers
             #endregion
 
             #region 6. 사용자 티어에 따라 가격경쟁 타이머 시작여부 결정
-            //if (common.UserTier > 2)
-            //    //Timer.Start();
+            if (common.UserTier > 2)
+                Timer.Start();
             //    //TimerFuncTest();
             //    await API.RefreshToken(common);
             #endregion
@@ -604,7 +613,7 @@ namespace Stockgazers
                     await RefreshSellStatus();          // 판매현황 그리드 다시 그리기
                     GetStatistics(common);          // 메인화면 통계정보 업데이트
                 }
-                catch (IOException ex)
+                catch (IOException)
                 {
                     MaterialSnackBar snackBar = new("CSV파일이 열려있어 업로드 할 수 없습니다.", "OK", true);
                     snackBar.Show(this);
@@ -766,6 +775,7 @@ namespace Stockgazers
             string message = $"{contextMenuStrip1.Items[0].Text} 모델의 입찰 등록을 삭제할까요?";
             if (MessageBox.Show(message, "입찰 등록 삭제", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
+                retry:
                 #region 딱스 입찰등록 삭제
                 string ListingID = contextMenuStrip1.Items[0].Tag.ToString() ?? string.Empty;
                 if (ListingID.Length == 0)
@@ -782,7 +792,14 @@ namespace Stockgazers
                 {
                     if (response.StatusCode == HttpStatusCode.Unauthorized)
                     {
-
+                        if (await API.RefreshToken(common))
+                            goto retry;
+                        else
+                        {
+                            MaterialSnackBar snackBar = new("접근 토근 갱신에 실패하였습니다.", "OK", true);
+                            snackBar.Show();
+                            return;
+                        }
                     }
                     else
                     {

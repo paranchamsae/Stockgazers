@@ -65,19 +65,43 @@ namespace Stockgazers
                 materialTextBoxEdit6.Text = data[0]["Price"].ToString();
                 materialTextBoxEdit5.Text = data[0]["Limit"].ToString();
 
+            retry:
                 url = $"https://api.stockx.com/v2/catalog/products/{data[0]["ProductID"].ToString()}/variants/{data[0]["VariantID"]}/market-data";
                 response = await common.session.GetAsync(url);
-                response.EnsureSuccessStatusCode();
+                try
+                {
+                    response.EnsureSuccessStatusCode();
 
-                result = response.Content.ReadAsStringAsync().Result;
-                data = JsonConvert.DeserializeObject<JToken>(result);
+                    result = response.Content.ReadAsStringAsync().Result;
+                    data = JsonConvert.DeserializeObject<JToken>(result);
 
-                button1.Text = "더 많은 수익\n" + data["earnMoreAmount"].ToString() + " USD";
-                button1.Tag = data["earnMoreAmount"].ToString();
-                button2.Text = "더 빨리 판매하기\n" + data["sellFasterAmount"].ToString() + " USD";
-                button2.Tag = data["sellFasterAmount"].ToString();
-                button3.Text = "즉시 판매하기\n" + data["highestBidAmount"].ToString() + " USD";
-                button3.Tag = data["highestBidAmount"].ToString();
+                    button1.Text = "더 많은 수익\n" + data["earnMoreAmount"].ToString() + " USD";
+                    button1.Tag = data["earnMoreAmount"].ToString();
+                    button2.Text = "더 빨리 판매하기\n" + data["sellFasterAmount"].ToString() + " USD";
+                    button2.Tag = data["sellFasterAmount"].ToString();
+                    button3.Text = "즉시 판매하기\n" + data["highestBidAmount"].ToString() + " USD";
+                    button3.Tag = data["highestBidAmount"].ToString();
+                }
+                catch (Exception ex)
+                {
+                    if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                    {
+                        if (await API.RefreshToken(common))
+                            goto retry;
+                        else
+                        {
+                            MaterialSnackBar snackBar = new("접근 토근 갱신에 실패하였습니다.", "OK", true);
+                            snackBar.Show();
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        MaterialSnackBar snackBar = new(ex.Message, "OK", true);
+                        snackBar.Show();
+                        return;
+                    }
+                }
             }
             catch (Exception)
             {
@@ -101,6 +125,7 @@ namespace Stockgazers
 
             if (MessageBox.Show(message, "입찰수정", MessageBoxButtons.YesNo, MessageBoxIcon.Asterisk) == DialogResult.Yes)
             {
+                retry:
                 string url = $"https://api.stockx.com/v2/selling/listings/{ListingID}";
                 Dictionary<string, string> data = new()
                 {
@@ -126,10 +151,25 @@ namespace Stockgazers
                     MainForm.isNewStockCreated = true;
                     this.Close();
                 }
-                catch(Exception)
+                catch (Exception)
                 {
-                    MaterialSnackBar snackBar = new($"서버와의 통신에 실패했어요 :(", "OK", true);
-                    snackBar.Show(this);
+                    if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                    {
+                        if (await API.RefreshToken(common))
+                            goto retry;
+                        else
+                        {
+                            MaterialSnackBar snackBar = new("접근 토근 갱신에 실패하였습니다.", "OK", true);
+                            snackBar.Show();
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        MaterialSnackBar snackBar = new($"서버와의 통신에 실패했어요 :(", "OK", true);
+                        snackBar.Show(this);
+                        return;
+                    }
                 }
             }
         }
