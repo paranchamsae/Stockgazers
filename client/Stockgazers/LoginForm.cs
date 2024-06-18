@@ -36,15 +36,16 @@ namespace Stockgazers
             string url = $"{API.GetServer()}/api/user/login";
             var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8,
                                   "application/json");
+            var response = await common.session.PostAsync(url, content);
 
             try
             {
-                var response = await common.session.PostAsync(url, content);
+                response.EnsureSuccessStatusCode();
                 string result = response.Content.ReadAsStringAsync().Result;
                 JObject? resultjson = JsonConvert.DeserializeObject<JObject>(result);
                 if (resultjson == null)
                 {
-                    MaterialSnackBar snackBar = new("서버와의 통신에 실패하였습니다.\r\n잠시 후 다시 시도 해 주세요.", "OK", true);
+                    MaterialSnackBar snackBar = new("서버와의 통신에 실패하였습니다. 잠시 후 다시 시도 해 주세요.", "OK", true);
                     snackBar.Show(this);
                     return;
                 }

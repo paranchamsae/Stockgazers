@@ -117,7 +117,6 @@ namespace Stockgazers
             {
                 foreach (AutoPricingData item in bids)
                 {
-                    
                     if (item.LimitPrice == 0)           // 하한가 설정이 되지 않았다면 업데이트 하지 않는다.
                     {
                         AppendRunningStatus($"{item.StyleID} - 하한가 설정값 없음, 입찰정보를 업데이트하지 않습니다.");
@@ -264,16 +263,26 @@ namespace Stockgazers
                 "application/json");
             var response = await common.session.PostAsync(url, content);
 
-            string tokenRaw = response.Content.ReadAsStringAsync().Result;
-            var tokenJson = JsonConvert.DeserializeObject<JObject>(tokenRaw);
-            if (tokenJson != null)
+            try
             {
-                JToken Access = tokenJson.Value<string>("access_token");
-                common.AccessToken = Access?.ToString() ?? string.Empty;
-                JToken Refresh = tokenJson.Value<string>("refresh_token");
-                common.RefreshToken = Refresh?.ToString() ?? string.Empty;
-                JToken ID = tokenJson.Value<string>("id_token");
-                common.IDToken = ID?.ToString() ?? string.Empty;
+                response.EnsureSuccessStatusCode();
+                string tokenRaw = response.Content.ReadAsStringAsync().Result;
+                var tokenJson = JsonConvert.DeserializeObject<JObject>(tokenRaw);
+                if (tokenJson != null)
+                {
+                    JToken Access = tokenJson.Value<string>("access_token");
+                    common.AccessToken = Access?.ToString() ?? string.Empty;
+                    JToken Refresh = tokenJson.Value<string>("refresh_token");
+                    common.RefreshToken = Refresh?.ToString() ?? string.Empty;
+                    JToken ID = tokenJson.Value<string>("id_token");
+                    common.IDToken = ID?.ToString() ?? string.Empty;
+                }
+            }
+            catch(Exception ex)
+            {
+                MaterialSnackBar snackBar = new(ex.Message, "OK", true);
+                snackBar.Show();
+                return;
             }
             #endregion
 
@@ -286,17 +295,25 @@ namespace Stockgazers
 
             response = await common.session.GetAsync(url);
             List<JToken> StockxListingsListOrigin = new List<JToken>();
-            if (response.StatusCode == HttpStatusCode.OK)
+            try
             {
+                response.EnsureSuccessStatusCode();
                 var StockxRaw = response.Content.ReadAsStringAsync().Result;
                 JToken? tempStockx = JsonConvert.DeserializeObject<JToken>(StockxRaw);
                 if (tempStockx != null)
                     StockxListingsListOrigin = JsonConvert.DeserializeObject<JToken>(tempStockx["listings"]!.ToString())!.ToList();
+
+                if (StockxListingsListOrigin.Count == 0)
+                {
+                    MaterialSnackBar snackBar = new("StockX에서 나의 판매 현황을 불러오는데 실패했습니다.", "OK", true);
+                    snackBar.Show(this);
+                    return;
+                }
             }
-            if (StockxListingsListOrigin.Count == 0)
+            catch(Exception ex)
             {
-                MaterialSnackBar snackBar = new("StockX에서 나의 판매 현황을 불러오는데 실패했습니다.", "OK", true);
-                snackBar.Show(this);
+                MaterialSnackBar snackBar = new(ex.Message, "OK", true);
+                snackBar.Show();
                 return;
             }
             #endregion
@@ -305,15 +322,26 @@ namespace Stockgazers
             url = $"{API.GetServer()}/api/stocks/{common.StockgazersUserID}";
             response = await common.session.GetAsync(url);
             JToken? StockgazersReference = null;
-            if (response.StatusCode == HttpStatusCode.OK)
+            try
             {
-                var StockgazersRaw = response.Content.ReadAsStringAsync().Result;
-                StockgazersReference = JsonConvert.DeserializeObject<JToken>(StockgazersRaw);
+                response.EnsureSuccessStatusCode();
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    var StockgazersRaw = response.Content.ReadAsStringAsync().Result;
+                    StockgazersReference = JsonConvert.DeserializeObject<JToken>(StockgazersRaw);
+                }
+                if (StockgazersReference == null)
+                {
+                    MaterialSnackBar snackBar = new("Stockgazers 서버에서 나의 판매 현황을 불러오는데 실패했습니다.", "OK", true);
+                    snackBar.Show(this);
+                    return;
+                }
             }
-            if (StockgazersReference == null)
+            catch (Exception ex)
             {
-                MaterialSnackBar snackBar = new("Stockgazers 서버에서 나의 판매 현황을 불러오는데 실패했습니다.", "OK", true);
-                snackBar.Show(this);
+                MaterialSnackBar snackBar = new(ex.Message, "OK", true);
+                snackBar.Show();
+                return;
             }
             #endregion
 
@@ -479,8 +507,9 @@ namespace Stockgazers
                     {
                         url = $"https://api.stockx.com/v2/selling/orders/{row["order"]["orderNumber"]}";
                         response = await common.session.GetAsync(url);
-                        if (response.StatusCode == HttpStatusCode.OK)
+                        try
                         {
+                            response.EnsureSuccessStatusCode();
                             JToken? tempOrder = JsonConvert.DeserializeObject<JToken>(response.Content.ReadAsStringAsync().Result);
                             Order o = new()
                             {
@@ -490,6 +519,12 @@ namespace Stockgazers
                                 AdjustPrice = Convert.ToDouble(tempOrder["payout"]["totalPayout"])
                             };
                             order.Add(o);
+                        }
+                        catch (Exception ex)
+                        {
+                            MaterialSnackBar snackBar = new(ex.Message, "OK", true);
+                            snackBar.Show(this);
+                            continue;
                         }
                     }
                 }
@@ -618,8 +653,9 @@ namespace Stockgazers
             var response = await common.session.GetAsync(url);
             string? path = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
 
-            if (response.StatusCode == HttpStatusCode.OK)
+            try
             {
+                response.EnsureSuccessStatusCode();
                 using (Stream stream = await response.Content.ReadAsStreamAsync())
                 {
                     using (FileStream fs = new(Path.Combine(path, "data.csv"), FileMode.OpenOrCreate, FileAccess.ReadWrite))
@@ -629,6 +665,11 @@ namespace Stockgazers
                 }
 
                 MaterialSnackBar snackBar = new("프로그램 경로에 다운로드 되었어요", "OK", true);
+                snackBar.Show(this);
+            }
+            catch(Exception ex)
+            {
+                MaterialSnackBar snackBar = new(ex.Message, "OK", true);
                 snackBar.Show(this);
             }
         }
@@ -708,6 +749,7 @@ namespace Stockgazers
                 {
                     MaterialSnackBar snackBar = new("Stockgazers 서버에서 나의 판매 현황을 불러오는데 실패했습니다.", "OK", true);
                     snackBar.Show(this);
+                    return false;
                 }
 
                 foreach (var row in StockgazersReference)
