@@ -85,7 +85,7 @@ async def patchorder(request: list[stocks_schema.RequestPatchOrder]):
             if result[0].BuyPrice > 0 and result[0].BuyPriceUSD > 0:
                 tempAdjustPrice = row.AdjustPrice/1300 if row.AdjustPrice > 1000 else row.AdjustPrice
                 tempProfit = (tempAdjustPrice-result[0].BuyPriceUSD)/result[0].BuyPriceUSD*100
-                if result[0].Status == "MATCHED":
+                if result[0].Status == "MATCHED" or result[0].Status == "READY_TO_SHIP":
                     tempProfit = 0
                     
                 query = update(Stocks).where(Stocks.ListingID == row.ListingID).values(

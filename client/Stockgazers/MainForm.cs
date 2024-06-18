@@ -356,10 +356,13 @@ namespace Stockgazers
             }
         #endregion
 
-        #region 2-4. 디비상의 ACTIVE 상태에 대해 재동기화
+        #region 2-4. 디비상의 ACTIVE/MATCHED/READY_TO_SHIP 상태에 대해 재동기화
         retry:
-            //List<JToken> tempCompare = StockxListingsListOrigin.Where(x => x["status"].ToString() == "ACTIVE").ToList();
-            List<JToken> tempCompare = StockgazersReference.Where(x => x["Status"].ToString() == "ACTIVE").ToList();
+            List<JToken> tempCompare = StockgazersReference.Where(
+                x => x["Status"].ToString() == "ACTIVE" ||
+                x["Status"].ToString() == "MATCHED" ||
+                x["Status"].ToString() == "READY_TO_SHIP"
+            ).ToList();
             bool isActiveRefresh = false;
             foreach (var active in tempCompare)
             {
@@ -535,6 +538,9 @@ namespace Stockgazers
                         break;
                     case "MATCHED":
                         status = "판매대기";
+                        break;
+                    case "READY_TO_SHIP":
+                        status = "발송대기";
                         break;
                     case "COMPLETED":
                         status = "판매완료";
@@ -724,6 +730,9 @@ namespace Stockgazers
                         case "MATCHED":
                             status = "판매대기";
                             break;
+                        case "READY_TO_SHIP":
+                            status = "발송대기";
+                            break;
                         case "COMPLETED":
                             status = "판매완료";
                             break;
@@ -797,16 +806,6 @@ namespace Stockgazers
                         contextMenuStrip1.Items[1].Enabled = false;
                         contextMenuStrip1.Items[2].Enabled = false;
                     }
-                    //if (item.SubItems[5].Text == "판매완료" || item.SubItems[5].Text == "비활성화" || item.SubItems[5].)
-                    //{
-                    //    contextMenuStrip1.Items[1].Enabled = false;
-                    //    contextMenuStrip1.Items[2].Enabled = false;
-                    //}
-                    //else
-                    //{
-                    //    contextMenuStrip1.Items[1].Enabled = true;
-                    //    contextMenuStrip1.Items[2].Enabled = true;
-                    //}
 
                     contextMenuStrip1.Show(materialListView1, e.Location);
                 }
@@ -917,12 +916,12 @@ namespace Stockgazers
                 // 라디오버튼이 적용된 상태의 경우 = 라디오버튼 + 검색어 이중중첩
                 if (materialRadioButton4.Checked)
                     materialListView1.Items.AddRange(originCollection.Where(x => (x.SubItems[5].Text == "입찰 중" || x.SubItems[5].Text == "판매대기") &&
-                        x.SubItems[1].Text.ToLower().Replace("-", "").Contains(materialTextBoxEdit2.Text)).ToArray());
+                        x.SubItems[0].Text.ToLower().Replace("-", "").Contains(materialTextBoxEdit2.Text)).ToArray());
                 else if (materialRadioButton5.Checked)
                     materialListView1.Items.AddRange(originCollection.Where(x => (x.SubItems[5].Text == "인증실패" || x.SubItems[5].Text == "판매완료") &&
-                        x.SubItems[1].Text.ToLower().Replace("-", "").Contains(materialTextBoxEdit2.Text)).ToArray());
+                        x.SubItems[0].Text.ToLower().Replace("-", "").Contains(materialTextBoxEdit2.Text)).ToArray());
                 else
-                    materialListView1.Items.AddRange(originCollection.Where(x => x.SubItems[1].Text.ToLower().Replace("-", "").Contains(materialTextBoxEdit2.Text)).ToArray());
+                    materialListView1.Items.AddRange(originCollection.Where(x => x.SubItems[0].Text.ToLower().Replace("-", "").Contains(materialTextBoxEdit2.Text)).ToArray());
             }
         }
 
@@ -940,7 +939,7 @@ namespace Stockgazers
 
                 if (materialTextBoxEdit2.Text.Length > 0)
                 {
-                    materialListView1.Items.AddRange(originCollection.Where(x => x.SubItems[1].Text.ToLower().Replace("-", "").Contains(materialTextBoxEdit2.Text)).ToArray());
+                    materialListView1.Items.AddRange(originCollection.Where(x => x.SubItems[0].Text.ToLower().Replace("-", "").Contains(materialTextBoxEdit2.Text)).ToArray());
                 }
                 else
                 {
@@ -963,7 +962,7 @@ namespace Stockgazers
 
                 IEnumerable<ListViewItem> filteredItem = originCollection.Where(x => x.SubItems[5].Text == "입찰 중" || x.SubItems[5].Text == "판매대기");
                 if (materialTextBoxEdit2.Text.Length > 0)
-                    filteredItem = filteredItem.Where(x => x.SubItems[1].Text.ToLower().Replace("-", "").Contains(materialTextBoxEdit2.Text));
+                    filteredItem = filteredItem.Where(x => x.SubItems[0].Text.ToLower().Replace("-", "").Contains(materialTextBoxEdit2.Text));
 
                 materialListView1.Items.AddRange(filteredItem.ToArray());
             }
@@ -982,7 +981,7 @@ namespace Stockgazers
 
                 IEnumerable<ListViewItem> filteredItem = originCollection.Where(x => x.SubItems[5].Text == "인증실패" || x.SubItems[5].Text == "판매완료");
                 if (materialTextBoxEdit2.Text.Length > 0)
-                    filteredItem = filteredItem.Where(x => x.SubItems[1].Text.ToLower().Replace("-", "").Contains(materialTextBoxEdit2.Text));
+                    filteredItem = filteredItem.Where(x => x.SubItems[0].Text.ToLower().Replace("-", "").Contains(materialTextBoxEdit2.Text));
 
                 materialListView1.Items.AddRange(filteredItem.ToArray());
             }
