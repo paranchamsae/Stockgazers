@@ -21,7 +21,8 @@ namespace Stockgazers
 #else
                 string cachePath = Path.Combine(Application.StartupPath, @"Stockgazers.exe.WebView2\EBWebView");
                 DirectoryInfo dir = new(cachePath);
-                dir.Delete(true);
+                if (dir.Exists)
+                    dir.Delete(true);
 #endif
                 Application.Run(new MainForm(common));
             }
