@@ -235,7 +235,7 @@ namespace Stockgazers
                         }
                         #endregion
 
-                        if (UpdatePrice > -1)
+                        if (UpdatePrice > -1 && UpdatePrice != item.BidPrice)
                         {
                             Thread.Sleep(1500);        // 딱스 API는 호출 사이에 1초 이상의 텀이 있어야 한다.
                             // 딱스에 입찰 업데이트
