@@ -117,6 +117,69 @@ namespace Stockgazers
             {
                 foreach (AutoPricingData item in bids)
                 {
+                    #region 체결된 입찰이 있는지 확인하고 상태값 업데이트 진행
+                    retry_sync:
+                    url = $"https://api.stockx.com/v2/selling/listings/{item.ListingID}";
+                    response = await common.session.GetAsync(url);
+                    try
+                    {
+                        response.EnsureSuccessStatusCode();
+                        var tempResult = response.Content.ReadAsStringAsync().Result;
+                        var tempResultData = JsonConvert.DeserializeObject<JObject>(tempResult);
+                        if (tempResultData["status"].ToString() != "ACTIVE")
+                        {
+                            Dictionary<string, string> patchData = new()
+                            {
+                                { "ListingID", item.ListingID },
+                                { "Status", tempResultData["status"].ToString() }
+                            };
+                            url = $"{API.GetServer()}/api/listing/status";
+                            var sendData = new StringContent(JsonConvert.SerializeObject(patchData), Encoding.UTF8, "application/json");
+                            response = await common.session.PatchAsync(url, sendData);
+                            response.EnsureSuccessStatusCode();
+
+                            url = $"https://api.stockx.com/v2/selling/orders/{tempResultData["order"]["orderNumber"]}";
+                            response = await common.session.GetAsync(url);
+                            response.EnsureSuccessStatusCode();
+                            JToken? tempOrder = JsonConvert.DeserializeObject<JToken>(response.Content.ReadAsStringAsync().Result);
+                            List<Order> orders = new();
+                            Order o = new()
+                            {
+                                OrderNo = tempOrder["orderNumber"].ToString(),
+                                ListingID = tempOrder["listingId"].ToString(),
+                                SalePrice = 0,
+                                AdjustPrice = 0
+                            };
+                            orders.Add(o);
+                            url = $"{API.GetServer()}/api/stocks/order";
+                            sendData = new StringContent(JsonConvert.SerializeObject(orders), Encoding.UTF8, "application/json");
+                            response = await common.session.PatchAsync(url, sendData);
+
+                            continue;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        if (response.StatusCode == HttpStatusCode.Unauthorized)
+                        {
+                            if (await API.RefreshToken(common))
+                                goto retry_sync;
+                            else
+                            {
+                                MaterialSnackBar snackBar = new("접근 토근 갱신에 실패하였습니다.", "OK", true);
+                                snackBar.Show();
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            MaterialSnackBar snackBar = new(ex.Message, "OK", true);
+                            snackBar.Show();
+                            return;
+                        }
+                    }
+                    #endregion
+
                     if (item.LimitPrice == 0)           // 하한가 설정이 되지 않았다면 업데이트 하지 않는다.
                     {
                         AppendRunningStatus($"{item.StyleID} - 하한가 설정값 없음, 입찰정보를 업데이트하지 않습니다.");
@@ -572,7 +635,7 @@ namespace Stockgazers
                         status = "인증실패";
                         break;
                     case "MATCHED":
-                        status = "판매대기";
+                        status = "판매/정산대기";
                         break;
                     case "READY_TO_SHIP":
                         status = "발송대기";
@@ -770,7 +833,7 @@ namespace Stockgazers
                             status = "인증실패";
                             break;
                         case "MATCHED":
-                            status = "판매대기";
+                            status = "판매/정산대기";
                             break;
                         case "READY_TO_SHIP":
                             status = "발송대기";
