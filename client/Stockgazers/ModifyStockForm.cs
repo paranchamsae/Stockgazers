@@ -142,7 +142,8 @@ namespace Stockgazers
                         ListingID = ListingID,
                         BuyPrice = Convert.ToInt32(materialTextBoxEdit4.Text),
                         Price = Convert.ToInt32(materialTextBoxEdit6.Text),
-                        Limit = Convert.ToInt32(materialTextBoxEdit5.Text)
+                        Limit = Convert.ToInt32(materialTextBoxEdit5.Text),
+                        Status = "ACTIVE"
                     };
                     sendData = new StringContent(JsonConvert.SerializeObject(data2), Encoding.UTF8, "application/json");
                     response = await common.session.PatchAsync(url, sendData);

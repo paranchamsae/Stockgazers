@@ -52,7 +52,8 @@ async def patchstock(request: stocks_schema.RequestPatchListing):
 async def deletestock(ListingID: str):
     with get_db() as db:
         query = update(Stocks).filter(Stocks.ListingID == ListingID).values(
-            IsDelete = "T"
+            IsDelete = "T",
+            Status = "DELETED"
         )
         db.execute(query)
         db.commit()
@@ -77,6 +78,22 @@ async def patchstock_price(request: listing_schema.RequestPatchListingPrice):
     return JSONResponse(
         status_code = status.HTTP_200_OK,
         content = {
+            "message": "ok"
+        }
+    )
+
+@router.patch("/status")
+async def patchstock_status(request: listing_schema.RequestPatchListingStatus):
+    with get_db() as db:
+        query = update(Stocks).filter(Stocks.ListingID == request.ListingID).values(
+            Status = request.Status
+        )
+        db.execute(query)
+        db.commit()
+
+    return JSONResponse(
+        status_code=status.HTTP_200_OK,
+        content={
             "message": "ok"
         }
     )

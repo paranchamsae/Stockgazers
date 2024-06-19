@@ -27,7 +27,7 @@ async def addStocks(request: list[stocks_schema.RequestAddStocks]):
                 UserID = row.UserID,
                 IsDelete = "F",
                 ListingID = row.ListingID,
-                StyleId = row.StyleID,
+                StyleID = row.StyleID,
                 ProductID = row.ProductID,
                 Title = row.Title,
                 VariantID = row.VariantID,
@@ -43,7 +43,7 @@ async def addStocks(request: list[stocks_schema.RequestAddStocks]):
                 Profit = row.Profit,
                 CreateDatetime = datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
                 UpdateDatetime = None,
-                Status = row.Status
+                Status = "ACTIVE"
             )
             db.add(new_stock)
         db.commit()
