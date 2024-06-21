@@ -46,7 +46,11 @@ class Stocks(Base):
     CreateDatetime = Column(DateTime, nullable=False)
     UpdateDatetime = Column(DateTime, nullable=True)
 
+class Variants(Base):
+    __tablename__ = "SGVariants"
 
+    VariantValue = Column(String, primary_key=True)
+    KRValue = Column(String, nullable=False)
 
 # class UserSettings(Base):
 #     __tablename__ = "SGUserSettings"

@@ -10,7 +10,7 @@ from datetime import datetime
 from io import BytesIO, StringIO
 
 from sqlalchemy import select, text, update, and_
-from models import Stocks
+from models import Stocks, Variants
 
 from domain.stocks import stocks_schema
 
@@ -58,7 +58,8 @@ async def addStocks(request: list[stocks_schema.RequestAddStocks]):
 @router.get("/{UserID}", summary="내 입찰 현황 불러오기")
 async def get_stocks(UserID: str):
     with get_db() as db:
-        result = db.query(Stocks).filter(and_(Stocks.UserID == int(UserID), Stocks.IsDelete == "F")).all()
+        result = db.query(Stocks, Variants).join(Variants, Stocks.VariantValue == Variants.VariantValue).filter(and_(Stocks.UserID == int(UserID), Stocks.IsDelete == "F")).all()
+        # print(select(Stocks, Variants.KRValue).join(Variants, Stocks.VariantValue == Variants.VariantValue).filter(and_(Stocks.UserID == int(UserID), Stocks.IsDelete == "F")))
 
     return result
 
@@ -82,6 +83,9 @@ async def patchorder(request: list[stocks_schema.RequestPatchOrder]):
         for row in request:
             # 해당 레코드에 구매원가 데이터가 있다면 profit 데이터도 계산하여 업데이트 같이 쳐줌
             result = db.query(Stocks).filter(Stocks.ListingID == row.ListingID).all()
+            
+            tempAdjustPrice = 0
+            tempProfit = 0
             if result[0].BuyPrice > 0 and result[0].BuyPriceUSD > 0:
                 tempAdjustPrice = row.AdjustPrice/1300 if row.AdjustPrice > 1000 else row.AdjustPrice
                 tempProfit = (tempAdjustPrice-result[0].BuyPriceUSD)/result[0].BuyPriceUSD*100

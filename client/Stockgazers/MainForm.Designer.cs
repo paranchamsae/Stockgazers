@@ -82,10 +82,11 @@
             columnHeader2 = new ColumnHeader();
             columnHeader3 = new ColumnHeader();
             columnHeader4 = new ColumnHeader();
-            columnHeader9 = new ColumnHeader();
             columnHeader5 = new ColumnHeader();
             columnHeader6 = new ColumnHeader();
             columnHeader7 = new ColumnHeader();
+            columnHeader8 = new ColumnHeader();
+            columnHeader9 = new ColumnHeader();
             tabPage3 = new TabPage();
             materialButton1 = new ReaLTaiizor.Controls.MaterialButton();
             materialTextBoxEdit1 = new ReaLTaiizor.Controls.MaterialTextBoxEdit();
@@ -129,7 +130,7 @@
             materialTabControl1.Multiline = true;
             materialTabControl1.Name = "materialTabControl1";
             materialTabControl1.SelectedIndex = 0;
-            materialTabControl1.Size = new Size(1194, 733);
+            materialTabControl1.Size = new Size(1226, 733);
             materialTabControl1.TabIndex = 0;
             // 
             // tabPage1
@@ -148,7 +149,7 @@
             tabPage1.Location = new Point(4, 24);
             tabPage1.Name = "tabPage1";
             tabPage1.Padding = new Padding(3);
-            tabPage1.Size = new Size(1543, 939);
+            tabPage1.Size = new Size(1218, 744);
             tabPage1.TabIndex = 0;
             tabPage1.Text = "메인";
             tabPage1.UseVisualStyleBackColor = true;
@@ -374,7 +375,7 @@
             materialCard5.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
             materialCard5.Name = "materialCard5";
             materialCard5.Padding = new Padding(14);
-            materialCard5.Size = new Size(1537, 46);
+            materialCard5.Size = new Size(1212, 46);
             materialCard5.TabIndex = 7;
             // 
             // materialLabel20
@@ -631,7 +632,7 @@
             tabPage2.Location = new Point(4, 24);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(3);
-            tabPage2.Size = new Size(1186, 705);
+            tabPage2.Size = new Size(1218, 705);
             tabPage2.TabIndex = 1;
             tabPage2.Text = "판매현황";
             tabPage2.UseVisualStyleBackColor = true;
@@ -664,7 +665,7 @@
             panel1.Controls.Add(sidePanelClose);
             panel1.Dock = DockStyle.Right;
             panel1.EdgeColor = Color.FromArgb(32, 41, 50);
-            panel1.Location = new Point(664, 3);
+            panel1.Location = new Point(696, 3);
             panel1.Name = "panel1";
             panel1.Padding = new Padding(5);
             panel1.Size = new Size(519, 699);
@@ -725,7 +726,7 @@
             materialFloatingActionButton1.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             materialFloatingActionButton1.Depth = 0;
             materialFloatingActionButton1.Icon = Properties.Resources.plus;
-            materialFloatingActionButton1.Location = new Point(1124, 643);
+            materialFloatingActionButton1.Location = new Point(1156, 643);
             materialFloatingActionButton1.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
             materialFloatingActionButton1.Name = "materialFloatingActionButton1";
             materialFloatingActionButton1.Size = new Size(56, 56);
@@ -870,7 +871,7 @@
             materialListView1.BackColor = Color.FromArgb(255, 255, 255);
             materialListView1.BorderStyle = BorderStyle.None;
             materialListView1.CheckBoxes = true;
-            materialListView1.Columns.AddRange(new ColumnHeader[] { columnHeader1, columnHeader2, columnHeader3, columnHeader4, columnHeader9, columnHeader5, columnHeader6, columnHeader7 });
+            materialListView1.Columns.AddRange(new ColumnHeader[] { columnHeader1, columnHeader2, columnHeader3, columnHeader4, columnHeader5, columnHeader7, columnHeader8, columnHeader9, columnHeader6 });
             materialListView1.Depth = 0;
             materialListView1.FullRowSelect = true;
             materialListView1.HeaderStyle = ColumnHeaderStyle.Nonclickable;
@@ -880,7 +881,7 @@
             materialListView1.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.OUT;
             materialListView1.Name = "materialListView1";
             materialListView1.OwnerDraw = true;
-            materialListView1.Size = new Size(1177, 639);
+            materialListView1.Size = new Size(1209, 639);
             materialListView1.TabIndex = 0;
             materialListView1.UseCompatibleStateImageBehavior = false;
             materialListView1.View = View.Details;
@@ -898,37 +899,37 @@
             // 
             // columnHeader3
             // 
-            columnHeader3.Text = "구매원가";
-            columnHeader3.Width = 100;
+            columnHeader3.Text = "사이즈";
             // 
             // columnHeader4
             // 
-            columnHeader4.Text = "입찰금액";
+            columnHeader4.Text = "구매원가";
             columnHeader4.Width = 100;
-            // 
-            // columnHeader9
-            // 
-            columnHeader9.DisplayIndex = 7;
-            columnHeader9.Text = "등록시각";
-            columnHeader9.Width = 150;
             // 
             // columnHeader5
             // 
-            columnHeader5.DisplayIndex = 4;
-            columnHeader5.Text = "상태";
+            columnHeader5.Text = "입찰금액";
             columnHeader5.Width = 100;
             // 
             // columnHeader6
             // 
-            columnHeader6.DisplayIndex = 5;
-            columnHeader6.Text = "정산금액";
-            columnHeader6.Width = 100;
+            columnHeader6.Text = "등록시각";
+            columnHeader6.Width = 150;
             // 
             // columnHeader7
             // 
-            columnHeader7.DisplayIndex = 6;
-            columnHeader7.Text = "이익률";
+            columnHeader7.Text = "상태";
             columnHeader7.Width = 100;
+            // 
+            // columnHeader8
+            // 
+            columnHeader8.Text = "정산금액";
+            columnHeader8.Width = 100;
+            // 
+            // columnHeader9
+            // 
+            columnHeader9.Text = "이익률";
+            columnHeader9.Width = 100;
             // 
             // tabPage3
             // 
@@ -943,7 +944,7 @@
             tabPage3.ImageKey = "icons8-설정-3-16.png";
             tabPage3.Location = new Point(4, 24);
             tabPage3.Name = "tabPage3";
-            tabPage3.Size = new Size(1527, 900);
+            tabPage3.Size = new Size(1202, 705);
             tabPage3.TabIndex = 2;
             tabPage3.Text = "설정";
             tabPage3.UseVisualStyleBackColor = true;
@@ -1111,7 +1112,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1200, 800);
+            ClientSize = new Size(1232, 800);
             Controls.Add(materialTabControl1);
             DrawerShowIconsWhenHidden = true;
             DrawerTabControl = materialTabControl1;
@@ -1161,9 +1162,9 @@
         private ReaLTaiizor.Controls.MaterialListView materialListView1;
         private ColumnHeader columnHeader1;
         private ColumnHeader columnHeader2;
-        private ColumnHeader columnHeader3;
         private ColumnHeader columnHeader4;
         private ColumnHeader columnHeader5;
+        private ColumnHeader columnHeader7;
         private ReaLTaiizor.Controls.MaterialLabel materialLabel3;
         private ReaLTaiizor.Controls.MaterialLabel materialLabel2;
         private ReaLTaiizor.Controls.MaterialLabel materialLabel1;
@@ -1208,8 +1209,8 @@
         private ReaLTaiizor.Controls.MaterialRadioButton materialRadioButton4;
         private ReaLTaiizor.Controls.MaterialRadioButton materialRadioButton3;
         private ReaLTaiizor.Controls.MaterialTextBoxEdit materialTextBoxEdit2;
-        private ColumnHeader columnHeader6;
-        private ColumnHeader columnHeader7;
+        private ColumnHeader columnHeader8;
+        private ColumnHeader columnHeader9;
         private ReaLTaiizor.Controls.MaterialButton materialButton5;
         private ReaLTaiizor.Controls.MaterialButton materialButton4;
         private ReaLTaiizor.Controls.MaterialFloatingActionButton materialFloatingActionButton1;
@@ -1217,10 +1218,11 @@
         private ToolStripMenuItem toolStripMenuItem1;
         private ToolStripMenuItem toolStripMenuItem2;
         private ToolStripMenuItem toolStripMenuItem3;
-        private ColumnHeader columnHeader9;
+        private ColumnHeader columnHeader6;
         private ReaLTaiizor.Controls.Panel panel1;
         private ReaLTaiizor.Controls.MaterialButton sidePanelClose;
         private ReaLTaiizor.Controls.MaterialMultiLineTextBoxEdit runningStatusTextEdit;
         private ReaLTaiizor.Controls.MaterialButton materialButton2;
+        private ColumnHeader columnHeader3;
     }
 }

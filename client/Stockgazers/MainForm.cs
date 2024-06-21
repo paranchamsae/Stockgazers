@@ -648,6 +648,7 @@ namespace Stockgazers
                 string[] element = new[] {
                     row["StyleID"].ToString(),
                     row["Title"].ToString(),
+                    row["VariantValue"].ToString(),
                     row["BuyPrice"].ToString(),
                     row["Price"].ToString(),
                     row["CreateDatetime"].ToString(),
@@ -847,6 +848,7 @@ namespace Stockgazers
                         //"",
                         row["StyleID"].ToString(),
                         row["Title"].ToString(),
+                        row["VariantValue"].ToString(),
                         row["BuyPrice"].ToString(),
                         row["Price"].ToString(),
                         row["CreateDatetime"].ToString(),
