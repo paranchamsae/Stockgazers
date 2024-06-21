@@ -26,7 +26,7 @@ async def get_stocks_excel(UserID: int):
         result = db.query(Stocks).filter(Stocks.UserID == UserID).all()
         for row in result:
             testrow = []
-            testrow.append(row.StyleId)
+            testrow.append(row.StyleID)
             testrow.append(row.Title)
             testrow.append(row.VariantValue)
             testrow.append(row.ListingID)
