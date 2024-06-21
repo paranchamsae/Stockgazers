@@ -410,7 +410,7 @@ namespace Stockgazers
 
             #region 2-3. 딱스 목록이랑 Stockgazers 판매현황 중복 거르고 남아있는 데이터는 디비에 추가
             List<JToken> StockxListingsList = StockxListingsListOrigin.Where(x => x["listingId"] != null && x["product"].Any() && x["variant"].Any()).ToList();
-            StockxListingsList = StockxListingsList.Where(x => StockgazersReference.Count(y => y["ListingID"].ToString() == x["listingId"].ToString()) == 0).ToList();
+            StockxListingsList = StockxListingsList.Where(x => StockgazersReference.Count(y => y["Stocks"]["ListingID"].ToString() == x["listingId"].ToString()) == 0).ToList();
             List<Stock> stocks = new();
             foreach (JToken list in StockxListingsList)
             {
@@ -450,14 +450,14 @@ namespace Stockgazers
         #region 2-4. 디비상의 ACTIVE/MATCHED/READY_TO_SHIP 상태에 대해 재동기화
         retry:
             List<JToken> tempCompare = StockgazersReference.Where(
-                x => x["Status"].ToString() == "ACTIVE" ||
-                x["Status"].ToString() == "MATCHED" ||
-                x["Status"].ToString() == "READY_TO_SHIP"
+                x => x["Stocks"]["Status"].ToString() == "ACTIVE" ||
+                x["Stocks"]["Status"].ToString() == "MATCHED" ||
+                x["Stocks"]["Status"].ToString() == "READY_TO_SHIP"
             ).ToList();
             bool isActiveRefresh = false;
             foreach (var active in tempCompare)
             {
-                url = $"{API.GetServer()}/api/listing/{active["ListingID"]}";
+                url = $"{API.GetServer()}/api/listing/{active["Stocks"]["ListingID"]}";
                 response = await common.session.GetAsync(url);
                 try
                 {
@@ -469,7 +469,7 @@ namespace Stockgazers
                     int sgPrice = Convert.ToInt32(resultData[0]["Price"].ToString());
                     string sgStatus = resultData[0]["Status"].ToString();
 
-                    url = $"https://api.stockx.com/v2/selling/listings/{active["ListingID"]}";
+                    url = $"https://api.stockx.com/v2/selling/listings/{active["Stocks"]["ListingID"]}";
                     response = await common.session.GetAsync(url);
                     try
                     {
@@ -561,12 +561,12 @@ namespace Stockgazers
             #region 3. 홈 화면 데이터 업데이트 - 판매 완료이력 조회(판매금액, 정산금액 획득 후 서버에서 profit 계산)
             List<JToken> ordersRaw = StockxListingsListOrigin.Where(x => x["order"] != null && x["order"]!.Any()).ToList();         // 딱스에서 가져온 전체 입찰정보
             List<Order> order = new List<Order>();      // 갱신할 데이터를 저장할 리스트
-            if (StockgazersReference.Where(x => Convert.ToInt32(x["AdjustPrice"]) == 0).Any())
+            if (StockgazersReference.Where(x => Convert.ToInt32(x["Stocks"]["AdjustPrice"]) == 0).Any())
             {
                 foreach (var row in ordersRaw)
                 {
-                    var a = StockgazersReference.Where(x => x["ListingID"].ToString() == row["listingId"].ToString());
-                    if (a.Any() && Convert.ToInt32(a.First()["AdjustPrice"]) == 0 && a.First()["Status"].ToString() == "COMPLETED")
+                    var a = StockgazersReference.Where(x => x["Stocks"]["ListingID"].ToString() == row["listingId"].ToString());
+                    if (a.Any() && Convert.ToInt32(a.First()["Stocks"]["AdjustPrice"]) == 0 && a.First()["Stocks"]["Status"].ToString() == "COMPLETED")
                     {
                         url = $"https://api.stockx.com/v2/selling/orders/{row["order"]["orderNumber"]}";
                         response = await common.session.GetAsync(url);
@@ -620,7 +620,7 @@ namespace Stockgazers
             foreach (var row in StockgazersReference)
             {
                 string status = string.Empty;
-                switch (row["Status"].ToString())
+                switch (row["Stocks"]["Status"].ToString())
                 {
                     case "ACTIVE":
                         status = "입찰 중";
@@ -646,18 +646,18 @@ namespace Stockgazers
                 }
 
                 string[] element = new[] {
-                    row["StyleID"].ToString(),
-                    row["Title"].ToString(),
-                    row["VariantValue"].ToString(),
-                    row["BuyPrice"].ToString(),
-                    row["Price"].ToString(),
-                    row["CreateDatetime"].ToString(),
+                    row["Stocks"]["StyleID"].ToString(),
+                    row["Stocks"]["Title"].ToString(),
+                    $"{row["Variants"]["KRValue"]} ({row["Stocks"]["VariantValue"].ToString()})",
+                    row["Stocks"]["BuyPrice"].ToString(),
+                    row["Stocks"]["Price"].ToString(),
                     status,
-                    row["AdjustPrice"].ToString(),
-                    row["Profit"].ToString(),
+                    row["Stocks"]["AdjustPrice"].ToString(),
+                    row["Stocks"]["Profit"].ToString(),
+                    row["Stocks"]["CreateDatetime"].ToString(),
                 };
                 ListViewItem item = new ListViewItem(element);
-                item.Tag = row["ListingID"].ToString();
+                item.Tag = row["Stocks"]["ListingID"].ToString();
                 materialListView1.Items.Add(item);
 
                 originCollection.Add(item);
@@ -846,15 +846,15 @@ namespace Stockgazers
 
                     string[] element = new[] {
                         //"",
-                        row["StyleID"].ToString(),
-                        row["Title"].ToString(),
-                        row["VariantValue"].ToString(),
-                        row["BuyPrice"].ToString(),
-                        row["Price"].ToString(),
-                        row["CreateDatetime"].ToString(),
+                        row["Stocks"]["StyleID"].ToString(),
+                        row["Stocks"]["Title"].ToString(),
+                        $"{row["Variants"]["KRValue"]} ({row["Stocks"]["VariantValue"].ToString()})",
+                        row["Stocks"]["BuyPrice"].ToString(),
+                        row["Stocks"]["Price"].ToString(),
                         status,
-                        row["AdjustPrice"].ToString(),
-                        row["Profit"].ToString(),
+                        row["Stocks"]["AdjustPrice"].ToString(),
+                        row["Stocks"]["Profit"].ToString(),
+                        row["Stocks"]["CreateDatetime"].ToString(),
                     };
                     ListViewItem item = new ListViewItem(element);
                     item.Tag = row["ListingID"].ToString();
