@@ -58,8 +58,10 @@ async def addStocks(request: list[stocks_schema.RequestAddStocks]):
 @router.get("/{UserID}", summary="내 입찰 현황 불러오기")
 async def get_stocks(UserID: str):
     with get_db() as db:
-        result = db.query(Stocks, Variants).join(Variants, Stocks.VariantValue == Variants.VariantValue).filter(and_(Stocks.UserID == int(UserID), Stocks.IsDelete == "F")).all()
-        # print(select(Stocks, Variants.KRValue).join(Variants, Stocks.VariantValue == Variants.VariantValue).filter(and_(Stocks.UserID == int(UserID), Stocks.IsDelete == "F")))
+        # result = db.query(Stocks, Variants).join(Variants, Stocks.VariantValue == Variants.VariantValue).filter(and_(Stocks.UserID == int(UserID), Stocks.IsDelete == "F")).all()
+        query = select(Stocks, Variants).join(Variants, Stocks.VariantValue==Variants.VariantValue).filter(and_(Stocks.UserID == int(UserID), Stocks.IsDelete == "F"))
+        result = db.execute(query).mappings().all()
+        # result = db.query(Stocks).filter(and_(Stocks.UserID == int(UserID), Stocks.IsDelete == "F")).all()
 
     return result
 
