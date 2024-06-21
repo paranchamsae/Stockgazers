@@ -117,8 +117,8 @@ namespace Stockgazers
             {
                 foreach (AutoPricingData item in bids)
                 {
-                    #region 체결된 입찰이 있는지 확인하고 상태값 업데이트 진행
-                    retry_sync:
+                #region 체결된 입찰이 있는지 확인하고 상태값 업데이트 진행
+                retry_sync:
                     url = $"https://api.stockx.com/v2/selling/listings/{item.ListingID}";
                     response = await common.session.GetAsync(url);
                     try
@@ -186,7 +186,7 @@ namespace Stockgazers
                         continue;
                     }
 
-                    retry:
+                retry:
                     url = $"https://api.stockx.com/v2/catalog/products/{item.ProductID}/variants/{item.VariantID}/market-data";
                     response = await common.session.GetAsync(url);
                     try
@@ -290,7 +290,7 @@ namespace Stockgazers
             }
             #endregion
 
-            AppendRunningStatus($"입찰 순회 완료, 다음 확인 시각은 {DateTime.Now.AddMinutes(Timer.Interval/60000):HH:mm:ss} 입니다.");
+            AppendRunningStatus($"입찰 순회 완료, 다음 확인 시각은 {DateTime.Now.AddMinutes(Timer.Interval / 60000):HH:mm:ss} 입니다.");
             Timer.Start();
         }
 
@@ -341,7 +341,7 @@ namespace Stockgazers
                     common.IDToken = ID?.ToString() ?? string.Empty;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MaterialSnackBar snackBar = new(ex.Message, "OK", true);
                 snackBar.Show();
@@ -373,7 +373,7 @@ namespace Stockgazers
                     return;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MaterialSnackBar snackBar = new(ex.Message, "OK", true);
                 snackBar.Show();
@@ -660,8 +660,10 @@ namespace Stockgazers
                 item.Tag = row["Stocks"]["ListingID"].ToString();
                 materialListView1.Items.Add(item);
 
+
                 originCollection.Add(item);
             }
+            materialListView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
             #endregion
 
             #region 5. 메인 탭 판매통계 데이터 불러와서 집어넣기
@@ -672,7 +674,7 @@ namespace Stockgazers
             if (common.UserTier > 2)
             {
                 Timer.Start();
-                AppendRunningStatus($"유료 사용자 확인 완료, 가격경쟁 타이머 가동 완료\r\n다음 확인 시각은 {DateTime.Now.AddMinutes(Timer.Interval/60000):HH:mm:ss} 입니다.");
+                AppendRunningStatus($"유료 사용자 확인 완료, 가격경쟁 타이머 가동 완료\r\n다음 확인 시각은 {DateTime.Now.AddMinutes(Timer.Interval / 60000):HH:mm:ss} 입니다.");
             }
             #endregion
         }
@@ -731,7 +733,7 @@ namespace Stockgazers
                 MaterialSnackBar snackBar = new("프로그램 경로에 다운로드 되었어요", "OK", true);
                 snackBar.Show(this);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MaterialSnackBar snackBar = new(ex.Message, "OK", true);
                 snackBar.Show(this);
@@ -865,6 +867,8 @@ namespace Stockgazers
                 }
 
                 materialListView1.Invalidate();
+                materialListView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+
                 return true;
             }
             catch (Exception ex)
@@ -1102,6 +1106,11 @@ namespace Stockgazers
         private void materialButton2_Click(object sender, EventArgs e)
         {
             panel1.Visible = true;
+        }
+
+        private void MainForm_ResizeEnd(object sender, EventArgs e)
+        {
+            materialListView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
         }
     }
 }

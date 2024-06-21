@@ -83,10 +83,10 @@
             columnHeader3 = new ColumnHeader();
             columnHeader4 = new ColumnHeader();
             columnHeader5 = new ColumnHeader();
-            columnHeader6 = new ColumnHeader();
             columnHeader7 = new ColumnHeader();
             columnHeader8 = new ColumnHeader();
             columnHeader9 = new ColumnHeader();
+            columnHeader6 = new ColumnHeader();
             tabPage3 = new TabPage();
             materialButton1 = new ReaLTaiizor.Controls.MaterialButton();
             materialTextBoxEdit1 = new ReaLTaiizor.Controls.MaterialTextBoxEdit();
@@ -130,7 +130,7 @@
             materialTabControl1.Multiline = true;
             materialTabControl1.Name = "materialTabControl1";
             materialTabControl1.SelectedIndex = 0;
-            materialTabControl1.Size = new Size(1226, 733);
+            materialTabControl1.Size = new Size(1194, 733);
             materialTabControl1.TabIndex = 0;
             // 
             // tabPage1
@@ -149,7 +149,7 @@
             tabPage1.Location = new Point(4, 24);
             tabPage1.Name = "tabPage1";
             tabPage1.Padding = new Padding(3);
-            tabPage1.Size = new Size(1218, 744);
+            tabPage1.Size = new Size(1186, 705);
             tabPage1.TabIndex = 0;
             tabPage1.Text = "메인";
             tabPage1.UseVisualStyleBackColor = true;
@@ -375,7 +375,7 @@
             materialCard5.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
             materialCard5.Name = "materialCard5";
             materialCard5.Padding = new Padding(14);
-            materialCard5.Size = new Size(1212, 46);
+            materialCard5.Size = new Size(1180, 46);
             materialCard5.TabIndex = 7;
             // 
             // materialLabel20
@@ -632,7 +632,7 @@
             tabPage2.Location = new Point(4, 24);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(3);
-            tabPage2.Size = new Size(1218, 705);
+            tabPage2.Size = new Size(1282, 744);
             tabPage2.TabIndex = 1;
             tabPage2.Text = "판매현황";
             tabPage2.UseVisualStyleBackColor = true;
@@ -665,10 +665,10 @@
             panel1.Controls.Add(sidePanelClose);
             panel1.Dock = DockStyle.Right;
             panel1.EdgeColor = Color.FromArgb(32, 41, 50);
-            panel1.Location = new Point(696, 3);
+            panel1.Location = new Point(760, 3);
             panel1.Name = "panel1";
             panel1.Padding = new Padding(5);
-            panel1.Size = new Size(519, 699);
+            panel1.Size = new Size(519, 738);
             panel1.SmoothingType = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
             panel1.TabIndex = 10;
             panel1.Text = "panel1";
@@ -693,7 +693,7 @@
             runningStatusTextEdit.SelectionLength = 0;
             runningStatusTextEdit.SelectionStart = 0;
             runningStatusTextEdit.ShortcutsEnabled = true;
-            runningStatusTextEdit.Size = new Size(503, 637);
+            runningStatusTextEdit.Size = new Size(503, 676);
             runningStatusTextEdit.TabIndex = 1;
             runningStatusTextEdit.TabStop = false;
             runningStatusTextEdit.TextAlign = HorizontalAlignment.Left;
@@ -726,7 +726,7 @@
             materialFloatingActionButton1.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             materialFloatingActionButton1.Depth = 0;
             materialFloatingActionButton1.Icon = Properties.Resources.plus;
-            materialFloatingActionButton1.Location = new Point(1156, 643);
+            materialFloatingActionButton1.Location = new Point(1172, 643);
             materialFloatingActionButton1.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
             materialFloatingActionButton1.Name = "materialFloatingActionButton1";
             materialFloatingActionButton1.Size = new Size(56, 56);
@@ -881,7 +881,7 @@
             materialListView1.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.OUT;
             materialListView1.Name = "materialListView1";
             materialListView1.OwnerDraw = true;
-            materialListView1.Size = new Size(1209, 639);
+            materialListView1.Size = new Size(1225, 639);
             materialListView1.TabIndex = 0;
             materialListView1.UseCompatibleStateImageBehavior = false;
             materialListView1.View = View.Details;
@@ -911,11 +911,6 @@
             columnHeader5.Text = "입찰금액";
             columnHeader5.Width = 100;
             // 
-            // columnHeader6
-            // 
-            columnHeader6.Text = "등록시각";
-            columnHeader6.Width = 150;
-            // 
             // columnHeader7
             // 
             columnHeader7.Text = "상태";
@@ -931,6 +926,11 @@
             columnHeader9.Text = "이익률";
             columnHeader9.Width = 100;
             // 
+            // columnHeader6
+            // 
+            columnHeader6.Text = "등록시각";
+            columnHeader6.Width = 150;
+            // 
             // tabPage3
             // 
             tabPage3.Controls.Add(materialButton1);
@@ -944,7 +944,7 @@
             tabPage3.ImageKey = "icons8-설정-3-16.png";
             tabPage3.Location = new Point(4, 24);
             tabPage3.Name = "tabPage3";
-            tabPage3.Size = new Size(1202, 705);
+            tabPage3.Size = new Size(1282, 744);
             tabPage3.TabIndex = 2;
             tabPage3.Text = "설정";
             tabPage3.UseVisualStyleBackColor = true;
@@ -1112,7 +1112,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1232, 800);
+            ClientSize = new Size(1200, 800);
             Controls.Add(materialTabControl1);
             DrawerShowIconsWhenHidden = true;
             DrawerTabControl = materialTabControl1;
@@ -1122,6 +1122,7 @@
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Stockgazers";
             Load += Form1_Load;
+            ResizeEnd += MainForm_ResizeEnd;
             materialTabControl1.ResumeLayout(false);
             tabPage1.ResumeLayout(false);
             materialCard10.ResumeLayout(false);
