@@ -16,6 +16,7 @@ using System.Windows.Forms;
 using System;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using static System.Net.WebRequestMethods;
+using System.Text.RegularExpressions;
 
 #pragma warning disable CS8602
 #pragma warning disable CS8604
@@ -169,14 +170,14 @@ namespace Stockgazers
                             else
                             {
                                 MaterialSnackBar snackBar = new("접근 토근 갱신에 실패하였습니다.", "OK", true);
-                                snackBar.Show();
+                                snackBar.Show(this);
                                 return;
                             }
                         }
                         else
                         {
                             MaterialSnackBar snackBar = new(ex.Message, "OK", true);
-                            snackBar.Show();
+                            snackBar.Show(this);
                             return;
                         }
                     }
@@ -277,7 +278,7 @@ namespace Stockgazers
                             else
                             {
                                 MaterialSnackBar snackBar = new("접근 토근 갱신에 실패하였습니다.", "OK", true);
-                                snackBar.Show();
+                                snackBar.Show(this);
                                 return;
                             }
                         }
@@ -346,7 +347,7 @@ namespace Stockgazers
             catch (Exception ex)
             {
                 MaterialSnackBar snackBar = new(ex.Message, "OK", true);
-                snackBar.Show();
+                snackBar.Show(this);
                 return;
             }
             #endregion
@@ -378,7 +379,7 @@ namespace Stockgazers
             catch (Exception ex)
             {
                 MaterialSnackBar snackBar = new(ex.Message, "OK", true);
-                snackBar.Show();
+                snackBar.Show(this);
                 return;
             }
             #endregion
@@ -405,7 +406,7 @@ namespace Stockgazers
             catch (Exception ex)
             {
                 MaterialSnackBar snackBar = new(ex.Message, "OK", true);
-                snackBar.Show();
+                snackBar.Show(this);
                 return;
             }
             #endregion
@@ -527,7 +528,7 @@ namespace Stockgazers
                             else
                             {
                                 MaterialSnackBar snackBar = new("접근 토근 갱신에 실패하였습니다.", "OK", true);
-                                snackBar.Show();
+                                snackBar.Show(this);
                                 return;
                             }
                         }
@@ -948,7 +949,7 @@ namespace Stockgazers
                         else
                         {
                             MaterialSnackBar snackBar = new("접근 토근 갱신에 실패하였습니다.", "OK", true);
-                            snackBar.Show();
+                            snackBar.Show(this);
                             return;
                         }
                     }
@@ -985,7 +986,7 @@ namespace Stockgazers
             await RefreshSellStatus();
         }
 
-        
+
 
         private void MainForm_ResizeEnd(object sender, EventArgs e)
         {
@@ -1189,7 +1190,7 @@ namespace Stockgazers
         private void materialTextBoxEdit3_TextChanged(object sender, EventArgs e)
         {
             dataGridView1.Rows.Clear();
-            if(materialTextBoxEdit3.Text == string.Empty)
+            if (materialTextBoxEdit3.Text == string.Empty)
             {
                 // 라디오버튼이 적용된 상태의 경우
                 if (materialRadioButton7.Checked)
@@ -1217,6 +1218,99 @@ namespace Stockgazers
                         x.Cells[0].Value.ToString().ToLower().Replace("-", "").Contains(materialTextBoxEdit3.Text)).ToArray());
                 else
                     dataGridView1.Rows.AddRange(originCollectionGrid.Where(x => x.Cells[0].ErrorText.ToLower().Replace("-", "").Contains(materialTextBoxEdit3.Text)).ToArray());
+            }
+        }
+
+
+        private void dataGridView1_DoubleClick(object sender, EventArgs e)
+        {
+            //int rowIndex = dataGridView1.HitTest(e.X, e.Y).RowIndex;
+            //int columnIndex = dataGridView1.HitTest(e.X, e.Y).ColumnIndex;
+            //if (rowIndex == -1 || columnIndex != 3) return;
+
+            //DataGridViewRow selected = dataGridView1.Rows[rowIndex];
+            //MessageBox.Show(selected.Cells[columnIndex].Value.ToString());
+        }
+
+        DataGridViewCell? selectedEdit = null;
+        string originSelectedValue = string.Empty;
+        bool isBeginEdit = false;
+        private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex == -1 || e.ColumnIndex != 3)
+                return;
+
+            selectedEdit = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex];
+            dataGridView1.CurrentCell = selectedEdit;
+            originSelectedValue = selectedEdit.Value.ToString();
+            dataGridView1.BeginEdit(true);
+            isBeginEdit = true;
+        }
+
+        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // 구매원가 데이터를 변경했더라도 명시적으로 엔터키를 누르지 않는다면 값이 변경되지 않는다.
+            if (isBeginEdit)
+            {
+                dataGridView1.EndEdit();
+                isBeginEdit = false;
+
+                DataGridViewRow recoveryRow = originCollectionGrid.Where(x => x.Index == selectedEdit.RowIndex).First();
+                dataGridView1.Rows[selectedEdit.RowIndex].Cells[selectedEdit.ColumnIndex].Value = originSelectedValue;
+                selectedEdit = null;
+                originSelectedValue = string.Empty;
+            }
+        }
+
+        private async void dataGridView1_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (isBeginEdit)
+            {
+                dataGridView1.EndEdit();
+                isBeginEdit = false;
+
+                if (e.KeyCode == Keys.Escape)        // ESC 키를 입력 했을 때는 변경 내역을 취소하고 원본 보존
+                {
+                    DataGridViewRow recoveryRow = originCollectionGrid.Where(x => x.Index == selectedEdit.RowIndex).First();
+                    dataGridView1.Rows[selectedEdit.RowIndex].Cells[selectedEdit.ColumnIndex].Value = originSelectedValue;
+                }
+                else if (e.KeyCode == Keys.Enter)       // 변경 내역 반영
+                {
+                    DataGridViewRow targetRow = originCollectionGrid.Where(x => x.Index == selectedEdit.RowIndex).First();
+                    
+                    // 숫자만 입력되었는가?
+                    Regex regex = new Regex("^[0-9]*$");
+                    if (!regex.IsMatch(targetRow.Cells[selectedEdit.ColumnIndex].Value.ToString()))
+                    {
+                        dataGridView1.Rows[selectedEdit.RowIndex].Cells[selectedEdit.ColumnIndex].Value = originSelectedValue;
+                        MaterialSnackBar snackBar = new("올바르지 않은 값이 입력되었어요", "OK", true);
+                        snackBar.Show(this);
+                    }
+                    else
+                    {
+                        string url = $"{API.GetServer()}/api/stocks/buyprice";
+                        Dictionary<string, string> data = new Dictionary<string, string>()
+                        {
+                            {"ListingID", targetRow.Tag.ToString() },
+                            {"BuyPrice", targetRow.Cells[selectedEdit.ColumnIndex].Value.ToString() }
+                        };
+                        var sendData = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
+                        var response = await common.session.PatchAsync(url, sendData);
+                        try
+                        {
+                            response.EnsureSuccessStatusCode();
+                            MaterialSnackBar snackBar = new("구매원가 데이터 업데이트가 완료되었어요", "OK", true);
+                            snackBar.Show(this);
+                        }
+                        catch (Exception ex)
+                        {
+                            MaterialSnackBar snackBar = new(ex.Message, "OK", true);
+                            snackBar.Show(this);
+                        }
+                    }
+                }
+                selectedEdit = null;
+                originSelectedValue = string.Empty;
             }
         }
     }

@@ -135,3 +135,24 @@ async def patchorder(request: list[stocks_schema.RequestPatchOrder]):
         }
     )
 
+@router.patch("/buyprice", summary="구매원가 값 업데이트")
+async def patch_buyprice(request: stocks_schema.RequestPatchBuyPrice):
+    with get_db() as db:
+        query = select(Stocks).filter(and_(Stocks.ListingID == request.ListingID, Stocks.IsDelete == "F"))
+        result = db.execute(query).mappings().all()
+
+        if len(result) < 1:
+            raise HTTPException(status.HTTP_404_NOT_FOUND)
+        
+        query = update(Stocks).where(Stocks.ListingID == request.ListingID).values(
+            BuyPrice = int(request.BuyPrice)
+        )
+        db.execute(query)
+        db.commit()
+
+    return JSONResponse(
+        status_code=status.HTTP_202_ACCEPTED,
+        content={
+            "message":"accepted"
+        }
+    )

@@ -136,7 +136,7 @@
             materialTabControl1.Multiline = true;
             materialTabControl1.Name = "materialTabControl1";
             materialTabControl1.SelectedIndex = 0;
-            materialTabControl1.Size = new Size(1212, 811);
+            materialTabControl1.Size = new Size(1194, 733);
             materialTabControl1.TabIndex = 0;
             // 
             // tabPage1
@@ -155,7 +155,7 @@
             tabPage1.Location = new Point(4, 24);
             tabPage1.Name = "tabPage1";
             tabPage1.Padding = new Padding(3);
-            tabPage1.Size = new Size(1204, 783);
+            tabPage1.Size = new Size(1332, 1005);
             tabPage1.TabIndex = 0;
             tabPage1.Text = "메인";
             tabPage1.UseVisualStyleBackColor = true;
@@ -381,7 +381,7 @@
             materialCard5.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
             materialCard5.Name = "materialCard5";
             materialCard5.Padding = new Padding(14);
-            materialCard5.Size = new Size(1198, 46);
+            materialCard5.Size = new Size(1326, 46);
             materialCard5.TabIndex = 7;
             // 
             // materialLabel20
@@ -629,7 +629,7 @@
             tabPage4.Location = new Point(4, 24);
             tabPage4.Name = "tabPage4";
             tabPage4.Padding = new Padding(3);
-            tabPage4.Size = new Size(1204, 783);
+            tabPage4.Size = new Size(1186, 705);
             tabPage4.TabIndex = 3;
             tabPage4.Text = "판매현황";
             tabPage4.UseVisualStyleBackColor = true;
@@ -646,7 +646,7 @@
             panel3.Controls.Add(materialRadioButton6);
             panel3.Location = new Point(6, 6);
             panel3.Name = "panel3";
-            panel3.Size = new Size(1432, 53);
+            panel3.Size = new Size(1414, 53);
             panel3.TabIndex = 2;
             // 
             // materialButton8
@@ -807,7 +807,7 @@
             panel2.Controls.Add(dataGridView1);
             panel2.Location = new Point(6, 65);
             panel2.Name = "panel2";
-            panel2.Size = new Size(1195, 712);
+            panel2.Size = new Size(1177, 634);
             panel2.TabIndex = 1;
             // 
             // materialFloatingActionButton1
@@ -815,7 +815,7 @@
             materialFloatingActionButton1.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             materialFloatingActionButton1.Depth = 0;
             materialFloatingActionButton1.Icon = Properties.Resources.plus;
-            materialFloatingActionButton1.Location = new Point(1136, 653);
+            materialFloatingActionButton1.Location = new Point(1118, 575);
             materialFloatingActionButton1.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
             materialFloatingActionButton1.Name = "materialFloatingActionButton1";
             materialFloatingActionButton1.Size = new Size(56, 56);
@@ -832,10 +832,10 @@
             panel4.Controls.Add(materialButton3);
             panel4.Dock = DockStyle.Right;
             panel4.EdgeColor = Color.FromArgb(32, 41, 50);
-            panel4.Location = new Point(676, 0);
+            panel4.Location = new Point(658, 0);
             panel4.Name = "panel4";
             panel4.Padding = new Padding(5);
-            panel4.Size = new Size(519, 712);
+            panel4.Size = new Size(519, 634);
             panel4.SmoothingType = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
             panel4.TabIndex = 11;
             panel4.Text = "panel4";
@@ -882,7 +882,7 @@
             runningStatusTextEdit.SelectionLength = 0;
             runningStatusTextEdit.SelectionStart = 0;
             runningStatusTextEdit.ShortcutsEnabled = true;
-            runningStatusTextEdit.Size = new Size(502, 1493);
+            runningStatusTextEdit.Size = new Size(502, 1415);
             runningStatusTextEdit.TabIndex = 1;
             runningStatusTextEdit.TabStop = false;
             runningStatusTextEdit.TextAlign = HorizontalAlignment.Left;
@@ -921,9 +921,13 @@
             dataGridView1.MultiSelect = false;
             dataGridView1.Name = "dataGridView1";
             dataGridView1.RowTemplate.Height = 25;
-            dataGridView1.SelectionMode = DataGridViewSelectionMode.CellSelect;
-            dataGridView1.Size = new Size(1195, 712);
+            dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridView1.Size = new Size(1177, 634);
             dataGridView1.TabIndex = 1;
+            dataGridView1.CellClick += dataGridView1_CellClick;
+            dataGridView1.CellDoubleClick += dataGridView1_CellDoubleClick;
+            dataGridView1.DoubleClick += dataGridView1_DoubleClick;
+            dataGridView1.KeyUp += dataGridView1_KeyUp;
             dataGridView1.MouseClick += dataGridView1_MouseClick;
             // 
             // Column1
@@ -989,7 +993,7 @@
             tabPage3.ImageKey = "icons8-설정-3-16.png";
             tabPage3.Location = new Point(4, 24);
             tabPage3.Name = "tabPage3";
-            tabPage3.Size = new Size(1188, 744);
+            tabPage3.Size = new Size(1316, 1005);
             tabPage3.TabIndex = 2;
             tabPage3.Text = "설정";
             tabPage3.UseVisualStyleBackColor = true;
@@ -1157,7 +1161,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1218, 878);
+            ClientSize = new Size(1200, 800);
             Controls.Add(materialTabControl1);
             DrawerShowIconsWhenHidden = true;
             DrawerTabControl = materialTabControl1;
