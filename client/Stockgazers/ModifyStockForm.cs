@@ -129,7 +129,9 @@ namespace Stockgazers
                 string url = $"https://api.stockx.com/v2/selling/listings/{ListingID}";
                 Dictionary<string, string> data = new()
                 {
-                    { "amount", materialTextBoxEdit6.Text }
+                    { "amount", materialTextBoxEdit6.Text },
+                    { "currencyCode", "USD" },
+                    { "expiresAt", DateTime.UtcNow.AddMonths(1).ToString("O") }
                 };
                 var sendData = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
                 var response = await common.session.PatchAsync(url, sendData);

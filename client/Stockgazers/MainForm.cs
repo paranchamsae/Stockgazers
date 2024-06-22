@@ -838,7 +838,7 @@ namespace Stockgazers
                 foreach (var row in StockgazersReference)
                 {
                     string status = string.Empty;
-                    switch (row["Status"].ToString())
+                    switch (row["Stocks"]["Status"].ToString())
                     {
                         case "ACTIVE":
                             status = "ÀÔÂû Áß";
