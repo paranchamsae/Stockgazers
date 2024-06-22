@@ -2,7 +2,7 @@
 from fastapi import APIRouter, HTTPException, status, File, UploadFile
 from fastapi.responses import JSONResponse, FileResponse
 from fastapi.encoders import jsonable_encoder
-import math
+import requests
 from database import get_db
 from datetime import datetime
 
@@ -19,10 +19,22 @@ router = APIRouter(
     tags=["Stocks"]
 )
 
+async def GetRatio():
+    headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
+    url = 'https://quotation-api-cdn.dunamu.com/v1/forex/recent?codes=FRX.KRWUSD'
+    exchange =requests.get(url, headers=headers).json()
+    return exchange[0]['basePrice']
+
 @router.post("", summary="", status_code=status.HTTP_201_CREATED)
 async def addStocks(request: list[stocks_schema.RequestAddStocks]):
     with get_db() as db:
         for row in request:
+            tempBuyPriceRatio = 0
+            tempBuyPriceUSD = 0
+            if row.BuyPrice > 0:        # 구매원가 KRW가 입력되었다면 현재 환율 정보를 기반으로 구매원가 USD를 계산
+                tempBuyPriceRatio = GetRatio()
+                tempBuyPriceUSD = row.BuyPrice / tempBuyPriceRatio
+
             new_stock = Stocks(
                 UserID = row.UserID,
                 IsDelete = "F",
@@ -33,13 +45,15 @@ async def addStocks(request: list[stocks_schema.RequestAddStocks]):
                 VariantID = row.VariantID,
                 VariantValue = row.VariantValue,
                 BuyPrice = row.BuyPrice,
-                BuyPriceUSD = row.BuyPriceUSD,
-                Price = row.Price,
-                Limit = row.Limit,
+                BuyPriceRatio = tempBuyPriceRatio,      # 구매입찰 등록 당시의 환율 정보
+                BuyPriceUSD = round(tempBuyPriceUSD, 2),    # 구매원가 USD 계산 결과, 소숫점 둘째자리까지 저장
+                Price = row.Price,      # 입찰 등록가
+                Limit = row.Limit,      # 가격 하한선
                 OrderNo = row.OrderNo,
                 SellDatetime = row.SellDatetime,
                 SendDatetime = row.SendDatetime,
                 AdjustPrice = row.AdjustPrice,
+                AdjustRatio = 0,        # 새로운 재고가 추가되는 경우에는 정산 당시 환율 정보가 없다.
                 Profit = row.Profit,
                 CreateDatetime = datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
                 UpdateDatetime = None,
@@ -57,9 +71,7 @@ async def addStocks(request: list[stocks_schema.RequestAddStocks]):
 
 @router.get("/{UserID}", summary="내 입찰 현황 불러오기")
 async def get_stocks(UserID: str):
-    response = []
     with get_db() as db:
-        # result = db.query(Stocks, Variants).join(Variants, Stocks.VariantValue == Variants.VariantValue).filter(and_(Stocks.UserID == int(UserID), Stocks.IsDelete == "F")).all()
         query = select(Stocks, Variants).join(Variants, Stocks.VariantValue==Variants.VariantValue).filter(and_(Stocks.UserID == int(UserID), Stocks.IsDelete == "F"))
         result = db.execute(query).mappings().all()
 
@@ -88,24 +100,29 @@ async def patchorder(request: list[stocks_schema.RequestPatchOrder]):
             
             tempAdjustPrice = 0
             tempProfit = 0
-            if result[0].BuyPrice > 0 and result[0].BuyPriceUSD > 0:
-                tempAdjustPrice = row.AdjustPrice/1300 if row.AdjustPrice > 1000 else row.AdjustPrice
-                tempProfit = (tempAdjustPrice-result[0].BuyPriceUSD)/result[0].BuyPriceUSD*100
+            tempAdjustRatio = GetRatio()        # 현재 실시간 환율
+            if result[0].BuyPrice > 0 and result[0].BuyPriceUSD > 0:        # 구매원가 데이터가 입력된 경우 정산 데이터를 업데이트
+                
+                tempAdjustPrice = row.AdjustPrice/tempAdjustRatio if row.AdjustPrice > 10000 else row.AdjustPrice   # 정산금액 USD
+                tempProfit = (tempAdjustPrice-result[0].BuyPriceUSD)/result[0].BuyPriceUSD*100      # 이익률
                 if result[0].Status == "MATCHED" or result[0].Status == "READY_TO_SHIP":
                     tempProfit = 0
                     
                 query = update(Stocks).where(Stocks.ListingID == row.ListingID).values(
                     OrderNo = row.OrderNo,
                     AdjustPrice = tempAdjustPrice,
+                    AdjustRatio = tempAdjustRatio,
                     # 이익률 = 차익/구매원가*100 = (정산금액-구매원가)/구매원가*100
                     Profit = round( tempProfit, 2 ),
                     UpdateDatetime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                 )
-            else:
-                query = update(Stocks).where(Stocks.ListingID == row.ListingID).values(
-                    OrderNo = row.OrderNo,
-                    AdjustPrice = tempAdjustPrice,
-                    UpdateDatetime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            else:       # 구매원가 데이터가 입력되지 않은 경우
+                if result[0].AdjustRatio == 0:   # 체결 당시의 환율 정보가 없는 경우에만 PATCH 동장
+                    query = update(Stocks).where(Stocks.ListingID == row.ListingID).values(
+                        OrderNo = row.OrderNo,
+                        AdjustPrice = tempAdjustPrice,
+                        AdjustRatio = tempAdjustRatio,
+                        UpdateDatetime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                 )
             db.execute(query)
         db.commit()
