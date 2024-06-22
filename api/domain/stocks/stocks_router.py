@@ -2,10 +2,11 @@
 from fastapi import APIRouter, HTTPException, status, File, UploadFile
 from fastapi.responses import JSONResponse, FileResponse
 from fastapi.encoders import jsonable_encoder
-import requests
+
 from database import get_db
 from datetime import datetime
 
+import requests
 
 from io import BytesIO, StringIO
 
@@ -19,7 +20,7 @@ router = APIRouter(
     tags=["Stocks"]
 )
 
-async def GetRatio():
+def GetRatio():
     headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
     url = 'https://quotation-api-cdn.dunamu.com/v1/forex/recent?codes=FRX.KRWUSD'
     exchange =requests.get(url, headers=headers).json()
@@ -100,7 +101,7 @@ async def patchorder(request: list[stocks_schema.RequestPatchOrder]):
             
             tempAdjustPrice = 0
             tempProfit = 0
-            tempAdjustRatio = GetRatio()        # 현재 실시간 환율
+            tempAdjustRatio = GetRatio() if result[0].AdjustRatio == 0 else result[0].AdjustRatio       # 현재 실시간 환율
             if result[0].BuyPrice > 0 and result[0].BuyPriceUSD > 0:        # 구매원가 데이터가 입력된 경우 정산 데이터를 업데이트
                 
                 tempAdjustPrice = row.AdjustPrice/tempAdjustRatio if row.AdjustPrice > 10000 else row.AdjustPrice   # 정산금액 USD
