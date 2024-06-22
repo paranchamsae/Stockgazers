@@ -27,7 +27,8 @@ namespace Stockgazers
         private readonly MaterialSkinManager materialSkinManager;
         Common common;
         System.Windows.Forms.Timer Timer;
-        List<ListViewItem> originCollection;
+        //List<ListViewItem> originCollection;
+        List<DataGridViewRow> originCollectionGrid;
 
         private string authcode = string.Empty;
         private string state = string.Empty;
@@ -47,7 +48,8 @@ namespace Stockgazers
         {
             InitializeComponent();
             common = c;
-            originCollection = new List<ListViewItem>();
+            //originCollection = new List<ListViewItem>();
+            originCollectionGrid = new List<DataGridViewRow>();
 
             // Initialize MaterialSkinManager
             materialSkinManager = MaterialSkinManager.Instance;
@@ -604,8 +606,8 @@ namespace Stockgazers
             #endregion
 
             #region 4. 판매현황 탭 리스트뷰 데이터 집어넣기
-            if (originCollection?.Count > 0)
-                originCollection.Clear();
+            if (originCollectionGrid?.Count > 0)
+                originCollectionGrid.Clear();
 
             if (order.Count > 0 || isActiveRefresh)
             {
@@ -645,25 +647,37 @@ namespace Stockgazers
                         break;
                 }
 
-                string[] element = new[] {
-                    row["Stocks"]["StyleID"].ToString(),
-                    row["Stocks"]["Title"].ToString(),
-                    $"{row["Variants"]["KRValue"]} ({row["Stocks"]["VariantValue"].ToString()})",
-                    row["Stocks"]["BuyPrice"].ToString(),
-                    row["Stocks"]["Price"].ToString(),
-                    status,
-                    row["Stocks"]["AdjustPrice"].ToString(),
-                    row["Stocks"]["Profit"].ToString(),
-                    row["Stocks"]["CreateDatetime"].ToString(),
-                };
-                ListViewItem item = new ListViewItem(element);
-                item.Tag = row["Stocks"]["ListingID"].ToString();
-                materialListView1.Items.Add(item);
+                //string[] element = new[] {
+                //    row["Stocks"]["StyleID"].ToString(),
+                //    row["Stocks"]["Title"].ToString(),
+                //    $"{row["Variants"]["KRValue"]} ({row["Stocks"]["VariantValue"].ToString()})",
+                //    row["Stocks"]["BuyPrice"].ToString(),
+                //    row["Stocks"]["Price"].ToString(),
+                //    status,
+                //    row["Stocks"]["AdjustPrice"].ToString(),
+                //    row["Stocks"]["Profit"].ToString(),
+                //    row["Stocks"]["CreateDatetime"].ToString(),
+                //};
+                //ListViewItem item = new ListViewItem(element);
+                //item.Tag = row["Stocks"]["ListingID"].ToString();
+                //materialListView1.Items.Add(item);
 
+                int newRow = dataGridView1.Rows.Add();
+                DataGridViewRow r = dataGridView1.Rows[newRow];
+                r.Cells[0].Value = row["Stocks"]["StyleID"].ToString();
+                r.Cells[1].Value = row["Stocks"]["Title"].ToString();
+                r.Cells[2].Value = $"{row["Variants"]["KRValue"]} ({row["Stocks"]["VariantValue"].ToString()})";
+                r.Cells[3].Value = row["Stocks"]["BuyPrice"].ToString();
+                r.Cells[4].Value = row["Stocks"]["Price"].ToString();
+                r.Cells[5].Value = status;
+                r.Cells[6].Value = row["Stocks"]["AdjustPrice"].ToString();
+                r.Cells[7].Value = row["Stocks"]["Profit"].ToString();
+                r.Cells[8].Value = row["Stocks"]["CreateDatetime"].ToString();
+                r.Tag = row["Stocks"]["ListingID"].ToString();
 
-                originCollection.Add(item);
+                //originCollection.Add(item);
+                originCollectionGrid.Add(r);
             }
-            materialListView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
             #endregion
 
             #region 5. 메인 탭 판매통계 데이터 불러와서 집어넣기
@@ -795,8 +809,10 @@ namespace Stockgazers
         {
             if (isClearGrid)
             {
-                materialListView1.Items?.Clear();
-                originCollection?.Clear();
+                //materialListView1.Items?.Clear();
+                //originCollection?.Clear();
+                dataGridView1.Rows.Clear();
+                originCollectionGrid.Clear();
             }
 
             string url = $"{API.GetServer()}/api/stocks/{common.StockgazersUserID}";
@@ -846,28 +862,23 @@ namespace Stockgazers
                             break;
                     }
 
-                    string[] element = new[] {
-                        //"",
-                        row["Stocks"]["StyleID"].ToString(),
-                        row["Stocks"]["Title"].ToString(),
-                        $"{row["Variants"]["KRValue"]} ({row["Stocks"]["VariantValue"].ToString()})",
-                        row["Stocks"]["BuyPrice"].ToString(),
-                        row["Stocks"]["Price"].ToString(),
-                        status,
-                        row["Stocks"]["AdjustPrice"].ToString(),
-                        row["Stocks"]["Profit"].ToString(),
-                        row["Stocks"]["CreateDatetime"].ToString(),
-                    };
-                    ListViewItem item = new ListViewItem(element);
-                    item.Tag = row["ListingID"].ToString();
-                    materialListView1.Items.Add(item);
+                    int newRow = dataGridView1.Rows.Add();
+                    DataGridViewRow r = dataGridView1.Rows[newRow];
+                    r.Cells[0].Value = row["Stocks"]["StyleID"].ToString();
+                    r.Cells[1].Value = row["Stocks"]["Title"].ToString();
+                    r.Cells[2].Value = $"{row["Variants"]["KRValue"]} ({row["Stocks"]["VariantValue"].ToString()})";
+                    r.Cells[3].Value = row["Stocks"]["BuyPrice"].ToString();
+                    r.Cells[4].Value = row["Stocks"]["Price"].ToString();
+                    r.Cells[5].Value = status;
+                    r.Cells[6].Value = row["Stocks"]["AdjustPrice"].ToString();
+                    r.Cells[7].Value = row["Stocks"]["Profit"].ToString();
+                    r.Cells[8].Value = row["Stocks"]["CreateDatetime"].ToString();
+                    r.Tag = row["Stocks"]["ListingID"].ToString();
 
-                    originCollection ??= new List<ListViewItem>();
-                    originCollection.Add(item);
+                    originCollectionGrid.Add(r);
                 }
 
-                materialListView1.Invalidate();
-                materialListView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+                dataGridView1.Invalidate();
 
                 return true;
             }
@@ -894,34 +905,6 @@ namespace Stockgazers
             }
         }
 
-        private void materialListView1_MouseClick(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Right)
-            {
-                ListViewItem item = materialListView1.GetItemAt(e.X, e.Y);
-                if (item != null)
-                {
-                    item.Selected = true;
-
-                    contextMenuStrip1.Items[0].Text = item.SubItems[1].Text;
-                    contextMenuStrip1.Items[0].Tag = item.Tag;
-                    contextMenuStrip1.Items[0].Enabled = false;
-
-                    if (item.SubItems[5].Text == "입찰 중")
-                    {
-                        contextMenuStrip1.Items[1].Enabled = true;
-                        contextMenuStrip1.Items[2].Enabled = true;
-                    }
-                    else
-                    {
-                        contextMenuStrip1.Items[1].Enabled = false;
-                        contextMenuStrip1.Items[2].Enabled = false;
-                    }
-
-                    contextMenuStrip1.Show(materialListView1, e.Location);
-                }
-            }
-        }
 
         private async void toolStripMenuItem2_Click(object sender, EventArgs e)
         {
@@ -1002,38 +985,134 @@ namespace Stockgazers
             await RefreshSellStatus();
         }
 
-        private void materialTextBoxEdit2_TextChanged(object sender, EventArgs e)
+        
+
+        private void MainForm_ResizeEnd(object sender, EventArgs e)
         {
-            materialListView1.Items.Clear();
-            if (materialTextBoxEdit2.Text == string.Empty)
+            //materialListView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+        }
+
+        private void dataGridView1_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
             {
-                // 라디오버튼이 적용된 상태의 경우
-                if (materialRadioButton4.Checked)
+                int rowIndex = dataGridView1.HitTest(e.X, e.Y).RowIndex;
+                DataGridViewRow item = dataGridView1.Rows[rowIndex];
+                if (item != null)
                 {
-                    materialListView1.Items.AddRange(originCollection.Where(x => x.SubItems[5].Text == "입찰 중" || x.SubItems[5].Text == "판매대기").ToArray());
+                    item.Selected = true;
+
+                    contextMenuStrip1.Items[0].Text = item.Cells[1].Value.ToString();
+                    contextMenuStrip1.Items[0].Tag = item.Tag;
+                    contextMenuStrip1.Items[0].Enabled = false;
+
+                    if (item.Cells[5].Value.ToString() == "입찰 중")
+                    {
+                        contextMenuStrip1.Items[1].Enabled = true;
+                        contextMenuStrip1.Items[2].Enabled = true;
+                    }
+                    else
+                    {
+                        contextMenuStrip1.Items[1].Enabled = false;
+                        contextMenuStrip1.Items[2].Enabled = false;
+                    }
+
+                    contextMenuStrip1.Show(dataGridView1, e.Location);
                 }
-                else if (materialRadioButton5.Checked)
+            }
+        }
+
+        /// <summary>
+        /// 현재 진행현황 보기
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void materialButton8_Click(object sender, EventArgs e)
+        {
+            panel4.Visible = true;
+        }
+
+        /// <summary>
+        /// 구매원가 데이터 다운로드
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void materialButton10_Click(object sender, EventArgs e)
+        {
+            string url = $"{API.GetServer()}/api/data/export/{common.StockgazersUserID}";
+            var response = await common.session.GetAsync(url);
+            string? path = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+
+            try
+            {
+                response.EnsureSuccessStatusCode();
+                using (Stream stream = await response.Content.ReadAsStreamAsync())
                 {
-                    materialListView1.Items.AddRange(originCollection.Where(x => x.SubItems[5].Text == "인증실패" || x.SubItems[5].Text == "판매완료").ToArray());
+                    using (FileStream fs = new(Path.Combine(path, "data.csv"), FileMode.OpenOrCreate, FileAccess.ReadWrite))
+                    {
+                        await stream.CopyToAsync(fs);
+                    }
                 }
-                else
+
+                MaterialSnackBar snackBar = new("프로그램 경로에 다운로드 되었어요", "OK", true);
+                snackBar.Show(this);
+            }
+            catch (Exception ex)
+            {
+                MaterialSnackBar snackBar = new(ex.Message, "OK", true);
+                snackBar.Show(this);
+            }
+        }
+
+        /// <summary>
+        /// 구매원가 데이터 업로드
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void materialButton9_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog dlg = new()
+            {
+                Title = "Stockgazers",
+                Filter = "csv 파일 (*.csv)|*.csv"
+            };
+
+            DialogResult dlgResult = dlg.ShowDialog();
+            if (dlgResult == DialogResult.OK)
+            {
+                MultipartFormDataContent sendData = new();
+                sendData.Headers.ContentType.MediaType = "multipart/form-data";
+
+                string filepath = dlg.FileName;
+                try
                 {
-                    foreach (var element in originCollection)
-                        materialListView1.Items.Add(element);
+                    string url = $"{API.GetServer()}/api/data/import";
+                    byte[] bytes = System.IO.File.ReadAllBytes(filepath);
+                    sendData.Add(new StreamContent(new MemoryStream(bytes)), "csvfile", "data.csv");
+
+                    var response = await common.session.PostAsync(url, sendData);
+                    response.EnsureSuccessStatusCode();
+                    MaterialSnackBar snackBar2 = new("구매원가 데이터가 업로드 되었어요", "OK", true);
+                    snackBar2.Show(this);
+
+                    await RefreshSellStatus();          // 판매현황 그리드 다시 그리기
+                    GetStatistics(common);          // 메인화면 통계정보 업데이트
+                }
+                catch (IOException)
+                {
+                    MaterialSnackBar snackBar = new("CSV파일이 열려있어 업로드 할 수 없습니다.", "OK", true);
+                    snackBar.Show(this);
+                    return;
+                }
+                catch (Exception ex)
+                {
+                    MaterialSnackBar snackBar = new(ex.Message, "OK", true);
+                    snackBar.Show(this);
+                    return;
                 }
             }
             else
-            {
-                // 라디오버튼이 적용된 상태의 경우 = 라디오버튼 + 검색어 이중중첩
-                if (materialRadioButton4.Checked)
-                    materialListView1.Items.AddRange(originCollection.Where(x => (x.SubItems[5].Text == "입찰 중" || x.SubItems[5].Text == "판매대기") &&
-                        x.SubItems[0].Text.ToLower().Replace("-", "").Contains(materialTextBoxEdit2.Text)).ToArray());
-                else if (materialRadioButton5.Checked)
-                    materialListView1.Items.AddRange(originCollection.Where(x => (x.SubItems[5].Text == "인증실패" || x.SubItems[5].Text == "판매완료") &&
-                        x.SubItems[0].Text.ToLower().Replace("-", "").Contains(materialTextBoxEdit2.Text)).ToArray());
-                else
-                    materialListView1.Items.AddRange(originCollection.Where(x => x.SubItems[0].Text.ToLower().Replace("-", "").Contains(materialTextBoxEdit2.Text)).ToArray());
-            }
+                return;
         }
 
         /// <summary>
@@ -1041,21 +1120,20 @@ namespace Stockgazers
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void materialRadioButton3_CheckedChanged(object sender, EventArgs e)
+        private void materialRadioButton6_CheckedChanged(object sender, EventArgs e)
         {
-            if (materialRadioButton3.Checked)
+            if (materialRadioButton6.Checked)
             {
-                materialListView1.Items.Clear();
+                dataGridView1.Rows.Clear();
 
-
-                if (materialTextBoxEdit2.Text.Length > 0)
+                if (materialTextBoxEdit3.Text.Length > 0)
                 {
-                    materialListView1.Items.AddRange(originCollection.Where(x => x.SubItems[0].Text.ToLower().Replace("-", "").Contains(materialTextBoxEdit2.Text)).ToArray());
+                    dataGridView1.Rows.AddRange(originCollectionGrid.Where(x => x.Cells[0].Value.ToString().ToLower().Replace("-", "").Contains(materialTextBoxEdit3.Text)).ToArray());
                 }
                 else
                 {
-                    foreach (var element in originCollection)
-                        materialListView1.Items.Add(element);
+                    foreach (var element in originCollectionGrid)
+                        dataGridView1.Rows.Add(element);
                 }
             }
         }
@@ -1065,17 +1143,17 @@ namespace Stockgazers
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void materialRadioButton4_CheckedChanged_1(object sender, EventArgs e)
+        private void materialRadioButton7_CheckedChanged(object sender, EventArgs e)
         {
-            if (materialRadioButton4.Checked)
+            if (materialRadioButton7.Checked)
             {
-                materialListView1.Items.Clear();
+                dataGridView1.Rows.Clear();
 
-                IEnumerable<ListViewItem> filteredItem = originCollection.Where(x => x.SubItems[5].Text == "입찰 중" || x.SubItems[5].Text == "판매대기");
-                if (materialTextBoxEdit2.Text.Length > 0)
-                    filteredItem = filteredItem.Where(x => x.SubItems[0].Text.ToLower().Replace("-", "").Contains(materialTextBoxEdit2.Text));
+                IEnumerable<DataGridViewRow> filteredItem = originCollectionGrid.Where(x => x.Cells[5].Value.ToString() == "입찰 중" || x.Cells[5].Value.ToString() == "판매/정산대기");
+                if (materialTextBoxEdit3.Text.Length > 0)
+                    filteredItem = filteredItem.Where(x => x.Cells[0].Value.ToString().ToLower().Replace("-", "").Contains(materialTextBoxEdit3.Text));
 
-                materialListView1.Items.AddRange(filteredItem.ToArray());
+                dataGridView1.Rows.AddRange(filteredItem.ToArray());
             }
         }
 
@@ -1084,33 +1162,62 @@ namespace Stockgazers
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void materialRadioButton5_CheckedChanged(object sender, EventArgs e)
+        private void materialRadioButton8_CheckedChanged(object sender, EventArgs e)
         {
-            if (materialRadioButton5.Checked)
+            if (materialRadioButton8.Checked)
             {
-                materialListView1.Items.Clear();
+                dataGridView1.Rows.Clear();
 
-                IEnumerable<ListViewItem> filteredItem = originCollection.Where(x => x.SubItems[5].Text == "인증실패" || x.SubItems[5].Text == "판매완료");
-                if (materialTextBoxEdit2.Text.Length > 0)
-                    filteredItem = filteredItem.Where(x => x.SubItems[0].Text.ToLower().Replace("-", "").Contains(materialTextBoxEdit2.Text));
+                IEnumerable<DataGridViewRow> filteredItem = originCollectionGrid.Where(x => x.Cells[5].Value.ToString() == "인증실패" || x.Cells[5].Value.ToString() == "판매완료");
+                if (materialTextBoxEdit3.Text.Length > 0)
+                    filteredItem = filteredItem.Where(x => x.Cells[0].Value.ToString().ToLower().Replace("-", "").Contains(materialTextBoxEdit3.Text));
 
-                materialListView1.Items.AddRange(filteredItem.ToArray());
+                dataGridView1.Rows.AddRange(filteredItem.ToArray());
             }
         }
 
-        private void sidePanelClose_Click(object sender, EventArgs e)
+        /// <summary>
+        /// 현재 진행현황 보기 닫기
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void materialButton6_Click_1(object sender, EventArgs e)
         {
-            panel1.Visible = false;
+            panel4.Visible = false;
         }
 
-        private void materialButton2_Click(object sender, EventArgs e)
+        private void materialTextBoxEdit3_TextChanged(object sender, EventArgs e)
         {
-            panel1.Visible = true;
-        }
-
-        private void MainForm_ResizeEnd(object sender, EventArgs e)
-        {
-            materialListView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+            dataGridView1.Rows.Clear();
+            if(materialTextBoxEdit3.Text == string.Empty)
+            {
+                // 라디오버튼이 적용된 상태의 경우
+                if (materialRadioButton7.Checked)
+                {
+                    dataGridView1.Rows.AddRange(originCollectionGrid.Where(x => x.Cells[5].Value.ToString() == "입찰 중" || x.Cells[5].Value.ToString() == "판매/정산대기").ToArray());
+                }
+                else if (materialRadioButton8.Checked)
+                {
+                    dataGridView1.Rows.AddRange(originCollectionGrid.Where(x => x.Cells[5].Value.ToString() == "인증실패" || x.Cells[5].Value.ToString() == "판매완료").ToArray());
+                }
+                else
+                {
+                    foreach (var element in originCollectionGrid)
+                        dataGridView1.Rows.Add(element);
+                }
+            }
+            else
+            {
+                // 라디오버튼이 적용된 상태의 경우 = 라디오버튼 + 검색어 이중중첩
+                if (materialRadioButton7.Checked)
+                    dataGridView1.Rows.AddRange(originCollectionGrid.Where(x => (x.Cells[5].Value.ToString() == "입찰 중" || x.Cells[5].Value.ToString() == "판매대기") &&
+                        x.Cells[0].Value.ToString().ToLower().Replace("-", "").Contains(materialTextBoxEdit3.Text)).ToArray());
+                else if (materialRadioButton8.Checked)
+                    dataGridView1.Rows.AddRange(originCollectionGrid.Where(x => (x.Cells[5].Value.ToString() == "인증실패" || x.Cells[5].Value.ToString() == "판매완료") &&
+                        x.Cells[0].Value.ToString().ToLower().Replace("-", "").Contains(materialTextBoxEdit3.Text)).ToArray());
+                else
+                    dataGridView1.Rows.AddRange(originCollectionGrid.Where(x => x.Cells[0].ErrorText.ToLower().Replace("-", "").Contains(materialTextBoxEdit3.Text)).ToArray());
+            }
         }
     }
 }
