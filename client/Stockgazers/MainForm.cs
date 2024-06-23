@@ -72,6 +72,8 @@ namespace Stockgazers
             Timer.Tick += Timer_Tick;
             Timer.Interval = 30 * 60000;        // 30Ка
             //Timer.Interval = 1 * 60000;
+
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
         }
 
 
