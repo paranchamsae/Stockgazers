@@ -430,8 +430,14 @@ namespace Stockgazers
             List<JToken> StockxListingsList = StockxListingsListOrigin.Where(x => x["listingId"] != null && x["product"].Any() && x["variant"].Any()).ToList();
             StockxListingsList = StockxListingsList.Where(x => StockgazersReference.Count(y => y["Stocks"]["ListingID"].ToString() == x["listingId"].ToString()) == 0).ToList();
             List<Stock> stocks = new();
+
+            materialProgressBar1.Maximum = StockxListingsList.Count;
+            materialProgressBar1.Value = 0;
             foreach (JToken list in StockxListingsList)
             {
+                materialProgressBar1.Value++;
+                materialLabel20.Text = $"StockX DB에서 데이터 가져 오는 중, {materialProgressBar1.Value} / {materialProgressBar1.Maximum}";
+
                 Stock s = new()
                 {
                     UserID = common.StockgazersUserID,
@@ -473,8 +479,14 @@ namespace Stockgazers
                 x["Stocks"]["Status"].ToString() == "READY_TO_SHIP"
             ).ToList();
             bool isActiveRefresh = false;
+
+            materialProgressBar1.Value = 0;
+            materialProgressBar1.Maximum = tempCompare.Count;
             foreach (var active in tempCompare)
             {
+                materialProgressBar1.Value++;
+                materialLabel20.Text = $"입찰 중 상태의 데이터 동기화 중, {materialProgressBar1.Value} / {materialProgressBar1.Maximum}";
+
                 url = $"{API.GetServer()}/api/listing/{active["Stocks"]["ListingID"]}";
                 response = await common.session.GetAsync(url);
                 try
@@ -583,8 +595,13 @@ namespace Stockgazers
             List<Order> order = new List<Order>();      // 갱신할 데이터를 저장할 리스트
             if (StockgazersReference.Where(x => Convert.ToInt32(x["Stocks"]["AdjustPrice"]) == 0).Any())
             {
+                materialProgressBar1.Value = 0;
+                materialProgressBar1.Maximum = ordersRaw.Count;
                 foreach (var row in ordersRaw)
                 {
+                    materialProgressBar1.Value++;
+                    materialLabel20.Text = $"판매 완료 데이터 동기화 중, {materialProgressBar1.Value} / {materialProgressBar1.Maximum}";
+
                     var a = StockgazersReference.Where(x => x["Stocks"]["ListingID"].ToString() == row["listingId"].ToString());
                     if (a.Any() && Convert.ToInt32(a.First()["Stocks"]["AdjustPrice"]) == 0 && a.First()["Stocks"]["Status"].ToString() == "COMPLETED")
                     {

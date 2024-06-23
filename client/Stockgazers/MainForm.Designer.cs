@@ -48,6 +48,7 @@
             materialLabel15 = new ReaLTaiizor.Controls.MaterialLabel();
             materialLabel16 = new ReaLTaiizor.Controls.MaterialLabel();
             materialCard5 = new ReaLTaiizor.Controls.MaterialCard();
+            materialProgressBar1 = new ReaLTaiizor.Controls.MaterialProgressBar();
             materialLabel20 = new ReaLTaiizor.Controls.MaterialLabel();
             materialCard4 = new ReaLTaiizor.Controls.MaterialCard();
             materialLabel4 = new ReaLTaiizor.Controls.MaterialLabel();
@@ -81,6 +82,17 @@
             runningStatusTextEdit = new ReaLTaiizor.Controls.MaterialMultiLineTextBoxEdit();
             materialButton3 = new ReaLTaiizor.Controls.MaterialButton();
             dataGridView1 = new DataGridView();
+            Column1 = new DataGridViewTextBoxColumn();
+            Column2 = new DataGridViewTextBoxColumn();
+            Column3 = new DataGridViewTextBoxColumn();
+            Column4 = new DataGridViewTextBoxColumn();
+            Column10 = new DataGridViewTextBoxColumn();
+            Column5 = new DataGridViewTextBoxColumn();
+            Column6 = new DataGridViewTextBoxColumn();
+            Column7 = new DataGridViewTextBoxColumn();
+            Column11 = new DataGridViewTextBoxColumn();
+            Column8 = new DataGridViewTextBoxColumn();
+            Column9 = new DataGridViewTextBoxColumn();
             tabPage3 = new TabPage();
             materialButton1 = new ReaLTaiizor.Controls.MaterialButton();
             materialTextBoxEdit1 = new ReaLTaiizor.Controls.MaterialTextBoxEdit();
@@ -94,17 +106,6 @@
             toolStripMenuItem1 = new ToolStripMenuItem();
             toolStripMenuItem2 = new ToolStripMenuItem();
             toolStripMenuItem3 = new ToolStripMenuItem();
-            Column1 = new DataGridViewTextBoxColumn();
-            Column2 = new DataGridViewTextBoxColumn();
-            Column3 = new DataGridViewTextBoxColumn();
-            Column4 = new DataGridViewTextBoxColumn();
-            Column10 = new DataGridViewTextBoxColumn();
-            Column5 = new DataGridViewTextBoxColumn();
-            Column6 = new DataGridViewTextBoxColumn();
-            Column7 = new DataGridViewTextBoxColumn();
-            Column11 = new DataGridViewTextBoxColumn();
-            Column8 = new DataGridViewTextBoxColumn();
-            Column9 = new DataGridViewTextBoxColumn();
             materialTabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             materialCard10.SuspendLayout();
@@ -157,7 +158,7 @@
             tabPage1.Location = new Point(4, 24);
             tabPage1.Name = "tabPage1";
             tabPage1.Padding = new Padding(3);
-            tabPage1.Size = new Size(1202, 744);
+            tabPage1.Size = new Size(1186, 705);
             tabPage1.TabIndex = 0;
             tabPage1.Text = "메인";
             tabPage1.UseVisualStyleBackColor = true;
@@ -374,6 +375,7 @@
             // materialCard5
             // 
             materialCard5.BackColor = Color.FromArgb(255, 255, 255);
+            materialCard5.Controls.Add(materialProgressBar1);
             materialCard5.Controls.Add(materialLabel20);
             materialCard5.Depth = 0;
             materialCard5.Dock = DockStyle.Top;
@@ -383,8 +385,19 @@
             materialCard5.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
             materialCard5.Name = "materialCard5";
             materialCard5.Padding = new Padding(14);
-            materialCard5.Size = new Size(1196, 46);
+            materialCard5.Size = new Size(1180, 59);
             materialCard5.TabIndex = 7;
+            // 
+            // materialProgressBar1
+            // 
+            materialProgressBar1.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            materialProgressBar1.Depth = 0;
+            materialProgressBar1.Location = new Point(12, 38);
+            materialProgressBar1.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
+            materialProgressBar1.Name = "materialProgressBar1";
+            materialProgressBar1.Size = new Size(1151, 10);
+            materialProgressBar1.TabIndex = 14;
+            materialProgressBar1.UseAccentColor = false;
             // 
             // materialLabel20
             // 
@@ -631,7 +644,7 @@
             tabPage4.Location = new Point(4, 24);
             tabPage4.Name = "tabPage4";
             tabPage4.Padding = new Padding(3);
-            tabPage4.Size = new Size(1186, 705);
+            tabPage4.Size = new Size(1234, 822);
             tabPage4.TabIndex = 3;
             tabPage4.Text = "판매현황";
             tabPage4.UseVisualStyleBackColor = true;
@@ -932,6 +945,66 @@
             dataGridView1.KeyUp += dataGridView1_KeyUp;
             dataGridView1.MouseClick += dataGridView1_MouseClick;
             // 
+            // Column1
+            // 
+            Column1.HeaderText = "모델명";
+            Column1.Name = "Column1";
+            // 
+            // Column2
+            // 
+            Column2.HeaderText = "이름";
+            Column2.Name = "Column2";
+            Column2.Width = 350;
+            // 
+            // Column3
+            // 
+            Column3.HeaderText = "사이즈";
+            Column3.Name = "Column3";
+            // 
+            // Column4
+            // 
+            Column4.HeaderText = "구매원가(KRW)";
+            Column4.Name = "Column4";
+            Column4.Width = 115;
+            // 
+            // Column10
+            // 
+            Column10.HeaderText = "구매원가 적용환율";
+            Column10.Name = "Column10";
+            // 
+            // Column5
+            // 
+            Column5.HeaderText = "입찰금액(USD)";
+            Column5.Name = "Column5";
+            Column5.Width = 115;
+            // 
+            // Column6
+            // 
+            Column6.HeaderText = "상태";
+            Column6.Name = "Column6";
+            // 
+            // Column7
+            // 
+            Column7.HeaderText = "정산금액(USD)";
+            Column7.Name = "Column7";
+            Column7.Width = 115;
+            // 
+            // Column11
+            // 
+            Column11.HeaderText = "정산금액 적용환율";
+            Column11.Name = "Column11";
+            // 
+            // Column8
+            // 
+            Column8.HeaderText = "이익률(%)";
+            Column8.Name = "Column8";
+            Column8.Width = 90;
+            // 
+            // Column9
+            // 
+            Column9.HeaderText = "등록시각";
+            Column9.Name = "Column9";
+            // 
             // tabPage3
             // 
             tabPage3.Controls.Add(materialButton1);
@@ -945,7 +1018,7 @@
             tabPage3.ImageKey = "icons8-설정-3-16.png";
             tabPage3.Location = new Point(4, 24);
             tabPage3.Name = "tabPage3";
-            tabPage3.Size = new Size(1186, 705);
+            tabPage3.Size = new Size(1234, 822);
             tabPage3.TabIndex = 2;
             tabPage3.Text = "설정";
             tabPage3.UseVisualStyleBackColor = true;
@@ -1109,66 +1182,6 @@
             toolStripMenuItem3.Text = "입찰 삭제";
             toolStripMenuItem3.Click += toolStripMenuItem3_Click;
             // 
-            // Column1
-            // 
-            Column1.HeaderText = "모델명";
-            Column1.Name = "Column1";
-            // 
-            // Column2
-            // 
-            Column2.HeaderText = "이름";
-            Column2.Name = "Column2";
-            Column2.Width = 350;
-            // 
-            // Column3
-            // 
-            Column3.HeaderText = "사이즈";
-            Column3.Name = "Column3";
-            // 
-            // Column4
-            // 
-            Column4.HeaderText = "구매원가(KRW)";
-            Column4.Name = "Column4";
-            Column4.Width = 115;
-            // 
-            // Column10
-            // 
-            Column10.HeaderText = "구매원가 적용환율";
-            Column10.Name = "Column10";
-            // 
-            // Column5
-            // 
-            Column5.HeaderText = "입찰금액(USD)";
-            Column5.Name = "Column5";
-            Column5.Width = 115;
-            // 
-            // Column6
-            // 
-            Column6.HeaderText = "상태";
-            Column6.Name = "Column6";
-            // 
-            // Column7
-            // 
-            Column7.HeaderText = "정산금액(USD)";
-            Column7.Name = "Column7";
-            Column7.Width = 115;
-            // 
-            // Column11
-            // 
-            Column11.HeaderText = "정산금액 적용환율";
-            Column11.Name = "Column11";
-            // 
-            // Column8
-            // 
-            Column8.HeaderText = "이익률(%)";
-            Column8.Name = "Column8";
-            Column8.Width = 90;
-            // 
-            // Column9
-            // 
-            Column9.HeaderText = "등록시각";
-            Column9.Name = "Column9";
-            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1294,5 +1307,6 @@
         private DataGridViewTextBoxColumn Column11;
         private DataGridViewTextBoxColumn Column8;
         private DataGridViewTextBoxColumn Column9;
+        private ReaLTaiizor.Controls.MaterialProgressBar materialProgressBar1;
     }
 }
