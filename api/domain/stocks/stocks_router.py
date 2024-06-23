@@ -141,15 +141,16 @@ async def patch_buyprice(request: stocks_schema.RequestPatchBuyPrice):
         if len(result) < 1:
             raise HTTPException(status.HTTP_404_NOT_FOUND)
         
-        if result[0].BuyPriceRatio > 0:
-            query = update(Stocks).where(Stocks.ListingID == request.ListingID).values(
-                BuyPrice = int(request.BuyPrice),
-                BuyPriceUSD = round(int(request.BuyPrice)/result[0].BuyPriceRatio, 2)
-            )
-        else:
-            query = update(Stocks).where(Stocks.ListingID == request.ListingID).values(
-                BuyPrice = int(request.BuyPrice)
-            )
+        tempBuyPriceUSD = 0
+        if int(request.BuyPrice) > 0 and float(request.BuyPriceRatio) > 0:
+            tempBuyPriceUSD = round(int(request.BuyPrice)/float(request.BuyPriceRatio), 2)
+
+        query = update(Stocks).where(Stocks.ListingID == request.ListingID).values(
+            BuyPrice = int(request.BuyPrice),
+            BuyPriceRatio = round(float(request.BuyPriceRatio), 2),
+            BuyPriceUSD = tempBuyPriceUSD
+        )
+
         db.execute(query)
         db.commit()
 
@@ -157,5 +158,33 @@ async def patch_buyprice(request: stocks_schema.RequestPatchBuyPrice):
         status_code=status.HTTP_202_ACCEPTED,
         content={
             "message": "accepted"
+        }
+    )
+
+@router.patch("/adjustratio", summary="정산금액 적용환율 업데이트")
+async def patch_adjustratio(request: stocks_schema.RequestPatchAdjustRatio):
+    with get_db() as db:
+        result = db.query(Stocks).filter(and_(Stocks.ListingID == request.ListingID, Stocks.IsDelete == "F")).all()
+
+        if len(result) < 1:
+            raise HTTPException(status.HTTP_404_NOT_FOUND)
+        
+        tempProfit = 0
+        if result[0].Status == "COMPLETED" and result[0].BuyPrice > 0 and result[0].AdjustPrice > 0:
+            tempProfit = round( ((result[0].AdjustPrice*float(request.AdjustRatio))-result[0].BuyPrice)/result[0].BuyPrice*100, 2)
+
+        query = update(Stocks).filter(Stocks.ListingID == request.ListingID).values(
+            AdjustRatio = request.AdjustRatio,
+            Profit = tempProfit
+        )
+
+        db.execute(query)
+        db.commit()
+
+    return JSONResponse(
+        status_code = status.HTTP_202_ACCEPTED,
+        content = {
+            "mesage": "accepted",
+            "data": tempProfit
         }
     )

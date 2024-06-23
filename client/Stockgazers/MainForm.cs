@@ -408,11 +408,9 @@ namespace Stockgazers
             try
             {
                 response.EnsureSuccessStatusCode();
-                if (response.StatusCode == HttpStatusCode.OK)
-                {
-                    var StockgazersRaw = response.Content.ReadAsStringAsync().Result;
-                    StockgazersReference = JsonConvert.DeserializeObject<JToken>(StockgazersRaw);
-                }
+                var StockgazersRaw = response.Content.ReadAsStringAsync().Result;
+                StockgazersReference = JsonConvert.DeserializeObject<JToken>(StockgazersRaw);
+                
                 if (StockgazersReference == null)
                 {
                     MaterialSnackBar snackBar = new("Stockgazers 서버에서 나의 판매 현황을 불러오는데 실패했습니다.", "OK", true);
@@ -673,11 +671,13 @@ namespace Stockgazers
                 r.Cells[1].Value = row["Stocks"]["Title"].ToString();
                 r.Cells[2].Value = $"{row["Variants"]["KRValue"]} ({row["Stocks"]["VariantValue"].ToString()})";
                 r.Cells[3].Value = row["Stocks"]["BuyPrice"].ToString();
-                r.Cells[4].Value = row["Stocks"]["Price"].ToString();
-                r.Cells[5].Value = status;
-                r.Cells[6].Value = row["Stocks"]["AdjustPrice"].ToString();
-                r.Cells[7].Value = row["Stocks"]["Profit"].ToString();
-                r.Cells[8].Value = row["Stocks"]["CreateDatetime"].ToString();
+                r.Cells[4].Value = row["Stocks"]["BuyPriceRatio"].ToString();
+                r.Cells[5].Value = row["Stocks"]["Price"].ToString();
+                r.Cells[6].Value = status;
+                r.Cells[7].Value = row["Stocks"]["AdjustPrice"].ToString();
+                r.Cells[8].Value = row["Stocks"]["AdjustRatio"].ToString();
+                r.Cells[9].Value = row["Stocks"]["Profit"].ToString();
+                r.Cells[10].Value = row["Stocks"]["CreateDatetime"].ToString();
                 r.Tag = row["Stocks"]["ListingID"].ToString();
 
                 originCollectionGrid.Add(r);
@@ -865,11 +865,13 @@ namespace Stockgazers
                     r.Cells[1].Value = row["Stocks"]["Title"].ToString();
                     r.Cells[2].Value = $"{row["Variants"]["KRValue"]} ({row["Stocks"]["VariantValue"].ToString()})";
                     r.Cells[3].Value = row["Stocks"]["BuyPrice"].ToString();
-                    r.Cells[4].Value = row["Stocks"]["Price"].ToString();
-                    r.Cells[5].Value = status;
-                    r.Cells[6].Value = row["Stocks"]["AdjustPrice"].ToString();
-                    r.Cells[7].Value = row["Stocks"]["Profit"].ToString();
-                    r.Cells[8].Value = row["Stocks"]["CreateDatetime"].ToString();
+                    r.Cells[4].Value = row["Stocks"]["BuyPriceRatio"].ToString();
+                    r.Cells[5].Value = row["Stocks"]["Price"].ToString();
+                    r.Cells[6].Value = status;
+                    r.Cells[7].Value = row["Stocks"]["AdjustPrice"].ToString();
+                    r.Cells[8].Value = row["Stocks"]["AdjustRatio"].ToString();
+                    r.Cells[9].Value = row["Stocks"]["Profit"].ToString();
+                    r.Cells[10].Value = row["Stocks"]["CreateDatetime"].ToString();
                     r.Tag = row["Stocks"]["ListingID"].ToString();
 
                     originCollectionGrid.Add(r);
@@ -883,20 +885,20 @@ namespace Stockgazers
                     if(materialTextBoxEdit3.Text.Length == 0)
                     {
                         if (materialRadioButton7.Checked)       // 입찰 중 전체
-                            dataGridView1.Rows.AddRange(originCollectionGrid.Where(x => x.Cells[5].Value.ToString() == "입찰 중" || x.Cells[5].Value.ToString() == "판매/정산대기").ToArray());
+                            dataGridView1.Rows.AddRange(originCollectionGrid.Where(x => x.Cells[6].Value.ToString() == "입찰 중" || x.Cells[6].Value.ToString() == "판매/정산대기").ToArray());
                         else if (materialRadioButton8.Checked)      // 완료 전체
-                            dataGridView1.Rows.AddRange(originCollectionGrid.Where(x => x.Cells[5].Value.ToString() == "인증실패" || x.Cells[5].Value.ToString() == "판매완료").ToArray());
+                            dataGridView1.Rows.AddRange(originCollectionGrid.Where(x => x.Cells[6].Value.ToString() == "인증실패" || x.Cells[6].Value.ToString() == "판매완료").ToArray());
                     }
                     else
                     {
                         if (materialRadioButton7.Checked)       // 입찰 중 목록 중 해당 모델명을 가진 아이템
                         {
-                            dataGridView1.Rows.AddRange(originCollectionGrid.Where(x => (x.Cells[5].Value.ToString() == "입찰 중" || x.Cells[5].Value.ToString() == "판매대기") &&
+                            dataGridView1.Rows.AddRange(originCollectionGrid.Where(x => (x.Cells[6].Value.ToString() == "입찰 중" || x.Cells[6].Value.ToString() == "판매대기") &&
                                 x.Cells[0].Value.ToString().ToLower().Replace("-", "").Contains(materialTextBoxEdit3.Text)).ToArray());
                         }
                         else if (materialRadioButton8.Checked)      // 완료 목록 중 해당 모델명을 가진 아이템
                         {
-                            dataGridView1.Rows.AddRange(originCollectionGrid.Where(x => (x.Cells[5].Value.ToString() == "인증실패" || x.Cells[5].Value.ToString() == "판매완료") &&
+                            dataGridView1.Rows.AddRange(originCollectionGrid.Where(x => (x.Cells[6].Value.ToString() == "인증실패" || x.Cells[6].Value.ToString() == "판매완료") &&
                                 x.Cells[0].Value.ToString().ToLower().Replace("-", "").Contains(materialTextBoxEdit3.Text)).ToArray());
                         }
                         else
@@ -1032,7 +1034,7 @@ namespace Stockgazers
                     contextMenuStrip1.Items[0].Tag = item.Tag;
                     contextMenuStrip1.Items[0].Enabled = false;
 
-                    if (item.Cells[5].Value.ToString() == "입찰 중")
+                    if (item.Cells[6].Value.ToString() == "입찰 중")
                     {
                         contextMenuStrip1.Items[1].Enabled = true;
                         contextMenuStrip1.Items[2].Enabled = true;
@@ -1175,7 +1177,7 @@ namespace Stockgazers
             {
                 dataGridView1.Rows.Clear();
 
-                IEnumerable<DataGridViewRow> filteredItem = originCollectionGrid.Where(x => x.Cells[5].Value.ToString() == "입찰 중" || x.Cells[5].Value.ToString() == "판매/정산대기");
+                IEnumerable<DataGridViewRow> filteredItem = originCollectionGrid.Where(x => x.Cells[6].Value.ToString() == "입찰 중" || x.Cells[6].Value.ToString() == "판매/정산대기");
                 if (materialTextBoxEdit3.Text.Length > 0)
                     filteredItem = filteredItem.Where(x => x.Cells[0].Value.ToString().ToLower().Replace("-", "").Contains(materialTextBoxEdit3.Text));
 
@@ -1194,7 +1196,7 @@ namespace Stockgazers
             {
                 dataGridView1.Rows.Clear();
 
-                IEnumerable<DataGridViewRow> filteredItem = originCollectionGrid.Where(x => x.Cells[5].Value.ToString() == "인증실패" || x.Cells[5].Value.ToString() == "판매완료");
+                IEnumerable<DataGridViewRow> filteredItem = originCollectionGrid.Where(x => x.Cells[6].Value.ToString() == "인증실패" || x.Cells[6].Value.ToString() == "판매완료");
                 if (materialTextBoxEdit3.Text.Length > 0)
                     filteredItem = filteredItem.Where(x => x.Cells[0].Value.ToString().ToLower().Replace("-", "").Contains(materialTextBoxEdit3.Text));
 
@@ -1220,11 +1222,11 @@ namespace Stockgazers
                 // 라디오버튼이 적용된 상태의 경우
                 if (materialRadioButton7.Checked)
                 {
-                    dataGridView1.Rows.AddRange(originCollectionGrid.Where(x => x.Cells[5].Value.ToString() == "입찰 중" || x.Cells[5].Value.ToString() == "판매/정산대기").ToArray());
+                    dataGridView1.Rows.AddRange(originCollectionGrid.Where(x => x.Cells[6].Value.ToString() == "입찰 중" || x.Cells[6].Value.ToString() == "판매/정산대기").ToArray());
                 }
                 else if (materialRadioButton8.Checked)
                 {
-                    dataGridView1.Rows.AddRange(originCollectionGrid.Where(x => x.Cells[5].Value.ToString() == "인증실패" || x.Cells[5].Value.ToString() == "판매완료").ToArray());
+                    dataGridView1.Rows.AddRange(originCollectionGrid.Where(x => x.Cells[6].Value.ToString() == "인증실패" || x.Cells[6].Value.ToString() == "판매완료").ToArray());
                 }
                 else
                 {
@@ -1236,10 +1238,10 @@ namespace Stockgazers
             {
                 // 라디오버튼이 적용된 상태의 경우 = 라디오버튼 + 검색어 이중중첩
                 if (materialRadioButton7.Checked)
-                    dataGridView1.Rows.AddRange(originCollectionGrid.Where(x => (x.Cells[5].Value.ToString() == "입찰 중" || x.Cells[5].Value.ToString() == "판매대기") &&
+                    dataGridView1.Rows.AddRange(originCollectionGrid.Where(x => (x.Cells[6].Value.ToString() == "입찰 중" || x.Cells[6].Value.ToString() == "판매대기") &&
                         x.Cells[0].Value.ToString().ToLower().Replace("-", "").Contains(materialTextBoxEdit3.Text)).ToArray());
                 else if (materialRadioButton8.Checked)
-                    dataGridView1.Rows.AddRange(originCollectionGrid.Where(x => (x.Cells[5].Value.ToString() == "인증실패" || x.Cells[5].Value.ToString() == "판매완료") &&
+                    dataGridView1.Rows.AddRange(originCollectionGrid.Where(x => (x.Cells[6].Value.ToString() == "인증실패" || x.Cells[6].Value.ToString() == "판매완료") &&
                         x.Cells[0].Value.ToString().ToLower().Replace("-", "").Contains(materialTextBoxEdit3.Text)).ToArray());
                 else
                     dataGridView1.Rows.AddRange(originCollectionGrid.Where(x => x.Cells[0].ErrorText.ToLower().Replace("-", "").Contains(materialTextBoxEdit3.Text)).ToArray());
@@ -1249,12 +1251,7 @@ namespace Stockgazers
 
         private void dataGridView1_DoubleClick(object sender, EventArgs e)
         {
-            //int rowIndex = dataGridView1.HitTest(e.X, e.Y).RowIndex;
-            //int columnIndex = dataGridView1.HitTest(e.X, e.Y).ColumnIndex;
-            //if (rowIndex == -1 || columnIndex != 3) return;
-
-            //DataGridViewRow selected = dataGridView1.Rows[rowIndex];
-            //MessageBox.Show(selected.Cells[columnIndex].Value.ToString());
+            
         }
 
         DataGridViewCell? selectedEdit = null;
@@ -1262,7 +1259,7 @@ namespace Stockgazers
         bool isBeginEdit = false;
         private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex == -1 || e.ColumnIndex != 3)
+            if (e.RowIndex == -1 || (e.ColumnIndex != 3 && e.ColumnIndex != 4 && e.ColumnIndex != 8))       // 3: 구매원가 KRW, 4: 구매원가 적용환율, 8: 정산금액 적용환율
                 return;
 
             selectedEdit = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex];
@@ -1313,24 +1310,65 @@ namespace Stockgazers
                     }
                     else
                     {
-                        string url = $"{API.GetServer()}/api/stocks/buyprice";
-                        Dictionary<string, string> data = new Dictionary<string, string>()
+                        if (selectedEdit.ColumnIndex == 8)
                         {
-                            {"ListingID", targetRow.Tag.ToString() },
-                            {"BuyPrice", targetRow.Cells[selectedEdit.ColumnIndex].Value.ToString() }
-                        };
-                        var sendData = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
-                        var response = await common.session.PatchAsync(url, sendData);
-                        try
-                        {
-                            response.EnsureSuccessStatusCode();
-                            MaterialSnackBar snackBar = new("구매원가 데이터 업데이트가 완료되었어요", "OK", true);
-                            snackBar.Show(this);
+                            #region 정산금액 적용환율 업데이트
+                            string url = $"{API.GetServer()}/api/stocks/adjustratio";
+                            Dictionary<string, string> data = new Dictionary<string, string>()
+                            {
+                                {"ListingID", targetRow.Tag.ToString() },
+                                {"AdjustRatio", targetRow.Cells[8].Value.ToString() }
+                            };
+                            var sendData = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
+                            var response = await common.session.PatchAsync(url, sendData);
+                            try
+                            {
+                                response.EnsureSuccessStatusCode();
+                                var responseRaw = response.Content.ReadAsStringAsync().Result;
+                                var responseData = JsonConvert.DeserializeObject<JObject>(responseRaw);
+                                dataGridView1.Rows[selectedEdit.RowIndex].Cells[selectedEdit.ColumnIndex+1].Value = responseData["data"].ToString(); 
+
+                                MaterialSnackBar snackBar = new("정산금액 적용환율 데이터 업데이트가 완료되었어요", "OK", true);
+                                snackBar.Show(this);
+                            }
+                            catch (Exception ex)
+                            {
+                                DataGridViewRow recoveryRow = originCollectionGrid.Where(x => x.Index == selectedEdit.RowIndex).First();
+                                dataGridView1.Rows[selectedEdit.RowIndex].Cells[selectedEdit.ColumnIndex].Value = originSelectedValue;
+
+                                MaterialSnackBar snackBar = new(ex.Message, "OK", true);
+                                snackBar.Show(this);
+                            }
+                            #endregion
                         }
-                        catch (Exception ex)
+                        else
                         {
-                            MaterialSnackBar snackBar = new(ex.Message, "OK", true);
-                            snackBar.Show(this);
+                            #region 구매원가 / 구매원가 적용환율 업데이트
+                            string url = $"{API.GetServer()}/api/stocks/buyprice";
+                            Dictionary<string, string> data = new Dictionary<string, string>()
+                            {
+                                {"ListingID", targetRow.Tag.ToString() },
+                                {"BuyPrice", targetRow.Cells[3].Value.ToString() },
+                                {"BuyPriceRatio", targetRow.Cells[4].Value.ToString() }
+                            };
+                            var sendData = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
+                            var response = await common.session.PatchAsync(url, sendData);
+                            try
+                            {
+                                response.EnsureSuccessStatusCode();
+                                string target = selectedEdit.ColumnIndex == 3 ? "구매원가" : "구매원가 적용환율";
+                                MaterialSnackBar snackBar = new($"{target} 데이터 업데이트가 완료되었어요", "OK", true);
+                                snackBar.Show(this);
+                            }
+                            catch (Exception ex)
+                            {
+                                DataGridViewRow recoveryRow = originCollectionGrid.Where(x => x.Index == selectedEdit.RowIndex).First();
+                                dataGridView1.Rows[selectedEdit.RowIndex].Cells[selectedEdit.ColumnIndex].Value = originSelectedValue;
+
+                                MaterialSnackBar snackBar = new(ex.Message, "OK", true);
+                                snackBar.Show(this);
+                            }
+                            #endregion
                         }
                     }
                 }

@@ -53,3 +53,8 @@ class RequestPatchListing(BaseModel):
 class RequestPatchBuyPrice(BaseModel):
     ListingID: str
     BuyPrice: str
+    BuyPriceRatio: str
+
+class RequestPatchAdjustRatio(BaseModel):
+    ListingID: str
+    AdjustRatio: str
