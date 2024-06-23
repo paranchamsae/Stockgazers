@@ -810,8 +810,6 @@ namespace Stockgazers
         {
             if (isClearGrid)
             {
-                //materialListView1.Items?.Clear();
-                //originCollection?.Clear();
                 dataGridView1.Rows.Clear();
                 originCollectionGrid.Clear();
             }
@@ -877,6 +875,35 @@ namespace Stockgazers
                     r.Tag = row["Stocks"]["ListingID"].ToString();
 
                     originCollectionGrid.Add(r);
+                }
+
+                // 입찰 중 또는 완료 라디오버튼이 선택된 경우이거나 검색어가 입력되어있다면 그리드를 다시 그려야한다.
+                if (materialRadioButton7.Checked || materialRadioButton8.Checked || materialTextBoxEdit3.Text.Length > 0)
+                {
+                    dataGridView1.Rows.Clear();
+
+                    if(materialTextBoxEdit3.Text.Length == 0)
+                    {
+                        if (materialRadioButton7.Checked)       // 입찰 중 전체
+                            dataGridView1.Rows.AddRange(originCollectionGrid.Where(x => x.Cells[5].Value.ToString() == "입찰 중" || x.Cells[5].Value.ToString() == "판매/정산대기").ToArray());
+                        else if (materialRadioButton8.Checked)      // 완료 전체
+                            dataGridView1.Rows.AddRange(originCollectionGrid.Where(x => x.Cells[5].Value.ToString() == "인증실패" || x.Cells[5].Value.ToString() == "판매완료").ToArray());
+                    }
+                    else
+                    {
+                        if (materialRadioButton7.Checked)       // 입찰 중 목록 중 해당 모델명을 가진 아이템
+                        {
+                            dataGridView1.Rows.AddRange(originCollectionGrid.Where(x => (x.Cells[5].Value.ToString() == "입찰 중" || x.Cells[5].Value.ToString() == "판매대기") &&
+                                x.Cells[0].Value.ToString().ToLower().Replace("-", "").Contains(materialTextBoxEdit3.Text)).ToArray());
+                        }
+                        else if (materialRadioButton8.Checked)      // 완료 목록 중 해당 모델명을 가진 아이템
+                        {
+                            dataGridView1.Rows.AddRange(originCollectionGrid.Where(x => (x.Cells[5].Value.ToString() == "인증실패" || x.Cells[5].Value.ToString() == "판매완료") &&
+                                x.Cells[0].Value.ToString().ToLower().Replace("-", "").Contains(materialTextBoxEdit3.Text)).ToArray());
+                        }
+                        else
+                            dataGridView1.Rows.AddRange(originCollectionGrid.Where(x => x.Cells[0].ErrorText.ToLower().Replace("-", "").Contains(materialTextBoxEdit3.Text)).ToArray());
+                    }
                 }
 
                 dataGridView1.Invalidate();
