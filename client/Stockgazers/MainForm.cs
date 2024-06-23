@@ -509,7 +509,7 @@ namespace Stockgazers
                             response = await common.session.PatchAsync(url, sendData);
                             response.EnsureSuccessStatusCode();
 
-                            if (resultDataStockx["order"] != null)
+                            if (resultDataStockx["order"].ToString().Length > 0)
                             {
                                 Thread.Sleep(1000);
                                 url = $"https://api.stockx.com/v2/selling/orders/{resultDataStockx["order"]["orderNumber"]}";
