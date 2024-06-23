@@ -355,33 +355,48 @@ namespace Stockgazers
             #region 2. 내 재고 목록을 서버에서 가지고 와서 클라이언트에 뿌려줌
             materialLabel20.Text = "StockX DB와 동기화 중입니다. 일부 데이터가 정확하게 노출되지 않을 수 있습니다.";
             #region 2-1. 딱스에 등록된 내 전체 판매현황
-            url = $"https://api.stockx.com/v2/selling/listings";
             common.session.DefaultRequestHeaders.Add("Authorization", $"Bearer {common.AccessToken}");
             common.session.DefaultRequestHeaders.Add("x-api-key", $"{API.APIKey}");
 
-            response = await common.session.GetAsync(url);
+            int currentPage = 1;
             List<JToken> StockxListingsListOrigin = new List<JToken>();
-            try
-            {
-                response.EnsureSuccessStatusCode();
-                var StockxRaw = response.Content.ReadAsStringAsync().Result;
-                JToken? tempStockx = JsonConvert.DeserializeObject<JToken>(StockxRaw);
-                if (tempStockx != null)
-                    StockxListingsListOrigin = JsonConvert.DeserializeObject<JToken>(tempStockx["listings"]!.ToString())!.ToList();
+            bool isLoop = false;
 
-                if (StockxListingsListOrigin.Count == 0)
+            do
+            {
+                url = $"https://api.stockx.com/v2/selling/listings?pageNumber={currentPage}&pageSize=10";
+                response = await common.session.GetAsync(url);
+
+                try
                 {
-                    MaterialSnackBar snackBar = new("StockX에서 나의 판매 현황을 불러오는데 실패했습니다.", "OK", true);
+                    response.EnsureSuccessStatusCode();
+                    var StockxRaw = response.Content.ReadAsStringAsync().Result;
+                    JToken? tempStockx = JsonConvert.DeserializeObject<JToken>(StockxRaw);
+                    
+                    isLoop = Convert.ToBoolean(tempStockx["hasNextPage"]);
+                    currentPage = isLoop ? currentPage + 1 : currentPage;
+
+                    if (tempStockx != null)
+                    {
+                        var temp = JsonConvert.DeserializeObject<JToken>(tempStockx["listings"]!.ToString())!.ToList();
+                        foreach( var element in temp)
+                            StockxListingsListOrigin.Add(element);
+                    }
+
+                    if (StockxListingsListOrigin.Count == 0)
+                    {
+                        MaterialSnackBar snackBar = new("StockX에서 나의 판매 현황을 불러오는데 실패했습니다.", "OK", true);
+                        snackBar.Show(this);
+                        return;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MaterialSnackBar snackBar = new(ex.Message, "OK", true);
                     snackBar.Show(this);
                     return;
                 }
-            }
-            catch (Exception ex)
-            {
-                MaterialSnackBar snackBar = new(ex.Message, "OK", true);
-                snackBar.Show(this);
-                return;
-            }
+            } while (isLoop);
             #endregion
 
             #region 2-2. Stockgazers DB 서버에 관리 중인 내 전체 판매 현황
@@ -648,21 +663,6 @@ namespace Stockgazers
                         break;
                 }
 
-                //string[] element = new[] {
-                //    row["Stocks"]["StyleID"].ToString(),
-                //    row["Stocks"]["Title"].ToString(),
-                //    $"{row["Variants"]["KRValue"]} ({row["Stocks"]["VariantValue"].ToString()})",
-                //    row["Stocks"]["BuyPrice"].ToString(),
-                //    row["Stocks"]["Price"].ToString(),
-                //    status,
-                //    row["Stocks"]["AdjustPrice"].ToString(),
-                //    row["Stocks"]["Profit"].ToString(),
-                //    row["Stocks"]["CreateDatetime"].ToString(),
-                //};
-                //ListViewItem item = new ListViewItem(element);
-                //item.Tag = row["Stocks"]["ListingID"].ToString();
-                //materialListView1.Items.Add(item);
-
                 int newRow = dataGridView1.Rows.Add();
                 DataGridViewRow r = dataGridView1.Rows[newRow];
                 r.Cells[0].Value = row["Stocks"]["StyleID"].ToString();
@@ -676,7 +676,6 @@ namespace Stockgazers
                 r.Cells[8].Value = row["Stocks"]["CreateDatetime"].ToString();
                 r.Tag = row["Stocks"]["ListingID"].ToString();
 
-                //originCollection.Add(item);
                 originCollectionGrid.Add(r);
             }
             #endregion
@@ -716,11 +715,6 @@ namespace Stockgazers
                 MaterialSnackBar snackBar = new(ex.Message, "OK", true);
                 snackBar.Show(this);
             }
-        }
-
-        private void materialRadioButton4_CheckedChanged(object sender, EventArgs e)
-        {
-
         }
 
         /// <summary>
