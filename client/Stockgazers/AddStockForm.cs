@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Security.Policy;
 using System.Text;
+using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ReaLTaiizor.Colors;
@@ -52,7 +53,7 @@ namespace Stockgazers
             // 딱스에서 모델정보 불러옴
             if (e.KeyCode == Keys.Enter)
             {
-                retry:
+            retry:
                 if (listView1.Items.Count > 0)
                     listView1.Items.Clear();
 
@@ -120,14 +121,15 @@ namespace Stockgazers
                 모델명: {materialTextBoxEdit2.Text}
                 사이즈: {materialComboBox1.Text},
                 구매원가: {materialTextBoxEdit4.Text} KRW,
+                구매당시환율: {materialTextBoxEdit7.Text} USD,
                 입찰가: {materialTextBoxEdit6.Text} USD,
-                입찰하한제한: {materialTextBoxEdit5.Text} USD
+                입찰하한가: {materialTextBoxEdit5.Text} USD
 
 이 작업은 취소할 수 없습니다. 계속 할까요?";
 
             if (MessageBox.Show(message, "재고추가", MessageBoxButtons.YesNo, MessageBoxIcon.Asterisk) == DialogResult.Yes)
             {
-                retry:
+            retry:
                 string url = "https://api.stockx.com/v2/selling/listings";
                 CreateListing createListing = new()
                 {
@@ -170,8 +172,6 @@ namespace Stockgazers
                 {
                     try
                     {
-                        int buyprice = Convert.ToInt32(materialTextBoxEdit4.Text.ToString());
-                        float buypriceUsd = (float)buyprice / 1300;
                         Stock newStock = new()
                         {
                             UserID = common.StockgazersUserID,
@@ -182,8 +182,9 @@ namespace Stockgazers
                             Title = materialTextBoxEdit3.Text,
                             VariantID = materialComboBox1.SelectedValue.ToString(),
                             VariantValue = materialComboBox1.Text,
-                            BuyPrice = buyprice,
-                            BuyPriceUSD = (float)Math.Round(buypriceUsd, 2),
+                            BuyPrice = Convert.ToInt32(materialTextBoxEdit4.Text.ToString()),
+                            BuyPriceRatio = (float)Convert.ToDouble(materialTextBoxEdit7.Text),
+                            BuyPriceUSD = (float)Convert.ToDouble(materialTextBoxEdit8.Text),
                             Price = Convert.ToInt32(materialTextBoxEdit6.Text.ToString()),
                             Limit = Convert.ToInt32(materialTextBoxEdit5.Text.ToString()),
                             OrderNo = string.Empty,
@@ -224,7 +225,7 @@ namespace Stockgazers
 
             if (item != null)
             {
-                retry:
+            retry:
                 string url = $"https://api.stockx.com/v2/catalog/products/{item.Tag}/variants";
                 var response = await common.session.GetAsync(url);
 
@@ -263,7 +264,7 @@ namespace Stockgazers
                         else
                         {
                             MaterialSnackBar snackBar = new("접근 토근 갱신에 실패하였습니다.", "OK", true);
-                            snackBar.Show();
+                            snackBar.Show(this);
                             return;
                         }
                     }
@@ -284,7 +285,7 @@ namespace Stockgazers
 
             string VariantID = materialComboBox1.SelectedValue.ToString();
 
-            retry:
+        retry:
             string url = $"https://api.stockx.com/v2/catalog/products/{selectedProductID}/variants/{VariantID}/market-data";
             var response = await common.session.GetAsync(url);
 
@@ -311,7 +312,7 @@ namespace Stockgazers
                     else
                     {
                         MaterialSnackBar snackBar = new("접근 토근 갱신에 실패하였습니다.", "OK", true);
-                        snackBar.Show();
+                        snackBar.Show(this);
                         return;
                     }
                 }
@@ -361,6 +362,54 @@ namespace Stockgazers
             button2.BackColor = Color.White;
 
             materialTextBoxEdit6.Text = button3.Tag.ToString();
+        }
+
+        private async void AddStockForm_Load(object sender, EventArgs e)
+        {
+            string url = $"{API.GetServer()}/api/stocks/ratio";
+            var response = await common.session.GetAsync(url);
+            try
+            {
+                response.EnsureSuccessStatusCode();
+                var result = response.Content.ReadAsStringAsync().Result;
+                materialTextBoxEdit7.Text = result;
+            }
+            catch (Exception ex)
+            {
+                materialTextBoxEdit7.Text = "";
+                MaterialSnackBar snackBar = new(ex.Message, "OK", true);
+                snackBar.Show(this);
+            }
+        }
+
+        /// <summary>
+        /// 구매원가
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void materialTextBoxEdit4_TextChanged(object sender, EventArgs e)
+        {
+            Regex regex = new Regex("^[0-9]+(.)?[0-9]{1,2}$");
+            if (materialTextBoxEdit7.Text.Length > 0 && materialTextBoxEdit4.Text.Length > 0 && regex.IsMatch(materialTextBoxEdit7.Text) && regex.IsMatch(materialTextBoxEdit4.Text))
+            {
+                var buyPriceUSD = Convert.ToInt32(materialTextBoxEdit4.Text) / Convert.ToDouble(materialTextBoxEdit7.Text);
+                materialTextBoxEdit8.Text = Math.Round(buyPriceUSD, 2).ToString();
+            }
+        }
+
+        /// <summary>
+        /// 환율
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void materialTextBoxEdit7_TextChanged(object sender, EventArgs e)
+        {
+            Regex regex = new Regex("^[0-9]+(.)?[0-9]{1,2}$");
+            if (materialTextBoxEdit4.Text.Length > 0 && materialTextBoxEdit7.Text.Length > 0 && regex.IsMatch(materialTextBoxEdit4.Text) && regex.IsMatch(materialTextBoxEdit7.Text))
+            {
+                var buyPriceUSD = Convert.ToInt32(materialTextBoxEdit4.Text) / Convert.ToDouble(materialTextBoxEdit7.Text);
+                materialTextBoxEdit8.Text = Math.Round(buyPriceUSD, 2).ToString();
+            }
         }
     }
 }

@@ -41,6 +41,8 @@
             button1 = new Button();
             button2 = new Button();
             button3 = new Button();
+            materialTextBoxEdit7 = new ReaLTaiizor.Controls.MaterialTextBoxEdit();
+            materialTextBoxEdit8 = new ReaLTaiizor.Controls.MaterialTextBoxEdit();
             SuspendLayout();
             // 
             // materialTextBoxEdit1
@@ -86,7 +88,7 @@
             materialButton1.HighEmphasis = true;
             materialButton1.Icon = null;
             materialButton1.IconType = ReaLTaiizor.Controls.MaterialButton.MaterialIconType.Rebase;
-            materialButton1.Location = new Point(289, 694);
+            materialButton1.Location = new Point(289, 760);
             materialButton1.Margin = new Padding(5, 8, 5, 8);
             materialButton1.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
             materialButton1.Name = "materialButton1";
@@ -108,7 +110,7 @@
             materialButton2.HighEmphasis = true;
             materialButton2.Icon = null;
             materialButton2.IconType = ReaLTaiizor.Controls.MaterialButton.MaterialIconType.Rebase;
-            materialButton2.Location = new Point(373, 694);
+            materialButton2.Location = new Point(373, 760);
             materialButton2.Margin = new Padding(5, 8, 5, 8);
             materialButton2.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
             materialButton2.Name = "materialButton2";
@@ -197,7 +199,7 @@
             materialTextBoxEdit4.Depth = 0;
             materialTextBoxEdit4.Font = new Font("Roboto", 16F, FontStyle.Regular, GraphicsUnit.Pixel);
             materialTextBoxEdit4.HideSelection = true;
-            materialTextBoxEdit4.Hint = "BuyPrice(KRW)";
+            materialTextBoxEdit4.Hint = "구매원가(KRW)";
             materialTextBoxEdit4.LeadingIcon = Properties.Resources.icons8_수색_24;
             materialTextBoxEdit4.Location = new Point(8, 489);
             materialTextBoxEdit4.Margin = new Padding(4);
@@ -218,6 +220,7 @@
             materialTextBoxEdit4.TextAlign = HorizontalAlignment.Left;
             materialTextBoxEdit4.TrailingIcon = null;
             materialTextBoxEdit4.UseSystemPasswordChar = false;
+            materialTextBoxEdit4.TextChanged += materialTextBoxEdit4_TextChanged;
             // 
             // materialTextBoxEdit5
             // 
@@ -229,9 +232,9 @@
             materialTextBoxEdit5.Depth = 0;
             materialTextBoxEdit5.Font = new Font("Roboto", 16F, FontStyle.Regular, GraphicsUnit.Pixel);
             materialTextBoxEdit5.HideSelection = true;
-            materialTextBoxEdit5.Hint = "Limit(USD)";
+            materialTextBoxEdit5.Hint = "하한선(USD)";
             materialTextBoxEdit5.LeadingIcon = Properties.Resources.icons8_수색_24;
-            materialTextBoxEdit5.Location = new Point(221, 623);
+            materialTextBoxEdit5.Location = new Point(221, 689);
             materialTextBoxEdit5.Margin = new Padding(4);
             materialTextBoxEdit5.MaxLength = 32767;
             materialTextBoxEdit5.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.OUT;
@@ -296,9 +299,9 @@
             materialTextBoxEdit6.Depth = 0;
             materialTextBoxEdit6.Font = new Font("Roboto", 16F, FontStyle.Regular, GraphicsUnit.Pixel);
             materialTextBoxEdit6.HideSelection = true;
-            materialTextBoxEdit6.Hint = "Price";
+            materialTextBoxEdit6.Hint = "입찰가(USD)";
             materialTextBoxEdit6.LeadingIcon = Properties.Resources.icons8_수색_24;
-            materialTextBoxEdit6.Location = new Point(8, 623);
+            materialTextBoxEdit6.Location = new Point(8, 689);
             materialTextBoxEdit6.Margin = new Padding(4);
             materialTextBoxEdit6.MaxLength = 32767;
             materialTextBoxEdit6.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.OUT;
@@ -320,7 +323,7 @@
             // 
             // button1
             // 
-            button1.Location = new Point(8, 554);
+            button1.Location = new Point(8, 620);
             button1.Name = "button1";
             button1.Size = new Size(140, 55);
             button1.TabIndex = 12;
@@ -330,7 +333,7 @@
             // 
             // button2
             // 
-            button2.Location = new Point(154, 554);
+            button2.Location = new Point(154, 620);
             button2.Name = "button2";
             button2.Size = new Size(140, 55);
             button2.TabIndex = 13;
@@ -340,7 +343,7 @@
             // 
             // button3
             // 
-            button3.Location = new Point(297, 554);
+            button3.Location = new Point(297, 620);
             button3.Name = "button3";
             button3.Size = new Size(140, 55);
             button3.TabIndex = 14;
@@ -348,11 +351,77 @@
             button3.UseVisualStyleBackColor = true;
             button3.Click += button3_Click;
             // 
+            // materialTextBoxEdit7
+            // 
+            materialTextBoxEdit7.AnimateReadOnly = false;
+            materialTextBoxEdit7.AutoCompleteMode = AutoCompleteMode.None;
+            materialTextBoxEdit7.AutoCompleteSource = AutoCompleteSource.None;
+            materialTextBoxEdit7.BackgroundImageLayout = ImageLayout.None;
+            materialTextBoxEdit7.CharacterCasing = CharacterCasing.Normal;
+            materialTextBoxEdit7.Depth = 0;
+            materialTextBoxEdit7.Font = new Font("Roboto", 16F, FontStyle.Regular, GraphicsUnit.Pixel);
+            materialTextBoxEdit7.HideSelection = true;
+            materialTextBoxEdit7.Hint = "환율(USD)";
+            materialTextBoxEdit7.LeadingIcon = Properties.Resources.icons8_us_dollar_circled_24;
+            materialTextBoxEdit7.Location = new Point(8, 555);
+            materialTextBoxEdit7.MaxLength = 32767;
+            materialTextBoxEdit7.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.OUT;
+            materialTextBoxEdit7.Name = "materialTextBoxEdit7";
+            materialTextBoxEdit7.PasswordChar = '\0';
+            materialTextBoxEdit7.PrefixSuffixText = null;
+            materialTextBoxEdit7.ReadOnly = false;
+            materialTextBoxEdit7.RightToLeft = RightToLeft.No;
+            materialTextBoxEdit7.SelectedText = "";
+            materialTextBoxEdit7.SelectionLength = 0;
+            materialTextBoxEdit7.SelectionStart = 0;
+            materialTextBoxEdit7.ShortcutsEnabled = true;
+            materialTextBoxEdit7.Size = new Size(205, 48);
+            materialTextBoxEdit7.TabIndex = 15;
+            materialTextBoxEdit7.TabStop = false;
+            materialTextBoxEdit7.TextAlign = HorizontalAlignment.Left;
+            materialTextBoxEdit7.TrailingIcon = null;
+            materialTextBoxEdit7.UseSystemPasswordChar = false;
+            materialTextBoxEdit7.TextChanged += materialTextBoxEdit7_TextChanged;
+            // 
+            // materialTextBoxEdit8
+            // 
+            materialTextBoxEdit8.AnimateReadOnly = false;
+            materialTextBoxEdit8.AutoCompleteMode = AutoCompleteMode.None;
+            materialTextBoxEdit8.AutoCompleteSource = AutoCompleteSource.None;
+            materialTextBoxEdit8.BackgroundImageLayout = ImageLayout.None;
+            materialTextBoxEdit8.CharacterCasing = CharacterCasing.Normal;
+            materialTextBoxEdit8.Depth = 0;
+            materialTextBoxEdit8.Font = new Font("Roboto", 16F, FontStyle.Regular, GraphicsUnit.Pixel);
+            materialTextBoxEdit8.HideSelection = true;
+            materialTextBoxEdit8.Hint = "구매원가 환산(USD)";
+            materialTextBoxEdit8.LeadingIcon = Properties.Resources.icons8_us_dollar_circled_24;
+            materialTextBoxEdit8.Location = new Point(221, 555);
+            materialTextBoxEdit8.MaxLength = 32767;
+            materialTextBoxEdit8.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.OUT;
+            materialTextBoxEdit8.Name = "materialTextBoxEdit8";
+            materialTextBoxEdit8.PasswordChar = '\0';
+            materialTextBoxEdit8.PrefixSuffixText = null;
+            materialTextBoxEdit8.ReadOnly = true;
+            materialTextBoxEdit8.RightToLeft = RightToLeft.No;
+            materialTextBoxEdit8.SelectedText = "";
+            materialTextBoxEdit8.SelectionLength = 0;
+            materialTextBoxEdit8.SelectionStart = 0;
+            materialTextBoxEdit8.ShortcutsEnabled = true;
+            materialTextBoxEdit8.Size = new Size(217, 48);
+            materialTextBoxEdit8.TabIndex = 16;
+            materialTextBoxEdit8.TabStop = false;
+            materialTextBoxEdit8.Text = "0.0";
+            materialTextBoxEdit8.TextAlign = HorizontalAlignment.Left;
+            materialTextBoxEdit8.TrailingIcon = null;
+            materialTextBoxEdit8.UseSystemPasswordChar = false;
+            // 
             // AddStockForm
             // 
             AutoScaleDimensions = new SizeF(9F, 19F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(445, 742);
+            ClientSize = new Size(445, 808);
+            Controls.Add(materialTextBoxEdit8);
+            Controls.Add(materialTextBoxEdit7);
             Controls.Add(button3);
             Controls.Add(button2);
             Controls.Add(button1);
@@ -374,6 +443,7 @@
             Padding = new Padding(4, 81, 4, 4);
             StartPosition = FormStartPosition.CenterParent;
             Text = "재고추가";
+            Load += AddStockForm_Load;
             ResumeLayout(false);
             PerformLayout();
         }
@@ -393,5 +463,7 @@
         private Button button1;
         private Button button2;
         private Button button3;
+        private ReaLTaiizor.Controls.MaterialTextBoxEdit materialTextBoxEdit7;
+        private ReaLTaiizor.Controls.MaterialTextBoxEdit materialTextBoxEdit8;
     }
 }

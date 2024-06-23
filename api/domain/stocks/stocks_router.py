@@ -30,12 +30,6 @@ def GetRatio():
 async def addStocks(request: list[stocks_schema.RequestAddStocks]):
     with get_db() as db:
         for row in request:
-            tempBuyPriceRatio = 0
-            tempBuyPriceUSD = 0
-            if row.BuyPrice > 0:        # 구매원가 KRW가 입력되었다면 현재 환율 정보를 기반으로 구매원가 USD를 계산
-                tempBuyPriceRatio = GetRatio()
-                tempBuyPriceUSD = row.BuyPrice / tempBuyPriceRatio
-
             new_stock = Stocks(
                 UserID = row.UserID,
                 IsDelete = "F",
@@ -46,8 +40,8 @@ async def addStocks(request: list[stocks_schema.RequestAddStocks]):
                 VariantID = row.VariantID,
                 VariantValue = row.VariantValue,
                 BuyPrice = row.BuyPrice,
-                BuyPriceRatio = tempBuyPriceRatio,      # 구매입찰 등록 당시의 환율 정보
-                BuyPriceUSD = round(tempBuyPriceUSD, 2),    # 구매원가 USD 계산 결과, 소숫점 둘째자리까지 저장
+                BuyPriceRatio = row.BuyPriceRatio,      # 구매입찰 등록 당시의 환율 정보
+                BuyPriceUSD = row.BuyPriceUSD,    # 구매원가 USD 계산 결과, 소숫점 둘째자리까지 저장
                 Price = row.Price,      # 입찰 등록가
                 Limit = row.Limit,      # 가격 하한선
                 OrderNo = row.OrderNo,
@@ -69,6 +63,10 @@ async def addStocks(request: list[stocks_schema.RequestAddStocks]):
             "message": "ok"
         }
     )
+
+@router.get("/ratio", summary="현재 환율 정보 조회")
+async def get_ratio():
+    return GetRatio()
 
 @router.get("/{UserID}", summary="내 입찰 현황 불러오기")
 async def get_stocks(UserID: str):
@@ -138,21 +136,26 @@ async def patchorder(request: list[stocks_schema.RequestPatchOrder]):
 @router.patch("/buyprice", summary="구매원가 값 업데이트")
 async def patch_buyprice(request: stocks_schema.RequestPatchBuyPrice):
     with get_db() as db:
-        query = select(Stocks).filter(and_(Stocks.ListingID == request.ListingID, Stocks.IsDelete == "F"))
-        result = db.execute(query).mappings().all()
+        result = db.query(Stocks).filter(and_(Stocks.ListingID == request.ListingID, Stocks.IsDelete == "F")).all()
 
         if len(result) < 1:
             raise HTTPException(status.HTTP_404_NOT_FOUND)
         
-        query = update(Stocks).where(Stocks.ListingID == request.ListingID).values(
-            BuyPrice = int(request.BuyPrice)
-        )
+        if result[0].BuyPriceRatio > 0:
+            query = update(Stocks).where(Stocks.ListingID == request.ListingID).values(
+                BuyPrice = int(request.BuyPrice),
+                BuyPriceUSD = round(int(request.BuyPrice)/result[0].BuyPriceRatio, 2)
+            )
+        else:
+            query = update(Stocks).where(Stocks.ListingID == request.ListingID).values(
+                BuyPrice = int(request.BuyPrice)
+            )
         db.execute(query)
         db.commit()
 
     return JSONResponse(
         status_code=status.HTTP_202_ACCEPTED,
         content={
-            "message":"accepted"
+            "message": "accepted"
         }
     )

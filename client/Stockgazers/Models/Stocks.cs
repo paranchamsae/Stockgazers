@@ -17,6 +17,7 @@ namespace Stockgazers.Models
         public string VariantID { get; set; } = string.Empty;
         public string VariantValue { get; set; } = string.Empty;
         public int BuyPrice { get; set; }
+        public float BuyPriceRatio { get; set; }
         public float BuyPriceUSD { get; set; }
         public int Price { get; set; }
         public int Limit { get; set; }

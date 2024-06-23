@@ -11,6 +11,7 @@ class RequestAddStocks(BaseModel):
     VariantID: str
     VariantValue: str
     BuyPrice: int
+    BuyPriceRatio: float
     BuyPriceUSD: float
     Price: int
     Limit: int
