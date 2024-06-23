@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Text;
+using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ReaLTaiizor.Colors;
@@ -64,6 +65,8 @@ namespace Stockgazers
                 materialTextBoxEdit4.Text = data[0]["BuyPrice"].ToString();
                 materialTextBoxEdit6.Text = data[0]["Price"].ToString();
                 materialTextBoxEdit5.Text = data[0]["Limit"].ToString();
+                materialTextBoxEdit7.Text = data[0]["BuyPriceRatio"].ToString();
+                materialTextBoxEdit8.Text = data[0]["BuyPriceUSD"].ToString();
 
             retry:
                 url = $"https://api.stockx.com/v2/catalog/products/{data[0]["ProductID"].ToString()}/variants/{data[0]["VariantID"]}/market-data";
@@ -118,6 +121,7 @@ namespace Stockgazers
     사이즈: {materialTextBoxEdit1.Text},
 
     구매원가: {materialTextBoxEdit4.Text} KRW,
+    적용환율: {materialTextBoxEdit7.Text},
     입찰가: {materialTextBoxEdit6.Text} USD,
     입찰하한제한: {materialTextBoxEdit5.Text} USD
 
@@ -125,7 +129,7 @@ namespace Stockgazers
 
             if (MessageBox.Show(message, "입찰수정", MessageBoxButtons.YesNo, MessageBoxIcon.Asterisk) == DialogResult.Yes)
             {
-                retry:
+            retry:
                 string url = $"https://api.stockx.com/v2/selling/listings/{ListingID}";
                 Dictionary<string, string> data = new()
                 {
@@ -143,6 +147,8 @@ namespace Stockgazers
                     {
                         ListingID = ListingID,
                         BuyPrice = Convert.ToInt32(materialTextBoxEdit4.Text),
+                        BuyPriceRatio = Math.Round(Convert.ToDouble(materialTextBoxEdit7.Text), 2),
+                        BuyPriceUSD = Math.Round(Convert.ToDouble(materialTextBoxEdit8.Text), 2),
                         Price = Convert.ToInt32(materialTextBoxEdit6.Text),
                         Limit = Convert.ToInt32(materialTextBoxEdit5.Text),
                         Status = "ACTIVE"
@@ -221,5 +227,34 @@ namespace Stockgazers
             materialTextBoxEdit6.Text = button3.Tag.ToString();
         }
 
+        /// <summary>
+        /// 구매원가
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void materialTextBoxEdit4_TextChanged(object sender, EventArgs e)
+        {
+            Regex regex = new Regex("^[0-9]+(.)?[0-9]{1,2}$");
+            if (materialTextBoxEdit7.Text.Length > 0 && materialTextBoxEdit4.Text.Length > 0 && regex.IsMatch(materialTextBoxEdit7.Text) && regex.IsMatch(materialTextBoxEdit4.Text))
+            {
+                var buyPriceUSD = Convert.ToInt32(materialTextBoxEdit4.Text) / Convert.ToDouble(materialTextBoxEdit7.Text);
+                materialTextBoxEdit8.Text = Math.Round(buyPriceUSD, 2).ToString();
+            }
+        }
+
+        /// <summary>
+        /// 환율
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void materialTextBoxEdit7_TextChanged(object sender, EventArgs e)
+        {
+            Regex regex = new Regex("^[0-9]+(.)?[0-9]{1,2}$");
+            if (materialTextBoxEdit4.Text.Length > 0 && materialTextBoxEdit7.Text.Length > 0 && regex.IsMatch(materialTextBoxEdit4.Text) && regex.IsMatch(materialTextBoxEdit7.Text))
+            {
+                var buyPriceUSD = Convert.ToInt32(materialTextBoxEdit4.Text) / Convert.ToDouble(materialTextBoxEdit7.Text);
+                materialTextBoxEdit8.Text = Math.Round(buyPriceUSD, 2).ToString();
+            }
+        }
     }
 }

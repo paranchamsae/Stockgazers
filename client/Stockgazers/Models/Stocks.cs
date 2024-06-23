@@ -47,6 +47,8 @@ namespace Stockgazers.Models
     {
         public string ListingID { get; set; } = string.Empty;
         public int BuyPrice { get; set; }
+        public double BuyPriceRatio { get; set; }
+        public double BuyPriceUSD { get; set; }
         public int Price { get; set; }
         public int Limit { get; set; }
         public string Status { get; set; } = string.Empty;

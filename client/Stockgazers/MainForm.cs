@@ -502,6 +502,8 @@ namespace Stockgazers
                             {
                                 ListingID = resultDataStockx["listingId"].ToString(),
                                 BuyPrice = Convert.ToInt32(resultData[0]["BuyPrice"]),
+                                BuyPriceRatio = Convert.ToDouble(active["Stocks"]["BuyPriceRatio"]),
+                                BuyPriceUSD = Convert.ToDouble(active["Stocks"]["BuyPriceUSD"]),
                                 Price = Convert.ToInt32(resultDataStockx["amount"]),
                                 Limit = Convert.ToInt32(resultData[0]["Limit"]),
                                 Status = resultDataStockx["status"].ToString()

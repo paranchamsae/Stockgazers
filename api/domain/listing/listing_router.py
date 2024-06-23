@@ -26,13 +26,14 @@ async def getstock(ListingID: str):
 
 @router.patch("")
 async def patchstock(request: stocks_schema.RequestPatchListing):
-    BuyPriceUSD = 0
-    if request.BuyPrice > 0:
-        BuyPriceUSD = request.BuyPrice/1300
+    # BuyPriceUSD = 0
+    # if request.BuyPrice > 0:
+        # BuyPriceUSD = request.BuyPrice/1300
     with get_db() as db:
         query = update(Stocks).filter(Stocks.ListingID == request.ListingID).values(
             BuyPrice = request.BuyPrice,
-            BuyPriceUSD = BuyPriceUSD,
+            BuyPriceRatio = request.BuyPriceRatio,
+            BuyPriceUSD = request.BuyPriceUSD,
             Price = request.Price,
             Limit = request.Limit,
             Status = request.Status,

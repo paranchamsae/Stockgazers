@@ -44,6 +44,8 @@ class RequestPatchOrder(BaseModel):
 class RequestPatchListing(BaseModel):
     ListingID: str
     BuyPrice: int
+    BuyPriceRatio: float
+    BuyPriceUSD: float
     Price: int
     Limit: int
     Status: str
